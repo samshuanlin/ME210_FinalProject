@@ -7,7 +7,9 @@
   Written by Limor Fried for Adafruit Industries.
  ***************************************************************************/
 
-#include <Adafruit_SensorLab.h>
+// this is a huge library, so I will only do this when I actually need to calibrate it.
+// You should not have to worry about this script.
+#include <Adafruit_SensorLab.h> 
  Adafruit_SensorLab lab;
  
  Adafruit_Sensor *mag;
