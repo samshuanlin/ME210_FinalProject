@@ -1,3 +1,6 @@
 .pio
 .vscode
 src/main.*
+schematic.kicad_pcb
+schematic.kicad_prl
+~schematic.kicad_sch.lck
