@@ -5,203 +5,6 @@
 	(uuid "a117cae9-da48-465a-8dd5-c903415f43a6")
 	(paper "A4")
 	(lib_symbols
-		(symbol "Connector_Generic:Conn_01x04"
-			(pin_names
-				(offset 1.016) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "J"
-				(at 0 5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "Conn_01x04"
-				(at 0 -7.62 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "~"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "connector"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "Connector*:*_1x??_*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "Conn_01x04_1_1"
-				(rectangle
-					(start -1.27 -4.953)
-					(end 0 -5.207)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 -2.413)
-					(end 0 -2.667)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 0.127)
-					(end 0 -0.127)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 2.667)
-					(end 0 2.413)
-					(stroke
-						(width 0.1524)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(rectangle
-					(start -1.27 3.81)
-					(end 1.27 -6.35)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(pin passive line
-					(at -5.08 2.54 0)
-					(length 3.81)
-					(name "Pin_1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 0 0)
-					(length 3.81)
-					(name "Pin_2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -2.54 0)
-					(length 3.81)
-					(name "Pin_3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at -5.08 -5.08 0)
-					(length 3.81)
-					(name "Pin_4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
 		(symbol "MCU_Module:Arduino_UNO_R2"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -1817,49 +1620,27 @@
 				)
 			)
 		)
-		(symbol "Sensor_Proximity:BPR-105"
-			(pin_names
-				(offset 0.0254) hide)
+		(symbol "symbol_lib:HC-SR04"
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "U"
-				(at -5.08 5.08 0)
+				(at 0 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify left)
 				)
 			)
-			(property "Value" "BPR-105"
-				(at 7.62 5.08 0)
+			(property "Value" ""
+				(at 0 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
-					(justify right)
 				)
 			)
-			(property "Footprint" "OptoDevice:Everlight_ITR8307"
-				(at 0 -5.08 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "http://www.ystone.com.tw/en/data/goods/IRPT/Photo%20Interrupters-Reflective%20Type.pdf"
-				(at 0 2.54 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Subminiature Reflective Optical Sensor, SMD-package with PCB-cutout"
+			(property "Footprint" ""
 				(at 0 0 0)
 				(effects
 					(font
@@ -1868,7 +1649,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "Reflective Optical Sensor Opto"
+			(property "Datasheet" ""
 				(at 0 0 0)
 				(effects
 					(font
@@ -1877,7 +1658,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "Everlight*ITR8307*"
+			(property "Description" ""
 				(at 0 0 0)
 				(effects
 					(font
@@ -1886,337 +1667,181 @@
 					(hide yes)
 				)
 			)
-			(symbol "BPR-105_0_1"
+			(symbol "HC-SR04_0_1"
+				(arc
+					(start -1.905 -8.255)
+					(mid -2.54 -7.992)
+					(end -3.175 -8.255)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start -1.27 -7.62)
+					(mid -2.54 -7.0939)
+					(end -3.81 -7.62)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start -0.635 -6.985)
+					(mid -2.54 -6.1959)
+					(end -4.445 -6.985)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
 				(polyline
 					(pts
-						(xy -3.81 -0.635) (xy -2.54 -0.635)
+						(xy -4.445 -5.715) (xy -4.191 -5.461)
 					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.937 -5.715) (xy -3.683 -5.461)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.429 -5.715) (xy -3.175 -5.461)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.921 -5.715) (xy -2.667 -5.461)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.413 -5.715) (xy -2.159 -5.461)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.905 -5.715) (xy -1.651 -5.461)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.397 -5.715) (xy -1.143 -5.461)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.889 -5.715) (xy -0.635 -5.461)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.381 -5.715) (xy -4.572 -5.715)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "HC-SR04_1_1"
+				(rectangle
+					(start -5.08 -1.27)
+					(end 5.08 -13.97)
 					(stroke
 						(width 0.254)
 						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.286 2.921) (xy -2.032 3.175)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.778 2.921) (xy -1.524 3.175)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.524 2.667) (xy -1.651 2.159)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.27 2.921) (xy -1.016 3.175)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -1.143 1.905) (xy -1.27 1.397)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -0.762 2.921) (xy -0.508 3.175)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -0.254 2.921) (xy 0 3.175)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.254 2.921) (xy 0.508 3.175)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.762 2.921) (xy 1.016 3.175)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 2.921) (xy 1.524 3.175)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.651 0.889) (xy 1.143 1.016)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.778 2.921) (xy -2.413 2.921)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.032 1.651) (xy 1.524 1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.667 -0.127) (xy 3.81 -1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.667 0.127) (xy 3.81 1.27)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.54 1.651) (xy -1.524 2.667) (xy -2.032 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -2.159 0.889) (xy -1.143 1.905) (xy -1.651 1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.635 1.905) (xy 1.651 0.889) (xy 1.524 1.397)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.016 2.667) (xy 2.032 1.651) (xy 1.905 2.159)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.667 1.016) (xy 2.667 -1.016) (xy 2.667 -1.016)
-					)
-					(stroke
-						(width 0.3556)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 3.81 -1.27) (xy 3.81 -2.54) (xy 5.08 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 3.81 1.27) (xy 3.81 2.54) (xy 5.08 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -5.08 -2.54) (xy -3.175 -2.54) (xy -3.175 2.54) (xy -5.08 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -3.175 -0.635) (xy -3.81 0.635) (xy -2.54 0.635) (xy -3.175 -0.635)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 3.683 -1.143) (xy 3.429 -0.635) (xy 3.175 -0.889) (xy 3.683 -1.143)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -5.08 -3.81) (xy 5.08 -3.81) (xy 5.08 3.81) (xy -5.08 3.81) (xy -5.08 -3.81)
-					)
-					(stroke
-						(width 0.254)
-						(type default)
+						(color 132 0 0 1)
 					)
 					(fill
 						(type background)
 					)
 				)
-			)
-			(symbol "BPR-105_1_1"
-				(pin passive line
-					(at -7.62 -2.54 0)
+				(circle
+					(center -2.54 -8.89)
+					(radius 0.0001)
+					(stroke
+						(width 0.254)
+						(type default)
+						(color 132 0 0 1)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(pin power_in line
+					(at 7.62 -3.81 180)
 					(length 2.54)
-					(name "K"
+					(name "VCC"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2231,10 +1856,10 @@
 						)
 					)
 				)
-				(pin passive line
-					(at -7.62 2.54 0)
+				(pin input line
+					(at 7.62 -6.35 180)
 					(length 2.54)
-					(name "A"
+					(name "Trig"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2249,10 +1874,10 @@
 						)
 					)
 				)
-				(pin open_collector line
-					(at 7.62 2.54 180)
+				(pin output line
+					(at 7.62 -8.89 180)
 					(length 2.54)
-					(name "C"
+					(name "Echo"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2267,10 +1892,10 @@
 						)
 					)
 				)
-				(pin open_emitter line
-					(at 7.62 -2.54 180)
+				(pin output line
+					(at 7.62 -11.43 180)
 					(length 2.54)
-					(name "E"
+					(name "GND"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -2284,6 +1909,515 @@
 							)
 						)
 					)
+				)
+			)
+		)
+		(symbol "symbol_lib:TCRT5000"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "TCRT5000_0_1"
+				(polyline
+					(pts
+						(xy -3.81 -5.08) (xy -2.54 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.302 -10.287) (xy -4.445 -11.43)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.175 -6.35) (xy -3.175 -5.08)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.175 -3.81) (xy -3.175 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.048 -10.287) (xy -1.905 -11.43)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.286 -9.271) (xy -2.159 -8.763)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.524 -9.652) (xy -1.397 -9.144)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -6.477) (xy -1.778 -6.35)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.508 -6.096) (xy -1.016 -5.969)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.254 -9.398) (xy -0.254 -5.207)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.254 -8.89) (xy 0 -9.144)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.254 -8.382) (xy 0 -8.636)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.254 -7.874) (xy 0 -8.128)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.254 -7.366) (xy 0 -7.62)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.254 -6.858) (xy 0 -7.112)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.254 -6.35) (xy 0 -6.604)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.254 -5.842) (xy 0 -6.096)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.254 -5.334) (xy 0 -5.588)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.286 -5.461) (xy -1.27 -6.477) (xy -1.397 -5.969)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.159 -10.287) (xy -4.191 -10.287) (xy -4.191 -10.287)
+					)
+					(stroke
+						(width 0.3556)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.524 -5.08) (xy -0.508 -6.096) (xy -0.635 -5.588)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -8.255) (xy -2.286 -9.271) (xy -1.778 -9.144)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.508 -8.636) (xy -1.524 -9.652) (xy -1.016 -9.525)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -4.318 -11.303) (xy -3.81 -11.049) (xy -4.064 -10.795) (xy -4.318 -11.303)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -3.175 -5.08) (xy -3.81 -3.81) (xy -2.54 -3.81) (xy -3.175 -5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TCRT5000_1_1"
+				(rectangle
+					(start -5.08 -1.27)
+					(end 5.08 -13.97)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin power_in line
+					(at 7.62 -3.81 180)
+					(length 2.54)
+					(name "VCC"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 7.62 -6.35 180)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 7.62 -8.89 180)
+					(length 2.54)
+					(name "D0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 7.62 -11.43 180)
+					(length 2.54)
+					(name "A0"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "symbol_lib:TCRT5000")
+		(at 182.88 148.59 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "0146b090-f9f8-4476-b436-cee3137d9264")
+		(property "Reference" "U2"
+			(at 182.88 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TCRT5000"
+			(at 182.88 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 182.88 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 182.88 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 182.88 148.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "4"
+			(uuid "ac6fb670-e06b-4179-ab61-42460ae78ca8")
+		)
+		(pin "1"
+			(uuid "04b78147-470f-4605-8fa8-b237726968a5")
+		)
+		(pin "3"
+			(uuid "a355454f-7859-46ab-a4cd-cc9b5be0066c")
+		)
+		(pin "2"
+			(uuid "896c2624-2f07-4abd-9d2b-cfb24ab08bce")
+		)
+		(instances
+			(project "schematic"
+				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
+					(reference "U2")
+					(unit 1)
 				)
 			)
 		)
@@ -2514,232 +2648,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x04")
-		(at 87.63 132.08 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "2193a8ee-e95c-4ed3-b0d4-1ea738e1eac3")
-		(property "Reference" "J4"
-			(at 90.17 132.0799 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Conn_01x04"
-			(at 90.17 134.6199 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 87.63 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 87.63 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 87.63 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "b109d2bb-4d7e-445a-a4fc-804ad34e483e")
-		)
-		(pin "2"
-			(uuid "1753b715-8961-4812-97d4-a9cff75cbf8b")
-		)
-		(pin "3"
-			(uuid "0b0fed87-57f2-443b-a729-e052b0662232")
-		)
-		(pin "4"
-			(uuid "d5da45c6-3666-44f4-abac-b0b83da0aacc")
-		)
-		(instances
-			(project "schematic"
-				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "J4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x04")
-		(at 87.63 74.93 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "2fb11d70-0174-4734-aba7-87a6b89db6a9")
-		(property "Reference" "J1"
-			(at 90.17 74.9299 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Conn_01x04"
-			(at 90.17 77.4699 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 87.63 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 87.63 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 87.63 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "af283fd6-70e5-497f-984d-64e98c8bd05f")
-		)
-		(pin "2"
-			(uuid "74f4e18c-3fe9-4ad9-a77f-866d01dd3c4e")
-		)
-		(pin "3"
-			(uuid "88780925-d9e4-47f0-826d-b8c65b803ab8")
-		)
-		(pin "4"
-			(uuid "b276ffd4-001b-4ef3-978d-335e6dd3199e")
-		)
-		(instances
-			(project ""
-				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "J1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Sensor_Proximity:BPR-105")
-		(at 163.83 83.82 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "448fc0fd-0e47-43c9-9da6-75bca19df428")
-		(property "Reference" "U1"
-			(at 163.83 74.93 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "BPR-105"
-			(at 163.83 77.47 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "OptoDevice:Everlight_ITR8307"
-			(at 163.83 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ystone.com.tw/en/data/goods/IRPT/Photo%20Interrupters-Reflective%20Type.pdf"
-			(at 163.83 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Subminiature Reflective Optical Sensor, SMD-package with PCB-cutout"
-			(at 163.83 83.82 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "ddba62f9-4b8c-42dd-89f1-cb69c50d87ea")
-		)
-		(pin "1"
-			(uuid "d44d3511-1ded-418e-ab83-f92a5126c94e")
-		)
-		(pin "4"
-			(uuid "8a8a8a0e-1c16-4647-a60f-9b664ed7f9bc")
-		)
-		(pin "3"
-			(uuid "e1bd33b7-94d3-4490-95be-654e717f4d2b")
-		)
-		(instances
-			(project ""
-				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "U1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Motor:Motor_DC")
 		(at 43.18 102.87 0)
 		(unit 1)
@@ -2810,35 +2718,33 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x04")
-		(at 87.63 110.49 0)
+		(lib_id "symbol_lib:HC-SR04")
+		(at 87.63 96.52 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "52a359e5-579f-4487-b12a-9bb23ecf8162")
-		(property "Reference" "J3"
-			(at 90.17 110.4899 0)
+		(uuid "4c1b605c-0d8c-4f2c-a9a0-de5286e5cfdd")
+		(property "Reference" "U8"
+			(at 87.63 93.98 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "Conn_01x04"
-			(at 90.17 113.0299 0)
+		(property "Value" "HC-SR04"
+			(at 87.63 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 87.63 110.49 0)
+			(at 87.63 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2846,8 +2752,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 87.63 110.49 0)
+		(property "Datasheet" ""
+			(at 87.63 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2855,8 +2761,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 87.63 110.49 0)
+		(property "Description" ""
+			(at 87.63 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2865,21 +2771,95 @@
 			)
 		)
 		(pin "1"
-			(uuid "dc4c6197-e778-4983-ad3a-3c8012027906")
-		)
-		(pin "2"
-			(uuid "ce9b71cf-c739-4c88-b187-8be87d18f6fb")
-		)
-		(pin "3"
-			(uuid "03cca1b3-3034-4022-acb5-2b8881704e3f")
+			(uuid "f070d778-cf2b-472b-8e6d-28e33cae76c2")
 		)
 		(pin "4"
-			(uuid "b1778cdd-c301-4de1-b779-0620d1f16173")
+			(uuid "1af10fe1-b468-4808-ac07-d9098f2cc215")
+		)
+		(pin "3"
+			(uuid "46a33e06-a95c-488d-b3e5-6eec75258440")
+		)
+		(pin "2"
+			(uuid "d7033eb2-a794-4fae-89e6-5b7ad3ca4f8a")
 		)
 		(instances
 			(project "schematic"
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "J3")
+					(reference "U8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "symbol_lib:TCRT5000")
+		(at 182.88 125.73 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "735a398d-04f9-4e61-8cc0-3e70556fe230")
+		(property "Reference" "U1"
+			(at 182.88 123.19 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TCRT5000"
+			(at 182.88 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 182.88 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 182.88 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 182.88 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "4"
+			(uuid "9e7368a4-cedc-4820-89bf-0f94272937cd")
+		)
+		(pin "1"
+			(uuid "00f682bd-7d9f-47b7-96e5-12c2f6799217")
+		)
+		(pin "3"
+			(uuid "4d212476-9534-4be7-a442-81c4c2eda739")
+		)
+		(pin "2"
+			(uuid "f6dde9b5-3a49-4154-8969-ccc24e810c51")
+		)
+		(instances
+			(project "schematic"
+				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
+					(reference "U1")
 					(unit 1)
 				)
 			)
@@ -2950,6 +2930,80 @@
 			(project "schematic"
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
 					(reference "M4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "symbol_lib:HC-SR04")
+		(at 87.63 76.2 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "7f73be00-4a7b-4a37-9292-2289e2a3562c")
+		(property "Reference" "U7"
+			(at 87.63 73.66 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "HC-SR04"
+			(at 87.63 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 87.63 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 87.63 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 87.63 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "00e30925-0d97-420a-b8ce-708b4aeaddc9")
+		)
+		(pin "4"
+			(uuid "aebd6622-b949-4c85-a52b-13e8573bcc19")
+		)
+		(pin "3"
+			(uuid "2d13390c-2011-48c6-935d-cf8963aeebc9")
+		)
+		(pin "2"
+			(uuid "c064318c-dc08-4779-a1c3-c4e703d082ca")
+		)
+		(instances
+			(project "schematic"
+				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
+					(reference "U7")
 					(unit 1)
 				)
 			)
@@ -3029,35 +3083,33 @@
 		)
 	)
 	(symbol
-		(lib_id "Connector_Generic:Conn_01x04")
-		(at 87.63 92.71 0)
+		(lib_id "symbol_lib:HC-SR04")
+		(at 87.63 55.88 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "bbe72af8-0c68-4bdc-890b-fdfc45792566")
-		(property "Reference" "J2"
-			(at 90.17 92.7099 0)
+		(uuid "b689f047-0a31-411d-b99b-e36a77caca3d")
+		(property "Reference" "U6"
+			(at 87.63 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "Conn_01x04"
-			(at 90.17 95.2499 0)
+		(property "Value" "HC-SR04"
+			(at 87.63 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 87.63 92.71 0)
+			(at 87.63 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3065,8 +3117,8 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 87.63 92.71 0)
+		(property "Datasheet" ""
+			(at 87.63 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3074,8 +3126,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Generic connector, single row, 01x04, script generated (kicad-library-utils/schlib/autogen/connector/)"
-			(at 87.63 92.71 0)
+		(property "Description" ""
+			(at 87.63 55.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3084,137 +3136,54 @@
 			)
 		)
 		(pin "1"
-			(uuid "f6028409-7518-48f0-97e9-48208ce3e8d0")
-		)
-		(pin "2"
-			(uuid "80838a9b-35a7-4057-a8f9-7e95d8ed58c1")
-		)
-		(pin "3"
-			(uuid "c43b2e87-4974-4bca-b5de-89cff6502328")
+			(uuid "6785a93b-150f-4e7c-9128-4771000e0ad3")
 		)
 		(pin "4"
-			(uuid "5a848844-de6d-40ea-bf20-7dec9c8b2d14")
+			(uuid "b9f9d211-3f38-42d8-b0d6-e2c0b56f929c")
+		)
+		(pin "3"
+			(uuid "01eae5fa-f782-4163-975f-33c6fb6c2066")
+		)
+		(pin "2"
+			(uuid "25abafce-4f3e-4044-8e7b-c5423c68f44c")
 		)
 		(instances
-			(project "schematic"
+			(project ""
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "J2")
+					(reference "U6")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "Sensor_Proximity:BPR-105")
-		(at 163.83 129.54 0)
+		(lib_id "symbol_lib:TCRT5000")
+		(at 209.55 134.62 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "cd10cafb-8907-438a-98ac-854600b34f98")
-		(property "Reference" "U4"
-			(at 163.83 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "BPR-105"
-			(at 163.83 123.19 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "OptoDevice:Everlight_ITR8307"
-			(at 163.83 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ystone.com.tw/en/data/goods/IRPT/Photo%20Interrupters-Reflective%20Type.pdf"
-			(at 163.83 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Subminiature Reflective Optical Sensor, SMD-package with PCB-cutout"
-			(at 163.83 129.54 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "2"
-			(uuid "c9cca648-da5e-41c1-847e-9a5b696e9639")
-		)
-		(pin "1"
-			(uuid "53d7878f-437c-418e-8c30-a334a09b6f8b")
-		)
-		(pin "4"
-			(uuid "2380bed2-afa6-4e6e-82dc-a56bef1b456b")
-		)
-		(pin "3"
-			(uuid "961061d4-3ab5-44c2-928c-c476c837f2e3")
-		)
-		(instances
-			(project "schematic"
-				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "U4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Sensor_Proximity:BPR-105")
-		(at 163.83 114.3 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "d76bc1cf-0bdc-4bad-86ae-45711164f378")
+		(uuid "b7e32f67-c736-4352-9741-42cddfd2408d")
 		(property "Reference" "U3"
-			(at 163.83 105.41 0)
+			(at 209.55 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "BPR-105"
-			(at 163.83 107.95 0)
+		(property "Value" "TCRT5000"
+			(at 209.55 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "OptoDevice:Everlight_ITR8307"
-			(at 163.83 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ystone.com.tw/en/data/goods/IRPT/Photo%20Interrupters-Reflective%20Type.pdf"
-			(at 163.83 111.76 0)
+		(property "Footprint" ""
+			(at 209.55 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3222,8 +3191,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Subminiature Reflective Optical Sensor, SMD-package with PCB-cutout"
-			(at 163.83 114.3 0)
+		(property "Datasheet" ""
+			(at 209.55 134.62 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3231,22 +3200,105 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "9a4151b1-2e47-4094-84ff-409750bd7caf")
-		)
-		(pin "1"
-			(uuid "954aa39b-491f-4a7a-8748-15c93a3315c5")
+		(property "Description" ""
+			(at 209.55 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
 		(pin "4"
-			(uuid "e0b1911f-e0cb-4869-89b3-9131e83f3b66")
+			(uuid "487db111-d5bf-4aab-b9d6-fd9f8ef5cf7e")
+		)
+		(pin "1"
+			(uuid "72b076a0-732e-4a3f-862e-009383ece641")
 		)
 		(pin "3"
-			(uuid "79aaaed4-db7c-4092-952e-526a910016aa")
+			(uuid "16beab73-7dc2-4b55-93e0-1e0afa7a6ce8")
+		)
+		(pin "2"
+			(uuid "3cf3b0df-8b18-4cb2-800b-e24047786e1e")
 		)
 		(instances
 			(project "schematic"
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
 					(reference "U3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "symbol_lib:TCRT5000")
+		(at 182.88 105.41 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "bc235402-05c9-4f5c-a81f-be6aa2857054")
+		(property "Reference" "U10"
+			(at 182.88 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "TCRT5000"
+			(at 182.88 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 182.88 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 182.88 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 182.88 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "4"
+			(uuid "55567934-3af9-4807-9f87-962ea064a66a")
+		)
+		(pin "1"
+			(uuid "1822aa38-6cdf-4aa8-a57c-2d959c319a41")
+		)
+		(pin "3"
+			(uuid "91e18f3e-d6f3-4aad-a6bf-8faf66f14cc2")
+		)
+		(pin "2"
+			(uuid "8564cf76-f53f-4daa-8c6c-50e78a0bb98f")
+		)
+		(instances
+			(project ""
+				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
+					(reference "U10")
 					(unit 1)
 				)
 			)
@@ -3323,42 +3375,33 @@
 		)
 	)
 	(symbol
-		(lib_id "Sensor_Proximity:BPR-105")
-		(at 163.83 99.06 0)
+		(lib_id "symbol_lib:HC-SR04")
+		(at 87.63 119.38 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "dd9ba23c-5a70-469b-820b-3e59cbbfde50")
-		(property "Reference" "U2"
-			(at 163.83 90.17 0)
+		(uuid "e3665919-3b0a-45d3-891e-0293bbd09687")
+		(property "Reference" "U9"
+			(at 87.63 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "BPR-105"
-			(at 163.83 92.71 0)
+		(property "Value" "HC-SR04"
+			(at 87.63 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Footprint" "OptoDevice:Everlight_ITR8307"
-			(at 163.83 104.14 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ystone.com.tw/en/data/goods/IRPT/Photo%20Interrupters-Reflective%20Type.pdf"
-			(at 163.83 96.52 0)
+		(property "Footprint" ""
+			(at 87.63 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3366,8 +3409,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Subminiature Reflective Optical Sensor, SMD-package with PCB-cutout"
-			(at 163.83 99.06 0)
+		(property "Datasheet" ""
+			(at 87.63 119.38 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3375,22 +3418,31 @@
 				(hide yes)
 			)
 		)
-		(pin "2"
-			(uuid "f6a3edf9-dc9b-4fbc-9ca6-3cbb22e022e6")
+		(property "Description" ""
+			(at 87.63 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
 		)
 		(pin "1"
-			(uuid "9ebb2708-02cb-4320-933d-8bb2fc56b874")
+			(uuid "ea4e4ac8-54f0-4965-9597-d9c49e646e3d")
 		)
 		(pin "4"
-			(uuid "d12119c4-ebb3-4a39-a63b-b6cdbe613e95")
+			(uuid "d7a081de-926d-4885-9560-cb7d1b06908c")
 		)
 		(pin "3"
-			(uuid "07493d83-2336-4f1d-9aa2-c6eab28b2863")
+			(uuid "9f8d1fc3-0eca-4e66-a9cb-3f61f7ce6267")
+		)
+		(pin "2"
+			(uuid "c75d2b52-a562-4019-bda7-d74b7614ed37")
 		)
 		(instances
 			(project "schematic"
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "U2")
+					(reference "U9")
 					(unit 1)
 				)
 			)
