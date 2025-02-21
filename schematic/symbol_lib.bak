@@ -342,17 +342,6 @@
 			)
 		)
 		(symbol "TCRT5000_0_1"
-			(rectangle
-				(start -5.08 -1.27)
-				(end 5.08 -13.97)
-				(stroke
-					(width 0)
-					(type default)
-				)
-				(fill
-					(type none)
-				)
-			)
 			(polyline
 				(pts
 					(xy -3.81 -5.08) (xy -2.54 -5.08)
@@ -655,6 +644,17 @@
 			)
 		)
 		(symbol "TCRT5000_1_1"
+			(rectangle
+				(start -5.08 -1.27)
+				(end 5.08 -13.97)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type background)
+				)
+			)
 			(pin power_in line
 				(at 7.62 -3.81 180)
 				(length 2.54)
