@@ -1,0 +1,278 @@
+// LSM9DS1 9-DOF Sensor testing
+
+// upright position
+Accel X: -0.44 m/s^2    Y: -0.13 m/s^2  Z: 10.24 m/s^2 
+Mag X: 19.00 uT Y: 34.27 uT     Z: 63.08 uT
+Gyro X: 0.02 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.44 m/s^2    Y: -0.12 m/s^2  Z: 10.18 m/s^2 
+Mag X: 18.39 uT Y: 34.03 uT     Z: 63.62 uT
+Gyro X: 0.02 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.41 m/s^2    Y: -0.10 m/s^2  Z: 10.14 m/s^2 
+Mag X: 18.55 uT Y: 34.16 uT     Z: 63.33 uT
+Gyro X: 0.03 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.43 m/s^2    Y: -0.10 m/s^2  Z: 10.19 m/s^2 
+Mag X: 19.16 uT Y: 34.22 uT     Z: 62.91 uT
+Gyro X: 0.02 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.49 m/s^2    Y: -0.11 m/s^2  Z: 10.22 m/s^2 
+Mag X: 18.69 uT Y: 34.32 uT     Z: 63.49 uT
+Gyro X: 0.03 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.40 m/s^2    Y: -0.10 m/s^2  Z: 10.19 m/s^2 
+Mag X: 18.78 uT Y: 34.76 uT     Z: 62.44 uT
+Gyro X: 0.02 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.45 m/s^2    Y: -0.12 m/s^2  Z: 10.23 m/s^2 
+Mag X: 19.04 uT Y: 34.45 uT     Z: 63.04 uT
+Gyro X: 0.03 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.47 m/s^2    Y: -0.12 m/s^2  Z: 10.25 m/s^2 
+Mag X: 19.03 uT Y: 34.57 uT     Z: 62.91 uT
+Gyro X: 0.02 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.45 m/s^2    Y: -0.11 m/s^2  Z: 10.16 m/s^2 
+Mag X: 18.80 uT Y: 34.39 uT     Z: 63.20 uT
+Gyro X: 0.02 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.45 m/s^2    Y: -0.11 m/s^2  Z: 10.21 m/s^2 
+Mag X: 18.65 uT Y: 34.58 uT     Z: 63.48 uT
+Gyro X: 0.02 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.24 m/s^2    Y: 0.25 m/s^2   Z: 10.22 m/s^2 
+Mag X: 18.14 uT Y: 35.66 uT     Z: 63.94 uT
+Gyro X: 0.03 rad/s      Y: -0.19 rad/s  Z: -0.37 rad/s
+
+Accel X: 3.17 m/s^2     Y: 0.20 m/s^2   Z: 9.40 m/s^2 
+Mag X: 19.54 uT Y: 37.62 uT     Z: 63.78 uT
+Gyro X: 0.00 rad/s      Y: 0.11 rad/s   Z: -0.04 rad/s
+
+Accel X: 13.09 m/s^2    Y: -2.60 m/s^2  Z: 19.52 m/s^2 
+Mag X: 18.44 uT Y: 38.02 uT     Z: 62.44 uT
+Gyro X: 0.05 rad/s      Y: 1.79 rad/s   Z: -0.12 rad/s
+
+// turning to -Y torque position
+Accel X: -1.46 m/s^2    Y: 0.39 m/s^2   Z: 11.13 m/s^2 
+Mag X: 20.94 uT Y: 40.40 uT     Z: 58.13 uT
+Gyro X: 0.05 rad/s      Y: -2.33 rad/s  Z: -0.42 rad/s
+
+Accel X: -3.44 m/s^2    Y: -0.76 m/s^2  Z: -0.43 m/s^2 
+Mag X: 17.22 uT Y: 42.52 uT     Z: 42.14 uT
+Gyro X: -0.30 rad/s     Y: -1.23 rad/s  Z: 0.30 rad/s
+
+Accel X: -7.68 m/s^2    Y: 0.40 m/s^2   Z: 7.26 m/s^2 
+Mag X: 10.19 uT Y: 41.41 uT     Z: 32.68 uT
+Gyro X: 0.88 rad/s      Y: -2.54 rad/s  Z: -0.50 rad/s
+
+Accel X: -9.80 m/s^2    Y: -0.14 m/s^2  Z: 1.57 m/s^2 
+Mag X: -0.41 uT Y: 42.39 uT     Z: 28.21 uT
+Gyro X: -0.06 rad/s     Y: -0.52 rad/s  Z: -0.02 rad/s
+
+Accel X: -9.71 m/s^2    Y: -0.10 m/s^2  Z: 1.28 m/s^2 
+Mag X: -2.28 uT Y: 42.25 uT     Z: 28.16 uT
+Gyro X: -0.01 rad/s     Y: 0.05 rad/s   Z: -0.03 rad/s
+
+Accel X: -9.80 m/s^2    Y: -0.15 m/s^2  Z: 1.14 m/s^2 
+Mag X: -2.62 uT Y: 42.08 uT     Z: 28.16 uT
+Gyro X: 0.02 rad/s      Y: -0.02 rad/s  Z: -0.03 rad/s
+
+Accel X: -9.78 m/s^2    Y: -0.14 m/s^2  Z: 1.20 m/s^2 
+Mag X: -2.65 uT Y: 41.49 uT     Z: 27.87 uT
+Gyro X: 0.03 rad/s      Y: 0.09 rad/s   Z: -0.03 rad/s
+
+Accel X: -9.78 m/s^2    Y: -0.14 m/s^2  Z: 1.06 m/s^2 
+Mag X: -2.62 uT Y: 41.82 uT     Z: 28.30 uT
+Gyro X: 0.02 rad/s      Y: 0.03 rad/s   Z: -0.04 rad/s
+
+Accel X: -9.88 m/s^2    Y: -0.13 m/s^2  Z: 0.83 m/s^2 
+Mag X: -2.63 uT Y: 42.24 uT     Z: 28.09 uT
+Gyro X: 0.04 rad/s      Y: 0.08 rad/s   Z: -0.04 rad/s
+
+Accel X: -9.75 m/s^2    Y: -0.13 m/s^2  Z: 1.02 m/s^2 
+Mag X: -2.85 uT Y: 42.01 uT     Z: 28.24 uT
+Gyro X: 0.05 rad/s      Y: 0.17 rad/s   Z: -0.03 rad/s
+
+Accel X: -9.86 m/s^2    Y: -0.15 m/s^2  Z: 1.00 m/s^2 
+Mag X: -3.01 uT Y: 42.46 uT     Z: 27.89 uT
+Gyro X: 0.04 rad/s      Y: 0.01 rad/s   Z: -0.03 rad/s
+
+Accel X: -9.84 m/s^2    Y: -0.15 m/s^2  Z: 0.91 m/s^2 
+Mag X: -2.85 uT Y: 42.53 uT     Z: 27.76 uT
+Gyro X: 0.03 rad/s      Y: -0.05 rad/s  Z: -0.03 rad/s
+
+Accel X: -9.81 m/s^2    Y: -0.12 m/s^2  Z: 0.83 m/s^2 
+Mag X: -3.62 uT Y: 42.34 uT     Z: 28.49 uT
+Gyro X: 0.01 rad/s      Y: 0.01 rad/s   Z: -0.03 rad/s
+
+Accel X: -9.87 m/s^2    Y: -0.21 m/s^2  Z: 1.22 m/s^2 
+Mag X: -2.54 uT Y: 42.30 uT     Z: 28.52 uT
+Gyro X: 0.05 rad/s      Y: 0.84 rad/s   Z: -0.03 rad/s
+
+Accel X: -9.78 m/s^2    Y: -0.50 m/s^2  Z: 1.41 m/s^2 
+Mag X: 1.10 uT  Y: 44.53 uT     Z: 29.29 uT
+Gyro X: -0.08 rad/s     Y: -0.14 rad/s  Z: -0.02 rad/s
+
+// turning to +Y torque position
+Accel X: -9.39 m/s^2    Y: -0.16 m/s^2  Z: 2.99 m/s^2 
+Mag X: 2.32 uT  Y: 44.52 uT     Z: 30.04 uT
+Gyro X: -0.01 rad/s     Y: 0.07 rad/s   Z: -0.03 rad/s
+
+Accel X: -9.15 m/s^2    Y: 0.28 m/s^2   Z: 5.13 m/s^2 
+Mag X: 11.40 uT Y: 43.28 uT     Z: 35.47 uT
+Gyro X: -0.17 rad/s     Y: 1.72 rad/s   Z: 0.13 rad/s
+
+Accel X: -2.24 m/s^2    Y: 1.06 m/s^2   Z: 10.05 m/s^2 
+Mag X: 20.23 uT Y: 44.17 uT     Z: 56.78 uT
+Gyro X: -0.85 rad/s     Y: 2.77 rad/s   Z: 0.25 rad/s
+
+Accel X: 3.07 m/s^2     Y: 1.33 m/s^2   Z: 8.96 m/s^2 
+Mag X: 17.42 uT Y: 43.12 uT     Z: 71.78 uT
+Gyro X: 0.47 rad/s      Y: 1.38 rad/s   Z: 0.26 rad/s
+
+Accel X: 6.51 m/s^2     Y: 2.51 m/s^2   Z: 9.05 m/s^2 
+Mag X: 13.26 uT Y: 41.20 uT     Z: 77.74 uT
+Gyro X: -0.36 rad/s     Y: 1.30 rad/s   Z: 0.20 rad/s
+
+Accel X: 6.84 m/s^2     Y: 1.57 m/s^2   Z: 6.83 m/s^2 
+Mag X: 9.85 uT  Y: 41.60 uT     Z: 82.65 uT
+Gyro X: -0.14 rad/s     Y: 0.75 rad/s   Z: 0.06 rad/s
+
+Accel X: 7.76 m/s^2     Y: 1.87 m/s^2   Z: 5.35 m/s^2 
+Mag X: 5.89 uT  Y: 42.71 uT     Z: 86.36 uT
+Gyro X: 0.23 rad/s      Y: 1.07 rad/s   Z: -0.07 rad/s
+
+Accel X: 7.96 m/s^2     Y: 1.89 m/s^2   Z: 5.16 m/s^2 
+Mag X: 3.38 uT  Y: 42.84 uT     Z: 86.93 uT
+Gyro X: 0.02 rad/s      Y: 0.06 rad/s   Z: -0.05 rad/s
+
+Accel X: 8.11 m/s^2     Y: 1.95 m/s^2   Z: 5.18 m/s^2 
+Mag X: 3.03 uT  Y: 42.56 uT     Z: 86.71 uT
+Gyro X: -0.04 rad/s     Y: 0.11 rad/s   Z: -0.06 rad/s
+
+Accel X: 8.47 m/s^2     Y: 1.91 m/s^2   Z: 4.40 m/s^2 
+Mag X: 1.99 uT  Y: 42.87 uT     Z: 87.68 uT
+Gyro X: 0.07 rad/s      Y: -0.02 rad/s  Z: -0.02 rad/s
+
+Accel X: 8.38 m/s^2     Y: 1.93 m/s^2   Z: 4.67 m/s^2 
+Mag X: 1.81 uT  Y: 42.97 uT     Z: 88.86 uT
+Gyro X: 0.00 rad/s      Y: 0.14 rad/s   Z: -0.06 rad/s
+
+Accel X: 8.64 m/s^2     Y: 1.91 m/s^2   Z: 4.14 m/s^2 
+Mag X: 0.58 uT  Y: 42.98 uT     Z: 89.04 uT
+Gyro X: 0.02 rad/s      Y: 0.10 rad/s   Z: -0.03 rad/s
+
+Accel X: 8.55 m/s^2     Y: 1.94 m/s^2   Z: 4.40 m/s^2 
+Mag X: 0.83 uT  Y: 43.19 uT     Z: 88.38 uT
+Gyro X: 0.03 rad/s      Y: 0.03 rad/s   Z: -0.04 rad/s
+
+Accel X: 8.62 m/s^2     Y: 1.93 m/s^2   Z: 4.26 m/s^2 
+Mag X: 0.73 uT  Y: 43.12 uT     Z: 89.36 uT
+Gyro X: 0.02 rad/s      Y: 0.07 rad/s   Z: -0.04 rad/s
+
+Accel X: 8.54 m/s^2     Y: 2.01 m/s^2   Z: 4.24 m/s^2 
+Mag X: 0.35 uT  Y: 43.42 uT     Z: 88.67 uT
+Gyro X: 0.01 rad/s      Y: 0.05 rad/s   Z: -0.03 rad/s
+
+Accel X: 8.60 m/s^2     Y: 1.94 m/s^2   Z: 4.14 m/s^2 
+Mag X: 0.61 uT  Y: 43.23 uT     Z: 89.16 uT
+Gyro X: 0.02 rad/s      Y: 0.01 rad/s   Z: -0.03 rad/s
+
+Accel X: 8.57 m/s^2     Y: 2.06 m/s^2   Z: 4.38 m/s^2 
+Mag X: 1.29 uT  Y: 43.39 uT     Z: 88.69 uT
+Gyro X: -0.01 rad/s     Y: 0.13 rad/s   Z: -0.02 rad/s
+
+Accel X: 8.64 m/s^2     Y: 2.21 m/s^2   Z: 4.60 m/s^2 
+Mag X: 2.19 uT  Y: 42.56 uT     Z: 88.94 uT
+Gyro X: -0.08 rad/s     Y: -0.17 rad/s  Z: 0.10 rad/s
+
+Accel X: 7.50 m/s^2     Y: 3.65 m/s^2   Z: 4.14 m/s^2 
+Mag X: 5.73 uT  Y: 43.00 uT     Z: 87.71 uT
+Gyro X: -0.96 rad/s     Y: -0.88 rad/s  Z: 1.64 rad/s
+
+Accel X: 5.59 m/s^2     Y: 6.60 m/s^2   Z: 4.89 m/s^2 
+Mag X: 5.48 uT  Y: 41.61 uT     Z: 86.69 uT
+Gyro X: -0.07 rad/s     Y: 0.24 rad/s   Z: 1.12 rad/s
+
+// turning to +X torque direction
+Accel X: 2.86 m/s^2     Y: 7.55 m/s^2   Z: 1.86 m/s^2 
+Mag X: -1.94 uT Y: 43.09 uT     Z: 90.05 uT
+Gyro X: -2.26 rad/s     Y: 1.73 rad/s   Z: 0.43 rad/s
+
+Accel X: 1.72 m/s^2     Y: 7.17 m/s^2   Z: -0.93 m/s^2 
+Mag X: -5.89 uT Y: 47.60 uT     Z: 90.30 uT
+Gyro X: -0.90 rad/s     Y: 0.42 rad/s   Z: 0.53 rad/s
+
+Accel X: 3.23 m/s^2     Y: 10.04 m/s^2  Z: 0.59 m/s^2 
+Mag X: -7.38 uT Y: 48.64 uT     Z: 90.62 uT
+Gyro X: -0.02 rad/s     Y: 0.60 rad/s   Z: 0.20 rad/s
+
+Accel X: 1.87 m/s^2     Y: 9.25 m/s^2   Z: -0.09 m/s^2 
+Mag X: -8.42 uT Y: 48.74 uT     Z: 89.92 uT
+Gyro X: 0.07 rad/s      Y: -0.01 rad/s  Z: -0.03 rad/s
+
+Accel X: 1.55 m/s^2     Y: 9.46 m/s^2   Z: -0.13 m/s^2 
+Mag X: -8.39 uT Y: 48.74 uT     Z: 89.64 uT
+Gyro X: 0.05 rad/s      Y: 0.12 rad/s   Z: 0.05 rad/s
+
+Accel X: 1.39 m/s^2     Y: 9.45 m/s^2   Z: -0.02 m/s^2 
+Mag X: -7.72 uT Y: 48.93 uT     Z: 89.83 uT
+Gyro X: -0.06 rad/s     Y: 0.08 rad/s   Z: 0.08 rad/s
+
+Accel X: 0.98 m/s^2     Y: 9.57 m/s^2   Z: -0.48 m/s^2 
+Mag X: -8.01 uT Y: 49.31 uT     Z: 89.16 uT
+Gyro X: -0.01 rad/s     Y: 0.01 rad/s   Z: 0.01 rad/s
+
+Accel X: 0.97 m/s^2     Y: 9.52 m/s^2   Z: -0.32 m/s^2 
+Mag X: -7.75 uT Y: 49.66 uT     Z: 89.62 uT
+Gyro X: 0.07 rad/s      Y: -0.00 rad/s  Z: -0.03 rad/s
+
+Accel X: 0.88 m/s^2     Y: 9.57 m/s^2   Z: -0.48 m/s^2 
+Mag X: -7.99 uT Y: 49.34 uT     Z: 89.17 uT
+Gyro X: 0.06 rad/s      Y: -0.03 rad/s  Z: -0.07 rad/s
+
+Accel X: 0.91 m/s^2     Y: 9.55 m/s^2   Z: -0.26 m/s^2 
+Mag X: -7.00 uT Y: 49.39 uT     Z: 88.41 uT
+Gyro X: -0.03 rad/s     Y: -0.10 rad/s  Z: -0.08 rad/s
+
+Accel X: 1.27 m/s^2     Y: 9.53 m/s^2   Z: -0.25 m/s^2 
+Mag X: -7.54 uT Y: 48.86 uT     Z: 89.97 uT
+Gyro X: 0.06 rad/s      Y: 0.03 rad/s   Z: -0.21 rad/s
+
+Accel X: 1.82 m/s^2     Y: 9.17 m/s^2   Z: -0.44 m/s^2 
+Mag X: -6.33 uT Y: 48.03 uT     Z: 89.78 uT
+Gyro X: 0.76 rad/s      Y: -1.25 rad/s  Z: -0.30 rad/s
+
+// back to upright position
+Accel X: 2.38 m/s^2     Y: 8.04 m/s^2   Z: 1.85 m/s^2 
+Mag X: 0.79 uT  Y: 46.57 uT     Z: 88.89 uT
+Gyro X: 0.85 rad/s      Y: -1.98 rad/s  Z: -1.13 rad/s
+
+Accel X: -2.60 m/s^2    Y: 2.54 m/s^2   Z: 1.26 m/s^2 
+Mag X: 12.77 uT Y: 44.62 uT     Z: 81.94 uT
+Gyro X: 1.47 rad/s      Y: -2.65 rad/s  Z: -0.96 rad/s
+
+Accel X: -2.84 m/s^2    Y: 2.71 m/s^2   Z: 7.36 m/s^2 
+Mag X: 20.72 uT Y: 40.24 uT     Z: 64.66 uT
+Gyro X: 1.84 rad/s      Y: -5.00 rad/s  Z: 1.33 rad/s
+
+Accel X: -2.53 m/s^2    Y: 2.23 m/s^2   Z: 9.15 m/s^2 
+Mag X: 21.13 uT Y: 34.58 uT     Z: 54.59 uT
+Gyro X: 0.68 rad/s      Y: 0.73 rad/s   Z: 0.33 rad/s
+
+Accel X: -0.54 m/s^2    Y: -0.12 m/s^2  Z: 9.91 m/s^2 
+Mag X: 19.96 uT Y: 34.38 uT     Z: 65.08 uT
+Gyro X: 0.01 rad/s      Y: 0.31 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.12 m/s^2    Y: -0.09 m/s^2  Z: 10.20 m/s^2 
+Mag X: 19.85 uT Y: 35.06 uT     Z: 64.76 uT
+Gyro X: 0.03 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.13 m/s^2    Y: -0.11 m/s^2  Z: 10.22 m/s^2 
+Mag X: 19.69 uT Y: 34.52 uT     Z: 65.36 uT
+Gyro X: 0.02 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s
+
+Accel X: -0.11 m/s^2    Y: -0.10 m/s^2  Z: 10.18 m/s^2 
+Mag X: 20.02 uT Y: 34.48 uT     Z: 64.50 uT
+Gyro X: 0.02 rad/s      Y: 0.04 rad/s   Z: -0.04 rad/s

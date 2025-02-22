@@ -1,0 +1,46 @@
+// Line sensor testing, data coming in every 500 ms.
+
+// Sensor pointing at wooden table
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:20
+// Sensor pointing at black tape
+Line Sensor Reading:927
+Line Sensor Reading:928
+Line Sensor Reading:933
+Line Sensor Reading:930
+Line Sensor Reading:927
+Line Sensor Reading:929
+Line Sensor Reading:927
+Line Sensor Reading:921
+Line Sensor Reading:922
+Line Sensor Reading:922
+Line Sensor Reading:931
+Line Sensor Reading:933
+Line Sensor Reading:912
+// Sensor pointing at wooden table again
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:16
+Line Sensor Reading:21
+// Sensor pointing forward, not to a surface
+Line Sensor Reading:775
+Line Sensor Reading:608

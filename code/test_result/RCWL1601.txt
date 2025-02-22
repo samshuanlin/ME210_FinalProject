@@ -1,0 +1,53 @@
+// RCWL1601 Ultrasonic Sensor Test. Data coming in every 500 ms
+
+// Starting at a close distance, gradually moving away
+6 cm
+6 cm
+6 cm
+6 cm
+6 cm
+6 cm
+8 cm
+12 cm
+13 cm
+12 cm
+13 cm
+12 cm
+16 cm
+18 cm
+18 cm
+19 cm
+24 cm
+24 cm
+22 cm
+26 cm
+26 cm
+29 cm
+20 cm
+22 cm
+29 cm
+36 cm
+27 cm
+21 cm
+23 cm
+27 cm
+32 cm
+38 cm
+44 cm
+40 cm
+43 cm
+40 cm
+41 cm
+// starting here (at around 40 cm), the data stops being accurate
+27 cm
+23 cm
+19 cm
+20 cm
+22 cm
+24 cm
+25 cm
+45 cm
+25 cm
+40 cm
+39 cm
+22 cm
