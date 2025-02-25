@@ -1,11 +1,25 @@
 #include <Arduino.h>
 
+/*----------------Timer Interrupt Defines and Variables-------------*/
+#define USE_TIMER_1     true
+#define FREQUENCY       3300    // to be measured in the states
+
+#include <TimerInterrupt.hpp>        
+#include <ISR_Timer.hpp> 
+#include <TimerInterrupt.h>
+#include <ISR_Timer.h>
+
  /*---------------Module Defines-----------------------------*/
 
-#define LINE_SENSOR_N_PIN   A1
-#define LINE_SENSOR_E_PIN   A2
-#define LINE_SENSOR_S_PIN   A3
-#define LINE_SENSOR_W_PIN   A4
+// Line sensor pins
+#define LINE_SENSOR_N_PIN   A0
+#define LINE_SENSOR_E_PIN   A1
+#define LINE_SENSOR_S_PIN   A2
+#define LINE_SENSOR_W_PIN   A3
+
+// IR sensor pins
+#define IR_RX_PIN_1     2
+#define IR_RX_PIN_2     3
 
 /*---------------Module Function Prototypes-----------------*/
 void checkGlobalEvents(void);
@@ -43,10 +57,15 @@ void setup(void) {
    
    state = GOING_TO_PANTRY_1;
 
+   // pin declarations for line sensor pin
    pinMode(LINE_SENSOR_N_PIN, INPUT);
    pinMode(LINE_SENSOR_E_PIN, INPUT);
    pinMode(LINE_SENSOR_S_PIN, INPUT);
    pinMode(LINE_SENSOR_W_PIN, INPUT);
+
+   // pin declaration for IR sensor pin
+   pinMode(IR_RX_PIN_1, INPUT);
+   pinMode(IR_RX_PIN_2, INPUT);
  }
 
  
