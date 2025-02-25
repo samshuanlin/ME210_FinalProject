@@ -1,5 +1,20 @@
 ## Meeting Notes
 
+**Feb 22, 2024**
+Members: Sam C., Archer D., Thomas H., Enzo A.
+
+Discussion items:
+1. Confirmed and submitted the schematic, FSM, design sketches and test results.
+2. Thomas and Sam: tested the IR sensor and confirmed that the IR phototransistor can pick up rising edges from the IR beacon. Need to revise circuit.
+3. Archer: worked on the motor bracket and later (on Feb 23) finished the motor chassis plate.
+4. Enzo: integrated the line sensor and confirmed line sensor detection functionality in the proposed setting.
+
+Action items:
+1. Integrating the robot chassis.
+2. Revise IR sensor circuit.
+3. Program basic FSM for line sensor network with motor to confirm functionality.
+4. Obtain batteries for initial motor testing.
+
 **Feb 18, 2024**
 
 Members: Sam C., Enzo A.

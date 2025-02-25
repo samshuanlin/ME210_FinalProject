@@ -1,80 +1,89 @@
-#include <Arduino.h>
-/***************************************************************************
-  This is an example for the Adafruit SensorLab library
-  It will look for a supported magnetometer and output
-  uTesla data as well as the hard iron calibration offsets
-  
-  Written by Limor Fried for Adafruit Industries.
- ***************************************************************************/
+// https://registry.platformio.org/libraries/adafruit/Adafruit%20LSM9DS1%20Library/examples/lsm9ds1/lsm9ds1.ino
 
-// this is a huge library, so I will only do this when I actually need to calibrate it.
-// You should not have to worry about this script.
-#include <Adafruit_SensorLab.h> 
- Adafruit_SensorLab lab;
- 
- Adafruit_Sensor *mag;
- sensors_event_t mag_event;
- 
- sensors_event_t event;
- float min_x, max_x, mid_x;
- float min_y, max_y, mid_y;
- float min_z, max_z, mid_z;
- 
- void setup(void) {
-   Serial.begin(115200);
-   while (!Serial) delay(10);     // will pause Zero, Leonardo, etc until serial console opens
-   
-   Serial.println(F("Sensor Lab - Magnetometer Calibration!"));
-   lab.begin();
-   
-   Serial.println("Looking for a magnetometer");
-   mag = lab.getMagnetometer();
-   if (! mag) {
-     Serial.println(F("Could not find a magnetometer, check wiring!"));
-     while(1) delay(10);
-   }
-   mag->printSensorDetails();
-   delay(100);
- 
-   mag->getEvent(&event);
-   min_x = max_x = event.magnetic.x;
-   min_y = max_y = event.magnetic.y;
-   min_z = max_z = event.magnetic.z;
-   delay(10);
- }
- 
- 
- 
- void loop() {
-   mag->getEvent(&event);
-   float x = event.magnetic.x;
-   float y = event.magnetic.y;
-   float z = event.magnetic.z;
-   
-   Serial.print("Mag: (");
-   Serial.print(x); Serial.print(", ");
-   Serial.print(y); Serial.print(", ");
-   Serial.print(z); Serial.print(")");
- 
-   min_x = min(min_x, x);
-   min_y = min(min_y, y);
-   min_z = min(min_z, z);
- 
-   max_x = max(max_x, x);
-   max_y = max(max_y, y);
-   max_z = max(max_z, z);
- 
-   mid_x = (max_x + min_x) / 2;
-   mid_y = (max_y + min_y) / 2;
-   mid_z = (max_z + min_z) / 2;
-   Serial.print(" Hard offset: (");
-   Serial.print(mid_x); Serial.print(", ");
-   Serial.print(mid_y); Serial.print(", ");
-   Serial.print(mid_z); Serial.print(")");  
- 
-   Serial.print(" Field: (");
-   Serial.print((max_x - min_x)/2); Serial.print(", ");
-   Serial.print((max_y - min_y)/2); Serial.print(", ");
-   Serial.print((max_z - min_z)/2); Serial.println(")");    
-   delay(10); 
- }
+#include <Arduino.h>
+#include <Wire.h>
+#include <SPI.h>
+#include <Adafruit_LSM9DS1.h>
+#include <Adafruit_Sensor.h>  // not used in this demo but required!
+
+// i2c
+Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
+
+#define LSM9DS1_SCK A5
+#define LSM9DS1_MISO 12
+#define LSM9DS1_MOSI A4
+#define LSM9DS1_XGCS 6
+#define LSM9DS1_MCS 5
+// You can also use software SPI
+//Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1(LSM9DS1_SCK, LSM9DS1_MISO, LSM9DS1_MOSI, LSM9DS1_XGCS, LSM9DS1_MCS);
+// Or hardware SPI! In this case, only CS pins are passed in
+//Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1(LSM9DS1_XGCS, LSM9DS1_MCS);
+
+
+void setupSensor()
+{
+  // 1.) Set the accelerometer range
+  lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_2G, lsm.LSM9DS1_ACCELDATARATE_10HZ);
+  //lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_4G, lsm.LSM9DS1_ACCELDATARATE_119HZ);
+  //lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_8G, lsm.LSM9DS1_ACCELDATARATE_476HZ);
+  //lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_16G, lsm.LSM9DS1_ACCELDATARATE_952HZ);
+  
+  // 2.) Set the magnetometer sensitivity
+  lsm.setupMag(lsm.LSM9DS1_MAGGAIN_4GAUSS);
+  //lsm.setupMag(lsm.LSM9DS1_MAGGAIN_8GAUSS);
+  //lsm.setupMag(lsm.LSM9DS1_MAGGAIN_12GAUSS);
+  //lsm.setupMag(lsm.LSM9DS1_MAGGAIN_16GAUSS);
+
+  // 3.) Setup the gyroscope
+  lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);
+  //lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_500DPS);
+  //lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_2000DPS);
+}
+
+
+void setup() 
+{
+  Serial.begin(115200);
+
+  while (!Serial) {
+    delay(1); // will pause Zero, Leonardo, etc until serial console opens
+  }
+  
+  Serial.println("LSM9DS1 data read demo");
+  
+  // Try to initialise and warn if we couldn't detect the chip
+  if (!lsm.begin())
+  {
+    Serial.println("Oops ... unable to initialize the LSM9DS1. Check your wiring!");
+    while (1);
+  }
+  Serial.println("Found LSM9DS1 9DOF");
+
+  // helper to just set the default scaling we want, see above!
+  setupSensor();
+}
+
+void loop() 
+{
+  lsm.read();  /* ask it to read in the data */ 
+
+  /* Get a new sensor event */ 
+  sensors_event_t a, m, g, temp;
+
+  lsm.getEvent(&a, &m, &g, &temp); 
+
+  Serial.print("Accel X: "); Serial.print(a.acceleration.x); Serial.print(" m/s^2");
+  Serial.print("\tY: "); Serial.print(a.acceleration.y);     Serial.print(" m/s^2 ");
+  Serial.print("\tZ: "); Serial.print(a.acceleration.z);     Serial.println(" m/s^2 ");
+
+  Serial.print("Mag X: "); Serial.print(m.magnetic.x);   Serial.print(" uT");
+  Serial.print("\tY: "); Serial.print(m.magnetic.y);     Serial.print(" uT");
+  Serial.print("\tZ: "); Serial.print(m.magnetic.z);     Serial.println(" uT");
+
+  Serial.print("Gyro X: "); Serial.print(g.gyro.x);   Serial.print(" rad/s");
+  Serial.print("\tY: "); Serial.print(g.gyro.y);      Serial.print(" rad/s");
+  Serial.print("\tZ: "); Serial.print(g.gyro.z);      Serial.println(" rad/s");
+
+  Serial.println();
+  delay(200);
+}
