@@ -18,6 +18,7 @@
 #define LINE_SENSOR_S_PIN   A2
 #define LINE_SENSOR_W_PIN   A3
 
+// Servo pins
 #define GATE_SERVO_PIN      9
 
 // IR sensor pins
@@ -59,8 +60,11 @@ typedef enum {
 } States_t;
 
 /*---------------Module Variables---------------------------*/
+// State variables
 States_t state;
 States_t initialState = DUMPING;
+
+// Line sensor variables
 float thrLine = 200.0;
 int line1;
 int line2;
@@ -70,9 +74,15 @@ int current_line1;
 int current_line2;
 int current_line3;
 int current_line4;
+
+// Servo variables
 Servo gateServo;  // create servo object to control a servo
 int gateServoPos = 0;    // variable to store the servo position
 int dumpingDuration = 1000; // milliseconds
+
+// IR sensor variables
+int ir_1_status = 0;
+int ir_2_status = 0;
 
 /*---------------Robot Main Functions----------------*/
 void setup(void) {
@@ -85,12 +95,21 @@ void setup(void) {
    
    state = initialState;
 
+   // pin setup for line sensors
    pinMode(LINE_SENSOR_N_PIN, INPUT);
    pinMode(LINE_SENSOR_E_PIN, INPUT);
    pinMode(LINE_SENSOR_S_PIN, INPUT);
    pinMode(LINE_SENSOR_W_PIN, INPUT);
 
    gateServo.attach(GATE_SERVO_PIN);
+
+   // pin setup for IR sensors
+   pinMode(IR_RX_PIN_1, INPUT);
+   pinMode(IR_RX_PIN_2, INPUT);
+
+   // digital pin interrupt setup for IR sensors
+   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_Handler, RISING);
+   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_Handler, RISING);
  }
 
  
@@ -107,6 +126,8 @@ void setup(void) {
     //displayLineSensors();
  }
 
+/*----------------ISRs---------------*/
+
 
 /*----------------Module Functions--------------------------*/
 
@@ -116,6 +137,27 @@ void checkGlobalEvents(void) {
   if (TestForChangeInTape_3()) RespToChangeInTape_3();
   if (TestForChangeInTape_4()) RespToChangeInTape_4();
 } 
+
+void ir1_handler(void *) {
+  ir_1_status = 1;  // fired at every pin interrupt, set ir_1_status to be 1, to be turned of by TestForBeaconSensing
+}
+
+void ir2_handler(void *) {
+  ir_2_status = 1;  // fired at every pin interrupt, set ir_2_status to be 1, to be turned of by TestForBeaconSensing
+}
+
+uint8_t TestForBeaconSensing(void) {
+  if (ir_1_status || ir_2_status) {   // use OR logic to allow for greater coverage
+    ir_1_status = 0;
+    ir_2_status = 0;
+    return 1;
+  }
+  return 0;
+}
+
+void RespToBeaconSensing(void) {
+  state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
+}
 
 uint8_t TestForChangeInTape_1(void) {
   current_line1 = analogRead(LINE_SENSOR_N_PIN) > thrLine;
@@ -299,7 +341,4 @@ void handleDump(void) {
   delay(dumpingDuration);
   state = GOING_TO_PANTRY_1;
 }
-
-
-
 
