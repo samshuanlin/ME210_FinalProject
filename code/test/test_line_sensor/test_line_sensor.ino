@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <Servo.h>
 
 /*----------------Timer Interrupt Defines and Variables-------------*/
 #define USE_TIMER_1     true
@@ -9,6 +8,8 @@
 #include <ISR_Timer.hpp> 
 #include <TimerInterrupt.h>
 #include <ISR_Timer.h>
+
+#include <PWMServo.h>
 
  /*---------------Module Defines-----------------------------*/
 
@@ -40,8 +41,18 @@ unsigned char TestForChangeInTape_3(void);
 void RespToChangeInTape_3(void);
 unsigned char TestForChangeInTape_4(void);
 void RespToChangeInTape_4(void);
+void ir1_handler(void *);
+void ir2_handler(void *);
+uint8_t TestForBeaconSensing(void);
+void RespToBeaconSensing(void);
+uint8_t TestForFrontWall(void);
+void RespToFrontWall(void);
+uint8_t TestForLeftWall(void);
+void RespToLeftWall(void);
 
+void displayState(void);
 void handleDump(void);
+void checkFrontDistance(void);
 
 
 /*---------------State Definitions--------------------------*/
@@ -81,7 +92,7 @@ int current_line3;
 int current_line4;
 
 // Servo variables
-Servo gateServo;  // create servo object to control a servo
+PWMServo gateServo;  // create servo object to control a servo
 int gateServoPos = 0;    // variable to store the servo position
 int dumpingDuration = 1000; // milliseconds
 
@@ -120,8 +131,8 @@ void setup(void) {
    pinMode(IR_RX_PIN_2, INPUT);
 
    // digital pin interrupt setup for IR sensors
-   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_Handler, RISING);
-   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_Handler, RISING);
+   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_handler, RISING);
+   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, RISING);
 
    // ultrasonic sensor pin setup
    pinMode(US_TRIG, OUTPUT);
@@ -176,6 +187,10 @@ uint8_t TestForBeaconSensing(void) {
   return 0;
 }
 
+void RespToBeaconSensing(void) {
+  state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
+}
+
 void checkFrontDistance(void) {
   analogWrite(US_TRIG, 128);  // 50% duty cycle, 490Hz frequency
   unsigned long timeout = 3000L;
@@ -226,10 +241,6 @@ uint8_t TestForLeftWall(void) {
 
 void RespToLeftWall(void) {
   state = GOING_BACK_ON_TRACK;
-}
-
-void RespToBeaconSensing(void) {
-  state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
 }
 
 uint8_t TestForChangeInTape_1(void) {
