@@ -1,5 +1,19 @@
 ## Meeting Notes
 
+**Feb 25, 2025 Morning**
+Members: Sam C., Enzo A., Thomas H.,
+
+Discussion items/Worked on:
+1. Finalizing the motor operation code and integrating it into the FSM.
+2. Revamped IR sensor circuit to include pre-gain filter and a greater gain (~240x now) to pick up the signals from the furthest point of interest.
+3. 
+
+Action items:
+1. Test out IR sensor operation.
+2. Figure out two-board communication and organize code from there.
+3. Servo integration with gate & TPU.
+4. Battery connector crimping and wiring.
+
 **Feb 24, 2025**
 Members: Sam C., Archer D., Thomas H., Enzo A.
 
