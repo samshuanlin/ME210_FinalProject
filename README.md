@@ -1,6 +1,22 @@
 ## Meeting Notes
 
-**Feb 22, 2024**
+**Feb 24, 2025**
+Members: Sam C., Archer D., Thomas H., Enzo A.
+
+Discussion items/Worked on:
+1. Working version of the IR phototransistor network complete with code support.
+2. Chassis, motor and wheel assembly complete.
+3. FSM implementation for pantry-pot loop complete with line sensor input reading.
+4. Integrated IR and ultrasonic sensor code together.
+
+Action items:
+1. I2C inter-board communication.
+2. Integrate motor control code.
+3. Organize code to have separate classes/files for different functions.
+4. Test current ball track and servo gate.
+5. Start working on TPU arm.
+
+**Feb 22, 2025**
 Members: Sam C., Archer D., Thomas H., Enzo A.
 
 Discussion items:
@@ -15,7 +31,7 @@ Action items:
 3. Program basic FSM for line sensor network with motor to confirm functionality.
 4. Obtain batteries for initial motor testing.
 
-**Feb 18, 2024**
+**Feb 18, 2025**
 
 Members: Sam C., Enzo A.
 
