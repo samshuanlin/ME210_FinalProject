@@ -25,6 +25,11 @@
 #define IR_RX_PIN_1     2
 #define IR_RX_PIN_2     3
 
+// Ultrasonic sensor pins
+#define US_TRIG         9     // PWM pin
+#define US_1_ECHO       4     // regular IO pin
+#define US_2_ECHO       7     // regular IO pin
+
 /*---------------Module Function Prototypes-----------------*/
 void checkGlobalEvents(void);
 unsigned char TestForChangeInTape_1(void);
@@ -84,6 +89,13 @@ int dumpingDuration = 1000; // milliseconds
 int ir_1_status = 0;
 int ir_2_status = 0;
 
+// Ultrasonic sensor variables
+long duration1, distance1, duration2, distance2;    // long for 64 bit storage
+long prev_dist1, prev_dist2;
+long front_dist_threshold = 5;
+long left_dist_threshold = 50; 
+long hysteresis_threshold = 5;    // may need different threshold for different distances
+
 /*---------------Robot Main Functions----------------*/
 void setup(void) {
    Serial.begin(9600);
@@ -110,11 +122,17 @@ void setup(void) {
    // digital pin interrupt setup for IR sensors
    attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_Handler, RISING);
    attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_Handler, RISING);
+
+   // ultrasonic sensor pin setup
+   pinMode(US_TRIG, OUTPUT);
+   pinMode(US_1_ECHO, INPUT);
+   pinMode(US_2_ECHO, INPUT);
  }
 
  
  void loop() {
     checkGlobalEvents();
+    checkFrontDistance();
     switch (state) {
       case DUMPING:
         handleDump();
@@ -136,6 +154,9 @@ void checkGlobalEvents(void) {
   if (TestForChangeInTape_2()) RespToChangeInTape_2();
   if (TestForChangeInTape_3()) RespToChangeInTape_3();
   if (TestForChangeInTape_4()) RespToChangeInTape_4();
+  if (TestForBeaconSensing()) RespToBeaconSensing();
+  if (TestForFrontWall()) RespToFrontWall();
+  if (TestForLeftWall()) RespToLeftWall();
 } 
 
 void ir1_handler(void *) {
@@ -153,6 +174,58 @@ uint8_t TestForBeaconSensing(void) {
     return 1;
   }
   return 0;
+}
+
+void checkFrontDistance(void) {
+  analogWrite(US_TRIG, 128);  // 50% duty cycle, 490Hz frequency
+  unsigned long timeout = 3000L;
+  // US_1 is the front-facing ultrasonic sensor
+  duration1 = pulseIn(US_1_ECHO, HIGH, timeout);    // pulse in us. if returning 0, means no feedback received
+  distance1 = duration1 * 10 / 2 / 291;   // duration (us) / 2 / 29.1 (us / cm) (speed is the speed of light)
+                                          // additional 10 multiplied to prevent decimal numbers
+  // US_2 is the left-facing ultrasonic sensor
+  duration2 = pulseIn(US_2_ECHO, HIGH, timeout);
+  distance2 = duration2 * 10 / 2 / 291;
+  // note that this is done in a superloop, so will cause delays for 6 ms maximum
+}
+
+uint8_t TestForFrontWall(void) {
+  if (distance1 >= front_dist_threshold + hysteresis_threshold && prev_dist1 < front_dist_threshold + hysteresis_threshold) {
+    prev_dist1 = distance1;
+    return true;
+  }
+  prev_dist1 = distance1;
+  return false;
+}
+
+void RespToFrontWall(void) {
+  switch (state) {
+    case GOING_TO_CW_2:
+      state = MOVING_POT;
+      break;
+    case LEAVING_FROM_BTN_i:
+      state = MOVING_POT;
+      break;
+      case GOING_TO_BURNER_3:
+        state = DUMPING;
+      break;
+    case LEAVING_FROM_BTN_f:
+      state = DELIVERING;
+      break;
+  }
+}
+
+uint8_t TestForLeftWall(void) {
+  if (distance2 >= left_dist_threshold + hysteresis_threshold && prev_dist2 < left_dist_threshold + hysteresis_threshold) {
+    prev_dist2 = distance2;
+    return true;
+  }
+  prev_dist2 = distance2;
+  return false;
+}
+
+void RespToLeftWall(void) {
+  state = GOING_BACK_ON_TRACK;
 }
 
 void RespToBeaconSensing(void) {
