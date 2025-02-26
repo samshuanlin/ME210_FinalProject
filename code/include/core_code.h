@@ -13,6 +13,9 @@
 #include <TimerInterrupt.h>
 #include <ISR_Timer.h>
 
+/*----------------I2C Defines----------------*/
+#include <Wire.h>
+
  /*---------------Module Defines-----------------------------*/
 
 // Line sensor pins. Analog input, so analog pins used
@@ -47,9 +50,11 @@ void RespToChangeInTape_3(void);
 unsigned char TestForChangeInTape_4(void);
 void RespToChangeInTape_4(void);
 
+/*
 // IR receiver interrupt handlers
 void ir1_handler();
 void ir2_handler();
+*/
 
 // IR receiver sensing event detection and response functions
 uint8_t TestForBeaconSensing(void);

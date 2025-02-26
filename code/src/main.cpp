@@ -7,8 +7,17 @@
 
  #include <core_code.h>
 
+ /*---------------Interrupt Handlers------------------*/
+ void ir1_handler(void) {
+     ir_1_status = 1;  // fired at every pin interrupt, set ir_1_status to be 1, to be turned of by TestForBeaconSensing
+ }
+   
+ void ir2_handler(void) {
+     ir_2_status = 1;  // fired at every pin interrupt, set ir_2_status to be 1, to be turned of by TestForBeaconSensing
+ }  
+ 
  /*---------------Robot Main Functions----------------*/
- void setup(void) {
+ void setup() {
     Serial.begin(9600);
     while (!Serial) delay(10);     // will pause Zero, Leonardo, etc until serial console opens
     // ------- Clears the Serial Monitor --------
@@ -24,8 +33,6 @@
     pinMode(LINE_SENSOR_S_PIN, INPUT);
     pinMode(LINE_SENSOR_W_PIN, INPUT);
  
-    gateServo.attach(GATE_SERVO_PIN);
- 
     // pin setup for IR sensors
     pinMode(IR_RX_PIN_1, INPUT);
     pinMode(IR_RX_PIN_2, INPUT);
@@ -38,6 +45,9 @@
     pinMode(US_TRIG, OUTPUT);
     pinMode(US_1_ECHO, INPUT);
     pinMode(US_2_ECHO, INPUT);
+ 
+    // I2C core board setup
+    Wire.begin(); 
   }
  
   
@@ -55,9 +65,6 @@
      //displayLineSensors();
   }
  
- /*----------------ISRs---------------*/
- 
- 
  /*----------------Module Functions--------------------------*/
  
  void checkGlobalEvents(void) {
@@ -69,14 +76,6 @@
    if (TestForFrontWall()) RespToFrontWall();
    if (TestForLeftWall()) RespToLeftWall();
  } 
- 
- void ir1_handler(void *) {
-   ir_1_status = 1;  // fired at every pin interrupt, set ir_1_status to be 1, to be turned of by TestForBeaconSensing
- }
- 
- void ir2_handler(void *) {
-   ir_2_status = 1;  // fired at every pin interrupt, set ir_2_status to be 1, to be turned of by TestForBeaconSensing
- }
  
  uint8_t TestForBeaconSensing(void) {
    if (ir_1_status || ir_2_status) {   // use OR logic to allow for greater coverage
@@ -319,9 +318,5 @@
  }
  
  void handleDump(void) {
-   gateServo.write(100);
-   delay(dumpingDuration);
-   gateServo.write(0);
-   delay(dumpingDuration);
-   state = GOING_TO_PANTRY_1;
+  return;
  }
