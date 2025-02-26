@@ -1,7 +1,17 @@
 ## Meeting Notes
 
+**Feb 25, 2025 Afternoon-Evening**
+Members: Sam C., Archer D., Enzo A.
+Discussion items/worked on: 
+1. Assembled motor drivers and crimped battery wires. Tested the motor driver functionality with Enzo's test code, no issues with software. Need to redo direction of the mecanums.
+2. Sam looked into inter-board I2C communication and found ways to send messages. Also found a way to drive 2 Arduinos at once.
+
+Action items:
+1. Re-organize code to split into core and peripheral boards.
+2. Servo integration with gate & TPU.
+
 **Feb 25, 2025 Morning**
-Members: Sam C., Enzo A., Thomas H.,
+Members: Sam C., Enzo A., Thomas H.
 
 Discussion items/Worked on:
 1. Finalizing the motor operation code and integrating it into the FSM.
@@ -9,7 +19,7 @@ Discussion items/Worked on:
 3. 
 
 Action items:
-1. Test out IR sensor operation.
+1. Test out ultrasonic sensor operation.
 2. Figure out two-board communication and organize code from there.
 3. Servo integration with gate & TPU.
 4. Battery connector crimping and wiring.
