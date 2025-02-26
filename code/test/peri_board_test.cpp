@@ -1,8 +1,5 @@
-/*
 #include <Arduino.h>
 #include <Wire.h>
-
-void receiveEvent(int bytes);
 
 // Include the required Wire library for I2C<br>#include <Wire.h>
 int LED = 13;
@@ -34,4 +31,3 @@ void loop() {
     delay(400);
   }
 }
-  */
