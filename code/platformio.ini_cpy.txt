@@ -30,3 +30,19 @@ build_src_filter =
     ${env.src_filter}
     -<core.cpp>
     -<peripheral.cpp>
+
+[env:core]
+build_src_filter =
+    ${env.src_filter}
+    -<peripheral.cpp>
+    -<main.cpp>
+upload_port = /dev/cu.usbmodem13301 ; for the mac
+monitor_port = /dev/cu.usbmodem13301 ; for the mac
+
+[env:peripheral]
+build_src_filter =
+    ${env.src_filter}
+    -<core.cpp>
+    -<main.cpp>
+upload_port = /dev/cu.usbmodem13401 ; for the mac
+monitor_port = /dev/cu.usbmodem13401 ; for the mac. For windoes it'll probably be COMX, X being a number

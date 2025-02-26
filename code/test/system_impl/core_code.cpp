@@ -1,100 +1,11 @@
-/*
- *  This file contains methods that will be run by the core Arduino board.
+/* 
+ *  This file contains implementations that will be run on the core Arduino board (MCU).
  *  The responsibilities of the core board include:
- *  1. running the FSM based on ultrasonic, IR, and other sensing mechanisms
- *  2. Sending signals to the peripheral board for any action to trigger.
+ *  1. Handle FSM state transitions based on ultrasonic sensor, IR receiver, and line sensor inputs.
+ *  2. Send commands to the peripheral board to drive any motors or do any actuation.
  */
 
-#include <Arduino.h>
-#include <Servo.h>
-
- /*---------------Module Defines-----------------------------*/
-
-#define LINE_SENSOR_N_PIN   A0
-#define LINE_SENSOR_E_PIN   A1
-#define LINE_SENSOR_S_PIN   A2
-#define LINE_SENSOR_W_PIN   A3
-
-#define GATE_SERVO_PIN      9
-
-#define MOTOR_1_IN1_PIN     2 // This is M3 on Kicad
-#define MOTOR_1_IN2_PIN     4 // This is M3 on Kicad
-#define MOTOR_2_IN3_PIN     5 // This is M4 on Kicad
-#define MOTOR_2_IN4_PIN     6 // This is M4 on Kicad
-#define MOTOR_3_IN1_PIN     7 // This is M5 on Kicad
-#define MOTOR_3_IN2_PIN     8 // This is M5 on Kicad
-#define MOTOR_4_IN3_PIN     12 // This is M6 on Kicad
-#define MOTOR_4_IN4_PIN     13 // This is M6 on Kicad
-#define MOTOR_SPEED_PIN     3
-
-#define FORWARD_DIR         1
-#define BACKWARD_DIR        -1
-
-
-/*---------------Module Function Prototypes-----------------*/
-// Event-related functions
-void checkGlobalEvents(void);
-unsigned char TestForChangeInTape_1(void);
-void RespToChangeInTape_1(void);
-unsigned char TestForChangeInTape_2(void);
-void RespToChangeInTape_2(void);
-unsigned char TestForChangeInTape_3(void);
-void RespToChangeInTape_3(void);
-unsigned char TestForChangeInTape_4(void);
-void RespToChangeInTape_4(void);
-
-// Blocking functions
-void Dump(void);
-void Load(void);
-
-// Motor control
-void driveNorth(void);
-void driveEast(void);
-void driveSouth(void);
-void driveWest(void);
-void driveTurnRound(void);
-void drivePivot(void);
-void stop(void);
-
-
-/*---------------State Definitions--------------------------*/
-const char* stateNames[] = {
-    "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2", "PIVOTING", "GOING_TO_CW_1", "GOING_TO_CW_2",
-    "MOVING_POT", "GOING_BACK_ON_TRACK", "GOING_TO_BTN_i", "IGNITING_BTN",
-    "LEAVING_FROM_BTN_i", "DUMPING", "GOING_TO_PANTRY_1", "GOING_TO_PANTRY_2",
-    "GOING_TO_PANTRY_3", "LOADING", "GOING_TO_BURNER_1", "GOING_TO_BURNER_2",
-    "GOING_TO_BURNER_3", "GOING_TO_BTN_f", "TURNING_OFF_BURNER",
-    "LEAVING_FROM_BTN_f", "DELIVERING", "CELEBRATING"
-};
-
-typedef enum {
-  SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, PIVOTING, GOING_TO_CW_1, GOING_TO_CW_2,
-  MOVING_POT, GOING_BACK_ON_TRACK, GOING_TO_BTN_i, IGNITING_BTN,
-  LEAVING_FROM_BTN_i, DUMPING, 
-  GOING_TO_PANTRY_1, GOING_TO_PANTRY_2, GOING_TO_PANTRY_3, LOADING,
-  GOING_TO_BURNER_1, GOING_TO_BURNER_2, GOING_TO_BURNER_3,
-  GOING_TO_BTN_f, TURNING_OFF_BURNER, LEAVING_FROM_BTN_f,
-  DELIVERING, CELEBRATING, NUM_STATES
-} States_t;
-
-/*---------------Module Variables---------------------------*/
-States_t state;
-States_t initialState = LEAVING_SZ_1;
-float thrLine = 200.0;
-int line1;
-int line2;
-int line3;
-int line4;
-int current_line1;
-int current_line2;
-int current_line3;
-int current_line4;
-Servo gateServo;  // create servo object to control a servo
-int gateServoPos = 0;    // variable to store the servo position
-int dumpingDuration = 1000; // milliseconds
-int loading_driving_delay = 1000; // number of milliseconds the robot will drive toward and from the loading position
-int loading_staying_delay = 500; // number of milliseconds the robot will stay during loading
-int mtrSpeed = 50;
+#include <core_code.h>
 
 /*---------------Robot Main Functions----------------*/
 void setup(void) {
@@ -107,104 +18,44 @@ void setup(void) {
    
    state = initialState;
 
+   // pin setup for line sensors
    pinMode(LINE_SENSOR_N_PIN, INPUT);
    pinMode(LINE_SENSOR_E_PIN, INPUT);
    pinMode(LINE_SENSOR_S_PIN, INPUT);
    pinMode(LINE_SENSOR_W_PIN, INPUT);
 
-   pinMode(MOTOR_1_IN1_PIN, OUTPUT);
-   pinMode(MOTOR_1_IN2_PIN, OUTPUT);
-   pinMode(MOTOR_2_IN3_PIN, OUTPUT);
-   pinMode(MOTOR_2_IN4_PIN, OUTPUT);
-   pinMode(MOTOR_3_IN1_PIN, OUTPUT);
-   pinMode(MOTOR_3_IN2_PIN, OUTPUT);
-   pinMode(MOTOR_4_IN3_PIN, OUTPUT);
-   pinMode(MOTOR_4_IN4_PIN, OUTPUT);
-   pinMode(MOTOR_SPEED_PIN,OUTPUT);
-
    gateServo.attach(GATE_SERVO_PIN);
+
+   // pin setup for IR sensors
+   pinMode(IR_RX_PIN_1, INPUT);
+   pinMode(IR_RX_PIN_2, INPUT);
+
+   // digital pin interrupt setup for IR sensors
+   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_handler, RISING);
+   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, RISING);
+
+   // ultrasonic sensor pin setup
+   pinMode(US_TRIG, OUTPUT);
+   pinMode(US_1_ECHO, INPUT);
+   pinMode(US_2_ECHO, INPUT);
  }
 
  
  void loop() {
     checkGlobalEvents();
+    checkDistance();
     switch (state) {
-      case LEAVING_SZ_1:
-        driveNorth();
-        break;
-      case LEAVING_SZ_2:
-        driveNorth();
-        break;
-      case PIVOTING:
-        drivePivot();
-        break;
-      case GOING_TO_CW_1:
-        driveEast();
-        break;
-      case GOING_TO_CW_2:
-        driveNorth();
-        break;
-      case MOVING_POT:
-        driveWest();
-        break;
-      case GOING_BACK_ON_TRACK:
-        driveSouth();
-        break;
-      case GOING_TO_BTN_i:
-        driveWest();
-        break;
-      case IGNITING_BTN:
-        stop();
-        break;
-      case LEAVING_FROM_BTN_i:
-        driveNorth();
-        break;
       case DUMPING:
-        Dump();
-        break;
-      case GOING_TO_PANTRY_1:
-        driveSouth();
-        break;
-      case GOING_TO_PANTRY_2:
-        driveEast();
-        break;
-      case GOING_TO_PANTRY_3:
-        driveSouth();
-        break;
-      case LOADING:
-        Load();
-        break;
-      case GOING_TO_BURNER_1:
-        driveNorth();
-        break;
-      case GOING_TO_BURNER_2:
-        driveWest();
-        break;
-      case GOING_TO_BURNER_3:
-        driveNorth();
-        break;
-      case GOING_TO_BTN_f:
-        driveSouth();
-        break;
-      case TURNING_OFF_BURNER:
-        stop();
-        break;
-      case LEAVING_FROM_BTN_f:
-        driveNorth();
-        break;
-      case DELIVERING:
-        driveEast();
-        break;
-      case CELEBRATING:
-        stop();
+        handleDump();
         break;
     }
 
     displayState();
-    analogWrite(MOTOR_SPEED_PIN, mtrSpeed);
 
     //displayLineSensors();
  }
+
+/*----------------ISRs---------------*/
 
 
 /*----------------Module Functions--------------------------*/
@@ -214,7 +65,83 @@ void checkGlobalEvents(void) {
   if (TestForChangeInTape_2()) RespToChangeInTape_2();
   if (TestForChangeInTape_3()) RespToChangeInTape_3();
   if (TestForChangeInTape_4()) RespToChangeInTape_4();
+  if (TestForBeaconSensing()) RespToBeaconSensing();
+  if (TestForFrontWall()) RespToFrontWall();
+  if (TestForLeftWall()) RespToLeftWall();
 } 
+
+void ir1_handler(void *) {
+  ir_1_status = 1;  // fired at every pin interrupt, set ir_1_status to be 1, to be turned of by TestForBeaconSensing
+}
+
+void ir2_handler(void *) {
+  ir_2_status = 1;  // fired at every pin interrupt, set ir_2_status to be 1, to be turned of by TestForBeaconSensing
+}
+
+uint8_t TestForBeaconSensing(void) {
+  if (ir_1_status || ir_2_status) {   // use OR logic to allow for greater coverage
+    ir_1_status = 0;
+    ir_2_status = 0;
+    return 1;
+  }
+  return 0;
+}
+
+void RespToBeaconSensing(void) {
+  state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
+}
+
+void checkDistance(void) {
+  analogWrite(US_TRIG, 128);  // 50% duty cycle, 490Hz frequency
+  unsigned long timeout = 3000L;
+  // US_1 is the front-facing ultrasonic sensor
+  duration1 = pulseIn(US_1_ECHO, HIGH, timeout);    // pulse in us. if returning 0, means no feedback received
+  distance1 = duration1 * 10 / 2 / 291;   // duration (us) / 2 / 29.1 (us / cm) (speed is the speed of light)
+                                          // additional 10 multiplied to prevent decimal numbers
+  // US_2 is the left-facing ultrasonic sensor
+  duration2 = pulseIn(US_2_ECHO, HIGH, timeout);
+  distance2 = duration2 * 10 / 2 / 291;
+  // note that this is done in a superloop, so will cause delays for 6 ms maximum
+}
+
+uint8_t TestForFrontWall(void) {
+  if (distance1 >= front_dist_threshold + hysteresis_threshold && prev_dist1 < front_dist_threshold + hysteresis_threshold) {
+    prev_dist1 = distance1;
+    return true;
+  }
+  prev_dist1 = distance1;
+  return false;
+}
+
+void RespToFrontWall(void) {
+  switch (state) {
+    case GOING_TO_CW_2:
+      state = MOVING_POT;
+      break;
+    case LEAVING_FROM_BTN_i:
+      state = MOVING_POT;
+      break;
+      case GOING_TO_BURNER_3:
+        state = DUMPING;
+      break;
+    case LEAVING_FROM_BTN_f:
+      state = DELIVERING;
+      break;
+  }
+}
+
+uint8_t TestForLeftWall(void) {
+  if (distance2 >= left_dist_threshold + hysteresis_threshold && prev_dist2 < left_dist_threshold + hysteresis_threshold) {
+    prev_dist2 = distance2;
+    return true;
+  }
+  prev_dist2 = distance2;
+  return false;
+}
+
+void RespToLeftWall(void) {
+  state = GOING_BACK_ON_TRACK;
+}
 
 uint8_t TestForChangeInTape_1(void) {
   current_line1 = analogRead(LINE_SENSOR_N_PIN) > thrLine;
@@ -254,8 +181,13 @@ uint8_t TestForChangeInTape_2(void) {
 
 void RespToChangeInTape_2() {
   switch (state) {
-    case PIVOTING:
-      if (current_line2 == 1) {
+    case LEAVING_SZ_1:
+      if (current_line2 == 0){
+        state = LEAVING_SZ_2;
+      }
+      break;
+    case LEAVING_SZ_2:
+      if (current_line2 == 1 && line4 == 1) {
         state = GOING_TO_CW_1;
       }
       break;
@@ -327,14 +259,9 @@ uint8_t TestForChangeInTape_4(void) {
 
 void RespToChangeInTape_4() {
   switch (state) {
-    case LEAVING_SZ_1:
-      if (current_line4 == 0) {
-        state = LEAVING_SZ_2;
-      }
-      break;
     case LEAVING_SZ_2:
-      if (current_line4 == 1) {
-        state = PIVOTING;
+      if (current_line4 == 1 && line2 == 1) {
+        state = GOING_TO_CW_1;
       }
       break;
     case GOING_BACK_ON_TRACK:
@@ -391,88 +318,10 @@ void displayState(void){
     }
 }
 
-void Dump(void) {
+void handleDump(void) {
   gateServo.write(100);
   delay(dumpingDuration);
   gateServo.write(0);
   delay(dumpingDuration);
   state = GOING_TO_PANTRY_1;
 }
-
-void Load(void) {
-  driveSouth();
-  delay(loading_driving_delay);
-  stop();
-  delay(loading_staying_delay);
-  driveNorth();
-  delay(loading_driving_delay);
-  state = GOING_TO_BURNER_1;
-}
-
-void driveNorth(void) {
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR);
-  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR);
-  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, FORWARD_DIR);
-  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, FORWARD_DIR);
-}
-
-void driveEast(void) {
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR);
-  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR);
-  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR);
-  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, FORWARD_DIR);
-}
-
-void driveSouth(void) {
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR);
-  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR);
-  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR);
-  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR);
-}
-
-void driveWest(void) {
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR);
-  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR);
-  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, FORWARD_DIR);
-  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR);
-}
-
-void driveTurnRound(void) {
-  // We turn CCW
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR);
-  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR);
-  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR);
-  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR);
-}
-
-void drivePivot(void) {
-  // We pivot around the wheel number 4 (MTR 4 = Nort-West)
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR);
-  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR);
-} 
-
-void stop(void) {
-  Serial.println("");
-}
-
-
-
-// Shortcut function that sets the direction of a given motor to forward / backward
-void setMotorDirection(int in1, int in2, int dir) {
-  if (dir == FORWARD_DIR) {
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
-  }
-  else if (dir == BACKWARD_DIR) {
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, HIGH);
-  }
-}
-
-
-
-
-
-
-
-
