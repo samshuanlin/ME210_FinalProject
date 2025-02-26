@@ -389,11 +389,11 @@
     ],
     [
       "36720b7f-9e6e-4197-8c28-207631d2c0a5",
-      "master_mcu"
+      "core_Ccu"
     ],
     [
       "c5f6cf30-2438-4d40-aa4d-571d7fd035a9",
-      "peripheral_mcu"
+      "peripheral_Ccu"
     ]
   ],
   "text_variables": {}
