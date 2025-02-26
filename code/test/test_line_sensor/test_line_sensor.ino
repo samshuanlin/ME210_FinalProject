@@ -3,14 +3,29 @@
 
  /*---------------Module Defines-----------------------------*/
 
-#define LINE_SENSOR_N_PIN   A1
-#define LINE_SENSOR_E_PIN   A2
-#define LINE_SENSOR_S_PIN   A3
-#define LINE_SENSOR_W_PIN   A4
+#define LINE_SENSOR_N_PIN   A0
+#define LINE_SENSOR_E_PIN   A1
+#define LINE_SENSOR_S_PIN   A2
+#define LINE_SENSOR_W_PIN   A3
 
 #define GATE_SERVO_PIN      9
 
+#define MOTOR_1_IN1_PIN     2 // This is M3 on Kicad
+#define MOTOR_1_IN2_PIN     4 // This is M3 on Kicad
+#define MOTOR_2_IN3_PIN     5 // This is M4 on Kicad
+#define MOTOR_2_IN4_PIN     6 // This is M4 on Kicad
+#define MOTOR_3_IN1_PIN     7 // This is M5 on Kicad
+#define MOTOR_3_IN2_PIN     8 // This is M5 on Kicad
+#define MOTOR_4_IN3_PIN     12 // This is M6 on Kicad
+#define MOTOR_4_IN4_PIN     13 // This is M6 on Kicad
+#define MOTOR_SPEED_PIN     3
+
+#define FORWARD_DIR         1
+#define BACKWARD_DIR        -1
+
+
 /*---------------Module Function Prototypes-----------------*/
+// Event-related functions
 void checkGlobalEvents(void);
 unsigned char TestForChangeInTape_1(void);
 void RespToChangeInTape_1(void);
@@ -21,12 +36,23 @@ void RespToChangeInTape_3(void);
 unsigned char TestForChangeInTape_4(void);
 void RespToChangeInTape_4(void);
 
-void handleDump(void);
+// Blocking functions
+void Dump(void);
+void Load(void);
+
+// Motor control
+void driveNorth(void);
+void driveEast(void);
+void driveSouth(void);
+void driveWest(void);
+void driveTurnRound(void);
+void drivePivot(void);
+void stop(void);
 
 
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
-    "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2", "GOING_TO_CW_1", "GOING_TO_CW_2",
+    "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2", "PIVOTING", "GOING_TO_CW_1", "GOING_TO_CW_2",
     "MOVING_POT", "GOING_BACK_ON_TRACK", "GOING_TO_BTN_i", "IGNITING_BTN",
     "LEAVING_FROM_BTN_i", "DUMPING", "GOING_TO_PANTRY_1", "GOING_TO_PANTRY_2",
     "GOING_TO_PANTRY_3", "LOADING", "GOING_TO_BURNER_1", "GOING_TO_BURNER_2",
@@ -35,7 +61,7 @@ const char* stateNames[] = {
 };
 
 typedef enum {
-  SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, GOING_TO_CW_1, GOING_TO_CW_2,
+  SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, PIVOTING, GOING_TO_CW_1, GOING_TO_CW_2,
   MOVING_POT, GOING_BACK_ON_TRACK, GOING_TO_BTN_i, IGNITING_BTN,
   LEAVING_FROM_BTN_i, DUMPING, 
   GOING_TO_PANTRY_1, GOING_TO_PANTRY_2, GOING_TO_PANTRY_3, LOADING,
@@ -46,7 +72,7 @@ typedef enum {
 
 /*---------------Module Variables---------------------------*/
 States_t state;
-States_t initialState = DUMPING;
+States_t initialState = LEAVING_SZ_1;
 float thrLine = 200.0;
 int line1;
 int line2;
@@ -59,6 +85,9 @@ int current_line4;
 Servo gateServo;  // create servo object to control a servo
 int gateServoPos = 0;    // variable to store the servo position
 int dumpingDuration = 1000; // milliseconds
+int loading_driving_delay = 1000; // number of milliseconds the robot will drive toward and from the loading position
+int loading_staying_delay = 500; // number of milliseconds the robot will stay during loading
+int mtrSpeed = 50;
 
 /*---------------Robot Main Functions----------------*/
 void setup(void) {
@@ -76,6 +105,16 @@ void setup(void) {
    pinMode(LINE_SENSOR_S_PIN, INPUT);
    pinMode(LINE_SENSOR_W_PIN, INPUT);
 
+   pinMode(MOTOR_1_IN1_PIN, OUTPUT);
+   pinMode(MOTOR_1_IN2_PIN, OUTPUT);
+   pinMode(MOTOR_2_IN3_PIN, OUTPUT);
+   pinMode(MOTOR_2_IN4_PIN, OUTPUT);
+   pinMode(MOTOR_3_IN1_PIN, OUTPUT);
+   pinMode(MOTOR_3_IN2_PIN, OUTPUT);
+   pinMode(MOTOR_4_IN3_PIN, OUTPUT);
+   pinMode(MOTOR_4_IN4_PIN, OUTPUT);
+   pinMode(MOTOR_SPEED_PIN,OUTPUT);
+
    gateServo.attach(GATE_SERVO_PIN);
  }
 
@@ -83,12 +122,79 @@ void setup(void) {
  void loop() {
     checkGlobalEvents();
     switch (state) {
+      case LEAVING_SZ_1:
+        driveNorth();
+        break;
+      case LEAVING_SZ_2:
+        driveNorth();
+        break;
+      case PIVOTING:
+        drivePivot();
+        break;
+      case GOING_TO_CW_1:
+        driveEast();
+        break;
+      case GOING_TO_CW_2:
+        driveNorth();
+        break;
+      case MOVING_POT:
+        driveWest();
+        break;
+      case GOING_BACK_ON_TRACK:
+        driveSouth();
+        break;
+      case GOING_TO_BTN_i:
+        driveWest();
+        break;
+      case IGNITING_BTN:
+        stop();
+        break;
+      case LEAVING_FROM_BTN_i:
+        driveNorth();
+        break;
       case DUMPING:
-        handleDump();
+        Dump();
+        break;
+      case GOING_TO_PANTRY_1:
+        driveSouth();
+        break;
+      case GOING_TO_PANTRY_2:
+        driveEast();
+        break;
+      case GOING_TO_PANTRY_3:
+        driveSouth();
+        break;
+      case LOADING:
+        Load();
+        break;
+      case GOING_TO_BURNER_1:
+        driveNorth();
+        break;
+      case GOING_TO_BURNER_2:
+        driveWest();
+        break;
+      case GOING_TO_BURNER_3:
+        driveNorth();
+        break;
+      case GOING_TO_BTN_f:
+        driveSouth();
+        break;
+      case TURNING_OFF_BURNER:
+        stop();
+        break;
+      case LEAVING_FROM_BTN_f:
+        driveNorth();
+        break;
+      case DELIVERING:
+        driveEast();
+        break;
+      case CELEBRATING:
+        stop();
         break;
     }
 
     displayState();
+    analogWrite(MOTOR_SPEED_PIN, mtrSpeed);
 
     //displayLineSensors();
  }
@@ -141,13 +247,8 @@ uint8_t TestForChangeInTape_2(void) {
 
 void RespToChangeInTape_2() {
   switch (state) {
-    case LEAVING_SZ_1:
-      if (current_line2 == 0){
-        state = LEAVING_SZ_2;
-      }
-      break;
-    case LEAVING_SZ_2:
-      if (current_line2 == 1 && line4 == 1) {
+    case PIVOTING:
+      if (current_line2 == 1) {
         state = GOING_TO_CW_1;
       }
       break;
@@ -219,9 +320,14 @@ uint8_t TestForChangeInTape_4(void) {
 
 void RespToChangeInTape_4() {
   switch (state) {
+    case LEAVING_SZ_1:
+      if (current_line4 == 0) {
+        state = LEAVING_SZ_2;
+      }
+      break;
     case LEAVING_SZ_2:
-      if (current_line4 == 1 && line2 == 1) {
-        state = GOING_TO_CW_1;
+      if (current_line4 == 1) {
+        state = PIVOTING;
       }
       break;
     case GOING_BACK_ON_TRACK:
@@ -278,13 +384,87 @@ void displayState(void){
     }
 }
 
-void handleDump(void) {
+void Dump(void) {
   gateServo.write(100);
   delay(dumpingDuration);
   gateServo.write(0);
   delay(dumpingDuration);
   state = GOING_TO_PANTRY_1;
 }
+
+void Load(void) {
+  driveSouth();
+  delay(loading_driving_delay);
+  stop();
+  delay(loading_staying_delay);
+  driveNorth();
+  delay(loading_driving_delay);
+  state = GOING_TO_BURNER_1;
+}
+
+void driveNorth(void) {
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR);
+  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR);
+  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, FORWARD_DIR);
+  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, FORWARD_DIR);
+}
+
+void driveEast(void) {
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR);
+  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR);
+  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR);
+  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, FORWARD_DIR);
+}
+
+void driveSouth(void) {
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR);
+  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR);
+  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR);
+  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR);
+}
+
+void driveWest(void) {
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR);
+  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR);
+  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, FORWARD_DIR);
+  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR);
+}
+
+void driveTurnRound(void) {
+  // We turn CCW
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR);
+  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR);
+  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR);
+  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR);
+}
+
+void drivePivot(void) {
+  // We pivot around the wheel number 4 (MTR 4 = Nort-West)
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR);
+  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR);
+} 
+
+void stop(void) {
+  Serial.println("");
+}
+
+
+
+// Shortcut function that sets the direction of a given motor to forward / backward
+void setMotorDirection(int in1, int in2, int dir) {
+  if (dir == FORWARD_DIR) {
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+  }
+  else if (dir == BACKWARD_DIR) {
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, HIGH);
+  }
+}
+
+
+
+
 
 
 
