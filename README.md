@@ -5,10 +5,13 @@ Members: Sam C., Archer D., Enzo A.
 Discussion items/worked on: 
 1. Assembled motor drivers and crimped battery wires. Tested the motor driver functionality with Enzo's test code, no issues with software. Need to redo direction of the mecanums.
 2. Sam looked into inter-board I2C communication and found ways to send messages. Also found a way to drive 2 Arduinos at once.
+3. Tested slope and gate with servo code, dimensions for slope finalized. Finished gate redsign to clamp/ screw down servo.
 
 Action items:
 1. Re-organize code to split into core and peripheral boards.
 2. Servo integration with gate & TPU.
+3. Print and test new gate tomorrow.
+4. Thomas needs to talk to Archer about interfacing the slope with the chassis.
 
 **Feb 25, 2025 Morning**
 Members: Sam C., Enzo A., Thomas H.,
