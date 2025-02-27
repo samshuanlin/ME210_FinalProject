@@ -13,11 +13,13 @@
  }
 
 void requestEvent(int bytes) {
+  Wire.beginTransmission();
   if (cur_cmd == LOADING_CMD) {
     Wire.write(load_done_flag);
   } else if (cur_cmd == DUMPING_CMD) {
     Wire.write(dump_done_flag);
   }
+  Wire.endTransmission();
 }
  
  /*---------------Robot Main Functions----------------*/
@@ -45,7 +47,7 @@ void requestEvent(int bytes) {
      gateServo.attach(GATE_SERVO_PIN);
  
      // I2C peripheral device setup
-     Wire.begin();
+     Wire.begin(PERIPHERAL_ADDR);
      // Attach a function to trigger when something is received.
      Wire.onReceive(receiveEvent);
      Wire.onRequest(requestEvent);
