@@ -38,6 +38,9 @@ uint8_t dump_done_flag = 0;
 uint8_t cur_cmd = 8;    // no one is using this, so set as initial value
 uint8_t incoming_cmd = 255;
 
+// I2C Peripheral Address
+#define PERIPHERAL_ADDR 0x09
+
 /*---------------Module Function Prototypes-----------------*/
 // Blocking functions for timed states
 void dump(void);
@@ -51,6 +54,10 @@ void driveWest(void);
 void driveTurnRound(void);
 void drivePivot(void);
 void stop(void);
+
+// I2C interrupt handlers
+void receiveEvent(int bytes);
+void requestEvent(int bytes);
 
 // Loading-related variables (servo)
 Servo gateServo;  // create servo object to control a servo

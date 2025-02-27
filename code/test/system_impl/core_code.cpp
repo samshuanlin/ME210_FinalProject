@@ -451,4 +451,3 @@ void dumpCmd(void) {
   // only return control after done
   state = GOING_TO_PANTRY_1;  // set new state
 }
-

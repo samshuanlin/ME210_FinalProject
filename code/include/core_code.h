@@ -34,7 +34,7 @@
 #define US_2_ECHO       7     // regular IO pin
 
 // I2C Peripheral Address
-#define PERIPHERAL_ADDR 9
+#define PERIPHERAL_ADDR 0x09
 
 /*---------------Module Function Prototypes-----------------*/
 // Checking for global events, specifically driving the FSM in an infinite loop based on events.

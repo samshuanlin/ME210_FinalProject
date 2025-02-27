@@ -7,10 +7,18 @@
  
  #include <peripheral_code.h>
 
- // I2C interrupt handler
+ // I2C interrupt handlers
  void receiveEvent(int bytes) {
-     incoming_cmd = (uint8_t)Wire.read();
+    incoming_cmd = (uint8_t)Wire.read();
  }
+
+void requestEvent(int bytes) {
+  if (cur_cmd == LOADING_CMD) {
+    Wire.write(load_done_flag);
+  } else if (cur_cmd == DUMPING_CMD) {
+    Wire.write(dump_done_flag);
+  }
+}
  
  /*---------------Robot Main Functions----------------*/
  void setup(void) {
@@ -40,6 +48,7 @@
      Wire.begin();
      // Attach a function to trigger when something is received.
      Wire.onReceive(receiveEvent);
+     Wire.onRequest(requestEvent);
  }
   
    
