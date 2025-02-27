@@ -4,7 +4,7 @@
 */
 
 #include <Arduino.h>
-#include <Servo.h>
+#include <PWMServo.h>
 #include <Wire.h>
 
 /*---------------Module Defines-----------------------------*/
@@ -60,7 +60,7 @@ void receiveEvent(int bytes);
 void requestEvent(int bytes);
 
 // Loading-related variables (servo)
-Servo gateServo;  // create servo object to control a servo
+PWMServo gateServo;  // create servo object to control a servo
 int gateServoPos = 0;    // variable to store the servo position
 int dumpingDuration = 1000; // milliseconds
 

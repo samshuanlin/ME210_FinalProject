@@ -5,7 +5,7 @@
  *  2. Send commands to the peripheral board to drive any motors or do any actuation.
  */
 
- #include <core_code.h>
+ #include <core.h>
 
  /*---------------Interrupt Handlers------------------*/
  void ir1_handler(void) {

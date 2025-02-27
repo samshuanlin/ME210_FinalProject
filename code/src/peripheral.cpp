@@ -5,7 +5,7 @@
  *  2. Drive DC and servo motors at intended times.
  */
  
- #include <peripheral_code.h>
+ #include <peripheral.h>
 
  // I2C interrupt handlers
  void receiveEvent(int bytes) {
@@ -13,13 +13,11 @@
  }
 
 void requestEvent(int bytes) {
-  Wire.beginTransmission();
   if (cur_cmd == LOADING_CMD) {
     Wire.write(load_done_flag);
   } else if (cur_cmd == DUMPING_CMD) {
     Wire.write(dump_done_flag);
   }
-  Wire.endTransmission();
 }
  
  /*---------------Robot Main Functions----------------*/
