@@ -5,6 +5,7 @@
 
 #include <Arduino.h>
 #include <Servo.h>
+#include <Wire.h>
 
 /*---------------Module Defines-----------------------------*/
 
@@ -23,10 +24,24 @@
 #define FORWARD_DIR         1
 #define BACKWARD_DIR        -1
 
+// Command codes
+#define STOP_CMD        (uint8_t)0
+#define DRIVE_NORTH_CMD (uint8_t)1
+#define DRIVE_EAST_CMD  (uint8_t)2
+#define DRIVE_WEST_CMD  (uint8_t)3
+#define DRIVE_SOUTH_CMD (uint8_t)4
+#define DRIVE_PIVOT_CMD (uint8_t)5
+#define LOADING_CMD     (uint8_t)6
+uint8_t load_done_flag = 0;
+#define DUMPING_CMD     (uint8_t)7
+uint8_t dump_done_flag = 0;
+uint8_t cur_cmd = 8;    // no one is using this, so set as initial value
+uint8_t incoming_cmd = 255;
+
 /*---------------Module Function Prototypes-----------------*/
 // Blocking functions for timed states
-void Dump(void);
-void Load(void);
+void dump(void);
+void load(void);
 
 // Motor control functions
 void driveNorth(void);

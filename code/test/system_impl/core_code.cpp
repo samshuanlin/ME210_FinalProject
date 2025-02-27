@@ -52,13 +52,77 @@
  
   
   void loop() {
-     checkGlobalEvents();
-     checkDistance();
-     switch (state) {
-       case DUMPING:
-         handleDump();
-         break;
-     }
+    switch (state) {
+        case LEAVING_SZ_1:
+            driveNorthCmd();
+            break;
+        case LEAVING_SZ_2:
+            driveNorthCmd();
+            break;
+        case PIVOTING:
+            drivePivotCmd();
+            break;
+        case GOING_TO_CW_1:
+            driveEastCmd();
+            break;
+        case GOING_TO_CW_2:
+            driveNorthCmd();
+            break;
+        case MOVING_POT:
+            driveWestCmd();
+            break;
+        case GOING_BACK_ON_TRACK:
+            driveSouthCmd();
+            break;
+        case GOING_TO_BTN_i:
+            driveWestCmd();
+            break;
+        case IGNITING_BTN:
+            stopCmd();
+            break;
+        case LEAVING_FROM_BTN_i:
+            driveNorthCmd();
+            break;
+        case DUMPING:
+            dumpCmd();
+            break;
+        case GOING_TO_PANTRY_1:
+            driveSouthCmd();
+            break;
+        case GOING_TO_PANTRY_2:
+            driveEastCmd();
+            break;
+        case GOING_TO_PANTRY_3:
+            driveSouthCmd();
+            break;
+        case LOADING:
+            loadCmd();
+            break;
+        case GOING_TO_BURNER_1:
+            driveNorthCmd();
+            break;
+        case GOING_TO_BURNER_2:
+            driveWestCmd();
+            break;
+        case GOING_TO_BURNER_3:
+            driveNorthCmd();
+            break;
+        case GOING_TO_BTN_f:
+            driveSouthCmd();
+            break;
+        case TURNING_OFF_BURNER:
+            stopCmd();
+            break;
+        case LEAVING_FROM_BTN_f:
+            driveNorthCmd();
+            break;
+        case DELIVERING:
+            driveEastCmd();
+            break;
+        case CELEBRATING:
+            stopCmd();
+            break;
+        }
  
      displayState();
  
@@ -317,6 +381,74 @@
      }
  }
  
- void handleDump(void) {
-  return;
- }
+ // Motor command sending functions
+void stopCmd() {
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(STOP_CMD);
+  Wire.endTransmission();
+}
+
+void driveNorthCmd() {
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(DRIVE_NORTH_CMD);
+  Wire.endTransmission();
+}
+
+void driveEastCmd() {
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(DRIVE_EAST_CMD);
+  Wire.endTransmission();
+}
+
+void driveWestCmd(void) {
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(DRIVE_WEST_CMD);
+  Wire.endTransmission();
+}
+
+void driveSouthCmd(void) {
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(DRIVE_SOUTH_CMD);
+  Wire.endTransmission();
+}
+
+void drivePivotCmd(void) {
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(DRIVE_PIVOT_CMD);
+  Wire.endTransmission();
+}
+
+void loadCmd(void) {
+  // Send command
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(LOADING_CMD);
+  Wire.endTransmission();
+
+  // Wait until done
+  uint8_t inp;
+  do {
+    Wire.requestFrom(PERIPHERAL_ADDR, sizeof(uint8_t));  // request from peripheral
+    inp = Wire.read();
+  } while (inp != 1);  // while the done flag is not raised, keep waiting
+
+  // only return control after done
+  state = GOING_TO_BURNER_1;
+}
+
+void dumpCmd(void) {
+  // Send command
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(DUMPING_CMD);
+  Wire.endTransmission();
+
+  // Wait until done
+  uint8_t inp;
+  do {
+    Wire.requestFrom(PERIPHERAL_ADDR, sizeof(uint8_t));  // request from peripheral
+    inp = Wire.read();
+  } while (inp != 1);  // while the done flag is not raised, keep waiting
+
+  // only return control after done
+  state = GOING_TO_PANTRY_1;  // set new state
+}
+

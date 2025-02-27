@@ -33,6 +33,9 @@
 #define US_1_ECHO       4     // regular IO pin
 #define US_2_ECHO       7     // regular IO pin
 
+// I2C Peripheral Address
+#define PERIPHERAL_ADDR 9
+
 /*---------------Module Function Prototypes-----------------*/
 // Checking for global events, specifically driving the FSM in an infinite loop based on events.
 void checkGlobalEvents(void);
@@ -50,11 +53,9 @@ void RespToChangeInTape_3(void);
 unsigned char TestForChangeInTape_4(void);
 void RespToChangeInTape_4(void);
 
-/*
 // IR receiver interrupt handlers
 void ir1_handler();
 void ir2_handler();
-*/
 
 // IR receiver sensing event detection and response functions
 uint8_t TestForBeaconSensing(void);
@@ -69,12 +70,34 @@ void RespToLeftWall(void);
 // State display function for testing
 void displayState(void);
 
-// Motor Command Sensing Functions
-void handleDump(void);
+// Commands & Command Codes
+#define STOP_CMD        (uint8_t)0
+void stopCmd(void);
+
+#define DRIVE_NORTH_CMD (uint8_t)1
+void driveNorthCmd(void);
+
+#define DRIVE_EAST_CMD  (uint8_t)2
+void driveEastCmd(void);
+
+#define DRIVE_WEST_CMD  (uint8_t)3
+void driveWestCmd(void);
+
+#define DRIVE_SOUTH_CMD (uint8_t)4
+void driveSouthCmd(void);
+
+#define DRIVE_PIVOT_CMD (uint8_t)5
+void drivePivotCmd(void);
+
+#define LOADING_CMD     (uint8_t)6
+void loadCmd(void);
+
+#define DUMPING_CMD     (uint8_t)7
+void dumpCmd(void);
 
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
-    "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2", "GOING_TO_CW_1", "GOING_TO_CW_2",
+    "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2", "PIVOTING", "GOING_TO_CW_1", "GOING_TO_CW_2",
     "MOVING_POT", "GOING_BACK_ON_TRACK", "GOING_TO_BTN_i", "IGNITING_BTN",
     "LEAVING_FROM_BTN_i", "DUMPING", "GOING_TO_PANTRY_1", "GOING_TO_PANTRY_2",
     "GOING_TO_PANTRY_3", "LOADING", "GOING_TO_BURNER_1", "GOING_TO_BURNER_2",
@@ -83,7 +106,7 @@ const char* stateNames[] = {
 };
 
 typedef enum {
-  SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, GOING_TO_CW_1, GOING_TO_CW_2,
+  SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, PIVOTING, GOING_TO_CW_1, GOING_TO_CW_2,
   MOVING_POT, GOING_BACK_ON_TRACK, GOING_TO_BTN_i, IGNITING_BTN,
   LEAVING_FROM_BTN_i, DUMPING, 
   GOING_TO_PANTRY_1, GOING_TO_PANTRY_2, GOING_TO_PANTRY_3, LOADING,
