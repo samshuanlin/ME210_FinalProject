@@ -1,5 +1,15 @@
 ## Meeting Notes
 
+**Feb 26, 2025 Afternoon-Evening Testing Bot**
+Members: Thomas H., Enzo A.
+Discussion items/worked on: 
+1. Tested robot on the field.
+2. reinstalled buck converter, installed switch
+
+Action items:
+1. Tape Sensor needs to be more off the ground (0.5 in)
+2. Tape sensor needs to be in the right direction.
+
 **Feb 25, 2025 Afternoon-Evening**
 Members: Sam C., Archer D., Enzo A.
 Discussion items/worked on: 
