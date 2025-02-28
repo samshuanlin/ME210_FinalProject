@@ -69,5 +69,5 @@ int dumpingDuration = 1000; // milliseconds
 
 // Motor-related variables
 int loading_driving_delay = 1000; // number of milliseconds the robot will drive toward and from the loading position
-int loading_staying_delay = 500; // number of milliseconds the robot will stay during loading
+int loading_staying_delay = 1000; // number of milliseconds the robot will stay during loading
 int mtrSpeed = 150;

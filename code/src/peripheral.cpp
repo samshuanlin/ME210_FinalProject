@@ -12,11 +12,14 @@
     incoming_cmd = (uint8_t)Wire.read();
  }
 
-void requestEvent(int bytes) {
+void requestEvent() {
   if (cur_cmd == LOADING_CMD) {
     Wire.write(load_done_flag);
+    Serial.println(load_done_flag);
+    if (load_done_flag == 1) load_done_flag = 0;
   } else if (cur_cmd == DUMPING_CMD) {
     Wire.write(dump_done_flag);
+    if (dump_done_flag == 1) dump_done_flag = 0;
   }
 }
  
@@ -54,8 +57,10 @@ void requestEvent(int bytes) {
    
  void loop() {
      // turn off any done flags
-     load_done_flag = 0;
-     dump_done_flag = 0;
+     Serial.print("cur_cmd: ");
+     Serial.println(cur_cmd);
+     Serial.print("incoming_cmd: ");
+     Serial.println(incoming_cmd);
      if (cur_cmd != incoming_cmd) stop();   // stop before executing other command if the new cmd is not the current cmd
      cur_cmd = incoming_cmd;    // store what the currently running command is
      analogWrite(MOTOR_SPEED_PIN, mtrSpeed);
@@ -120,10 +125,13 @@ void setMotorDirection(int in1, int in2, int dir, int motor) {
  }
   
  void load(void) {
+    Serial.println("Driving south!");
     driveSouth();
     delay(loading_driving_delay);
+    Serial.println("Stopping!");
     stop();
     delay(loading_staying_delay);
+    Serial.println("Driving north!");
     driveNorth();
     delay(loading_driving_delay);
     load_done_flag = 1;

@@ -17,6 +17,7 @@
  }  
  
  /*---------------Robot Main Functions----------------*/
+
  void setup() {
     Serial.begin(9600);
     while (!Serial) delay(10);     // will pause Zero, Leonardo, etc until serial console opens
@@ -130,7 +131,8 @@
             stopCmd();
             break;
         }
- 
+    
+     checkGlobalEvents();
      displayState();
  
      //displayLineSensors();
@@ -262,7 +264,7 @@ void RespToTriggerTimerExpired() {
    current_line2 = analogRead(LINE_SENSOR_E_PIN) > thrLine;
    return current_line2 != line2;
  }
- 
+
  void RespToChangeInTape_2() {
   switch (state) {
     case PIVOTING:
@@ -283,7 +285,7 @@ void RespToTriggerTimerExpired() {
     case GOING_TO_PANTRY_3:
       if (current_line2 == 1 && line4 == 1) {
         state = LOADING;
-      }
+      } 
       break;
     case GOING_TO_BTN_f:
       if (current_line2 == 1) {
