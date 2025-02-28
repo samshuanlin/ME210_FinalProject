@@ -53,7 +53,10 @@
   
   void loop() {
     switch (state) {
-        case LEAVING_SZ_1:
+      case SCANNING:
+        driveTurnAroundCmd();
+        break;  
+      case LEAVING_SZ_1:
             driveNorthCmd();
             break;
         case LEAVING_SZ_2:
@@ -154,9 +157,12 @@
    return 0;
  }
  
- void RespToBeaconSensing(void) {
-   state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
- }
+void RespToBeaconSensing(void) {
+  state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
+  // detach interrupts since we don't need them anymore
+  detachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1));
+  detachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2));
+}
  
  void checkDistance(void) {
    analogWrite(US_TRIG, 128);  // 50% duty cycle, 490Hz frequency
@@ -433,6 +439,12 @@ void driveSouthCmd(void) {
 void drivePivotCmd(void) {
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(DRIVE_PIVOT_CMD);
+  Wire.endTransmission();
+}
+
+void driveTurnAroundCmd(void) {
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(DRIVE_TURNAROUND_CMD);
   Wire.endTransmission();
 }
 

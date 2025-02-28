@@ -88,7 +88,7 @@ void driveWestCmd(void);
 #define DRIVE_SOUTH_CMD (uint8_t)4
 void driveSouthCmd(void);
 
-#define DRIVE_TURNAROUND (uint8_t)5
+#define DRIVE_TURNAROUND_CMD (uint8_t)5
 void driveTurnAroundCmd(void);
 
 #define DRIVE_PIVOT_CMD (uint8_t)6
@@ -123,7 +123,7 @@ DELIVERING, CELEBRATING, NUM_STATES
 /*---------------Module Variables---------------------------*/
 // State variables
 States_t state;
-States_t initialState = DUMPING;
+States_t initialState = PIVOTING;
 
 // Line sensor variables
 float thrLine = 50.0; // depend on sensing

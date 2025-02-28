@@ -13,8 +13,8 @@
 
 #define MOTOR_1_IN1_PIN     2 // This is M3 on Kicad
 #define MOTOR_1_IN2_PIN     4 // This is M3 on Kicad
-#define MOTOR_2_IN3_PIN     5 // This is M4 on Kicad
-#define MOTOR_2_IN4_PIN     6 // This is M4 on Kicad
+#define MOTOR_2_IN3_PIN     A1 // This is M4 on Kicad
+#define MOTOR_2_IN4_PIN     A2 // This is M4 on Kicad
 #define MOTOR_3_IN1_PIN     7 // This is M5 on Kicad
 #define MOTOR_3_IN2_PIN     8 // This is M5 on Kicad
 #define MOTOR_4_IN3_PIN     12 // This is M6 on Kicad
@@ -31,7 +31,7 @@
 #define DRIVE_EAST_CMD  (uint8_t)2
 #define DRIVE_WEST_CMD  (uint8_t)3
 #define DRIVE_SOUTH_CMD (uint8_t)4
-#define DRIVE_TURNAROUND (uint8_t)5
+#define DRIVE_TURNAROUND_CMD (uint8_t)5
 #define DRIVE_PIVOT_CMD (uint8_t)6
 #define LOADING_CMD     (uint8_t)7
 uint8_t load_done_flag = 0;
