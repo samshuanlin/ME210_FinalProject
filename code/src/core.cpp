@@ -67,9 +67,11 @@
             break;
         case GOING_TO_CW_2:
             driveNorthCmd();
+            if (TestForFrontWall()) RespToFrontWall();
             break;
         case MOVING_POT:
             driveWestCmd();
+            if (TestForLeftWall()) RespToLeftWall();
             break;
         case GOING_BACK_ON_TRACK:
             driveSouthCmd();
@@ -106,6 +108,7 @@
             break;
         case GOING_TO_BURNER_3:
             driveNorthCmd();
+            if (TestForFrontWall()) RespToFrontWall();
             break;
         case GOING_TO_BTN_f:
             driveSouthCmd();
@@ -115,6 +118,7 @@
             break;
         case LEAVING_FROM_BTN_f:
             driveNorthCmd();
+            if (TestForFrontWall()) RespToFrontWall();
             break;
         case DELIVERING:
             driveEastCmd();
@@ -138,8 +142,8 @@
    if (TestForChangeInTape_4()) RespToChangeInTape_4();
    if (TestForBeaconSensing()) RespToBeaconSensing();
    if (TestForFrontWall()) RespToFrontWall();
-   if (TestForLeftWall()) RespToLeftWall();
- } 
+   if (TestForTriggerTimerExpired()) RespToTriggerTimerExpired();
+  } 
  
  uint8_t TestForBeaconSensing(void) {
    if (ir_1_status || ir_2_status) {   // use OR logic to allow for greater coverage
@@ -168,43 +172,52 @@
  }
  
  uint8_t TestForFrontWall(void) {
-   if (distance1 >= front_dist_threshold + hysteresis_threshold && prev_dist1 < front_dist_threshold + hysteresis_threshold) {
-     prev_dist1 = distance1;
-     return true;
-   }
-   prev_dist1 = distance1;
-   return false;
+    return us1 < thr_us1 && us1 > 0;
  }
  
  void RespToFrontWall(void) {
-   switch (state) {
-     case GOING_TO_CW_2:
-       state = MOVING_POT;
-       break;
-     case LEAVING_FROM_BTN_i:
-       state = MOVING_POT;
-       break;
-       case GOING_TO_BURNER_3:
-         state = DUMPING;
-       break;
-     case LEAVING_FROM_BTN_f:
-       state = DELIVERING;
-       break;
-   }
+    if (state == GOING_TO_CW_2) {
+      state = MOVING_POT;
+      startMillis = millis();
+    }
+    else if (state == GOING_TO_BURNER_3) {
+      state = DUMPING;
+    }
+    else if (state == LEAVING_FROM_BTN_f) {
+      state = DELIVERING;
+    }
  }
  
  uint8_t TestForLeftWall(void) {
-   if (distance2 >= left_dist_threshold + hysteresis_threshold && prev_dist2 < left_dist_threshold + hysteresis_threshold) {
-     prev_dist2 = distance2;
-     return true;
-   }
-   prev_dist2 = distance2;
-   return false;
+    return us2 < thr_us2 && us2 > 0;
  }
  
  void RespToLeftWall(void) {
-   state = GOING_BACK_ON_TRACK;
+    if (state == MOVING_POT) {
+      state = GOING_BACK_ON_TRACK;
+    }
  }
+
+ // Ultrasonic sensor time trigger control
+uint8_t TestForTriggerTimerExpired(void) {
+  return currentMillis - startMillis > timerTrigger;
+}
+
+void RespToTriggerTimerExpired() {
+  // we echo only when we need because the pulseIn function takes time
+  if (state == GOING_TO_CW_2 || state == GOING_TO_BURNER_3 || state == LEAVING_FROM_BTN_f) {
+    us1 = pulseIn(US_1_ECHO, DEC);
+    us1 = (us1/2) / 29.1;
+    Serial.println(us2);  // for testing. TODO
+  }
+  else if (state == MOVING_POT) {
+    us2 = pulseIn(US_2_ECHO, DEC);
+    us2 = (us2/2) / 29.1;
+    Serial.println(us2);  // for testing. TODO
+  }
+  
+  startMillis = millis();
+}
  
  uint8_t TestForChangeInTape_1(void) {
    current_line1 = analogRead(LINE_SENSOR_N_PIN) > thrLine;
@@ -212,30 +225,32 @@
  }
  
  void RespToChangeInTape_1() {
-   switch (state) {
-     case GOING_TO_CW_1:
-       if(current_line1 == 1 && line3 == 1) {
-         state = GOING_TO_CW_2;
-       }
-       break;
-     case GOING_TO_BTN_i:
-       if(current_line1 == 1 && line3 == 1) {
-         state = IGNITING_BTN;
-       }
-       break;
-     case GOING_TO_PANTRY_2:
-       if (current_line1 == 1 && line3 == 1) {
-         state = GOING_TO_PANTRY_3;
-       }
-       break;
-     case GOING_TO_BURNER_2:
-       if (current_line1 == 1 && line3 == 1) {
-         state = GOING_TO_BURNER_3;
-       }
-       break;
-   }
-   line1 = current_line1;
- }
+  switch (state) {
+    case GOING_TO_CW_1:
+      if(current_line1 == 1 && line3 == 1) {
+        state = GOING_TO_CW_2;
+        startMillis = millis();
+      }
+      break;
+    case GOING_TO_BTN_i:
+      if(current_line1 == 1 && line3 == 1) {
+        state = IGNITING_BTN;
+      }
+      break;
+    case GOING_TO_PANTRY_2:
+      if (current_line1 == 1 && line3 == 1) {
+        state = GOING_TO_PANTRY_3;
+      }
+      break;
+    case GOING_TO_BURNER_2:
+      if (current_line1 == 1 && line3 == 1) {
+        state = GOING_TO_BURNER_3;
+        startMillis = millis();
+      }
+      break;
+  }
+  line1 = current_line1;
+}
  
  uint8_t TestForChangeInTape_2(void) {
    current_line2 = analogRead(LINE_SENSOR_E_PIN) > thrLine;
@@ -243,46 +258,42 @@
  }
  
  void RespToChangeInTape_2() {
-   switch (state) {
-     case LEAVING_SZ_1:
-       if (current_line2 == 0){
-         state = LEAVING_SZ_2;
-       }
-       break;
-     case LEAVING_SZ_2:
-       if (current_line2 == 1 && line4 == 1) {
-         state = GOING_TO_CW_1;
-       }
-       break;
-     case GOING_BACK_ON_TRACK:
-       if (current_line2 == 1 && line4 == 1) {
-         state = GOING_TO_BTN_i;
-       }
-       break;
-     case GOING_TO_PANTRY_1:
-       if (current_line2 == 1) {
-         state = GOING_TO_PANTRY_2;
-       }
-       break;
-     case GOING_TO_PANTRY_3:
-       if (current_line2 == 1 && line4 == 1) {
-         state = LOADING;
-       }
-       break;
-     case GOING_TO_BTN_f:
-       if (current_line2 == 1) {
-         state = TURNING_OFF_BURNER;
-       }
-       break;
-     case DELIVERING:
-       if (current_line2 == 1 && line4 == 1) {
-           state = CELEBRATING;
-         }
-       break;
- 
-   }
-   line2 = current_line2;
- }
+  switch (state) {
+    case PIVOTING:
+      if (current_line2 == 1) {
+        state = GOING_TO_CW_1;
+      }
+      break;
+    case GOING_BACK_ON_TRACK:
+      if (current_line2 == 1 && line4 == 1) {
+        state = GOING_TO_BTN_i;
+      }
+      break;
+    case GOING_TO_PANTRY_1:
+      if (current_line2 == 1) {
+        state = GOING_TO_PANTRY_2;
+      }
+      break;
+    case GOING_TO_PANTRY_3:
+      if (current_line2 == 1 && line4 == 1) {
+        state = LOADING;
+      }
+      break;
+    case GOING_TO_BTN_f:
+      if (current_line2 == 1) {
+        state = TURNING_OFF_BURNER;
+      }
+      break;
+    case DELIVERING:
+      if (current_line2 == 1 && line4 == 1) {
+          state = CELEBRATING;
+        }
+      break;
+
+  }
+  line2 = current_line2;
+}
+
  
  uint8_t TestForChangeInTape_3(void) {
    current_line3 = analogRead(LINE_SENSOR_S_PIN) > thrLine;
@@ -290,30 +301,32 @@
  }
  
  void RespToChangeInTape_3() {
-   switch (state) {
-     case GOING_TO_CW_1:
-       if(current_line3 == 1 && line1 == 1) {
-         state = GOING_TO_CW_2;
-       }
-       break;
-     case GOING_TO_BTN_i:
-       if(current_line3 == 1 && line1 == 1) {
-         state = IGNITING_BTN;
-       }
-       break;
-     case GOING_TO_PANTRY_2:
-       if (current_line3 == 1 && line1 == 1) {
-         state = GOING_TO_PANTRY_3;
-       }
-       break;
-     case GOING_TO_BURNER_2:
-       if (current_line3 == 1 && line1 == 1) {
-         state = GOING_TO_BURNER_3;
-       }
-       break;
-   }
-   line3 = current_line3;
- }
+  switch (state) {
+    case GOING_TO_CW_1:
+      if(current_line3 == 1 && line1 == 1) {
+        state = GOING_TO_CW_2;
+        startMillis = millis();
+      }
+      break;
+    case GOING_TO_BTN_i:
+      if(current_line3 == 1 && line1 == 1) {
+        state = IGNITING_BTN;
+      }
+      break;
+    case GOING_TO_PANTRY_2:
+      if (current_line3 == 1 && line1 == 1) {
+        state = GOING_TO_PANTRY_3;
+      }
+      break;
+    case GOING_TO_BURNER_2:
+      if (current_line3 == 1 && line1 == 1) {
+        state = GOING_TO_BURNER_3;
+        startMillis = millis();
+      }
+      break;
+  }
+  line3 = current_line3;
+}
  
  uint8_t TestForChangeInTape_4(void) {
    current_line4 = analogRead(LINE_SENSOR_W_PIN) > thrLine;
@@ -321,35 +334,40 @@
  }
  
  void RespToChangeInTape_4() {
-   switch (state) {
-     case LEAVING_SZ_2:
-       if (current_line4 == 1 && line2 == 1) {
-         state = GOING_TO_CW_1;
-       }
-       break;
-     case GOING_BACK_ON_TRACK:
-       if (current_line4 == 1 && line2 == 1) {
-         state = GOING_TO_BTN_i;
-       }
-       break;
-     case GOING_TO_PANTRY_3:
-       if (current_line4 == 1 && line2 == 1) {
-         state = LOADING;
-       }
-       break;
-     case GOING_TO_BURNER_1:
-       if (current_line4 == 1) {
-         state = GOING_TO_BURNER_2;
-       }
-       break;
-     case DELIVERING:
-       if (current_line4 == 1 && line2 == 1) {
-           state = CELEBRATING;
-         }
-       break;
-   }
-   line4 = current_line4;
- }
+  switch (state) {
+    case LEAVING_SZ_1:
+      if (current_line4 == 0) {
+        state = LEAVING_SZ_2;
+      }
+      break;
+    case LEAVING_SZ_2:
+      if (current_line4 == 1) {
+        state = PIVOTING;
+      }
+      break;
+    case GOING_BACK_ON_TRACK:
+      if (current_line4 == 1 && line2 == 1) {
+        state = GOING_TO_BTN_i;
+      }
+      break;
+    case GOING_TO_PANTRY_3:
+      if (current_line4 == 1 && line2 == 1) {
+        state = LOADING;
+      }
+      break;
+    case GOING_TO_BURNER_1:
+      if (current_line4 == 1) {
+        state = GOING_TO_BURNER_2;
+      }
+      break;
+    case DELIVERING:
+      if (current_line4 == 1 && line2 == 1) {
+          state = CELEBRATING;
+        }
+      break;
+  }
+  line4 = current_line4;
+}
  
  void displayLineSensors(void) {
    Serial.print("(");

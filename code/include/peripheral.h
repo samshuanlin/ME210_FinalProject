@@ -23,6 +23,7 @@
 
 #define FORWARD_DIR         1
 #define BACKWARD_DIR        -1
+#define OFF                 0
 
 // Command codes
 #define STOP_CMD        (uint8_t)0
@@ -30,10 +31,11 @@
 #define DRIVE_EAST_CMD  (uint8_t)2
 #define DRIVE_WEST_CMD  (uint8_t)3
 #define DRIVE_SOUTH_CMD (uint8_t)4
-#define DRIVE_PIVOT_CMD (uint8_t)5
-#define LOADING_CMD     (uint8_t)6
+#define DRIVE_TURNAROUND (uint8_t)5
+#define DRIVE_PIVOT_CMD (uint8_t)6
+#define LOADING_CMD     (uint8_t)7
 uint8_t load_done_flag = 0;
-#define DUMPING_CMD     (uint8_t)7
+#define DUMPING_CMD     (uint8_t)8
 uint8_t dump_done_flag = 0;
 uint8_t cur_cmd = 8;    // no one is using this, so set as initial value
 uint8_t incoming_cmd = 255;
@@ -47,13 +49,14 @@ void dump(void);
 void load(void);
 
 // Motor control functions
+void setMotorDirection(int in1, int in2, int dir, int motor);
+void stop(void);
 void driveNorth(void);
 void driveEast(void);
 void driveSouth(void);
 void driveWest(void);
-void driveTurnRound(void);
+void driveTurnAround(void);
 void drivePivot(void);
-void stop(void);
 
 // I2C interrupt handlers
 void receiveEvent(int bytes);
@@ -67,4 +70,4 @@ int dumpingDuration = 1000; // milliseconds
 // Motor-related variables
 int loading_driving_delay = 1000; // number of milliseconds the robot will drive toward and from the loading position
 int loading_staying_delay = 500; // number of milliseconds the robot will stay during loading
-int mtrSpeed = 50;
+int mtrSpeed = 150;

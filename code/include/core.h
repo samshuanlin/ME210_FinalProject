@@ -66,6 +66,8 @@ uint8_t TestForFrontWall(void);
 void RespToFrontWall(void);
 uint8_t TestForLeftWall(void);
 void RespToLeftWall(void);
+uint8_t TestForTriggerTimerExpired(void);
+void RespToTriggerTimerExpired(void);
 
 // State display function for testing
 void displayState(void);
@@ -86,33 +88,36 @@ void driveWestCmd(void);
 #define DRIVE_SOUTH_CMD (uint8_t)4
 void driveSouthCmd(void);
 
-#define DRIVE_PIVOT_CMD (uint8_t)5
+#define DRIVE_TURNAROUND (uint8_t)5
+void driveTurnAroundCmd(void);
+
+#define DRIVE_PIVOT_CMD (uint8_t)6
 void drivePivotCmd(void);
 
-#define LOADING_CMD     (uint8_t)6
+#define LOADING_CMD     (uint8_t)7
 void loadCmd(void);
 
-#define DUMPING_CMD     (uint8_t)7
+#define DUMPING_CMD     (uint8_t)8
 void dumpCmd(void);
 
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
-    "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2", "PIVOTING", "GOING_TO_CW_1", "GOING_TO_CW_2",
-    "MOVING_POT", "GOING_BACK_ON_TRACK", "GOING_TO_BTN_i", "IGNITING_BTN",
-    "LEAVING_FROM_BTN_i", "DUMPING", "GOING_TO_PANTRY_1", "GOING_TO_PANTRY_2",
-    "GOING_TO_PANTRY_3", "LOADING", "GOING_TO_BURNER_1", "GOING_TO_BURNER_2",
-    "GOING_TO_BURNER_3", "GOING_TO_BTN_f", "TURNING_OFF_BURNER",
-    "LEAVING_FROM_BTN_f", "DELIVERING", "CELEBRATING"
+  "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2", "PIVOTING", "GOING_TO_CW_1", "GOING_TO_CW_2",
+  "MOVING_POT", "GOING_BACK_ON_TRACK", "GOING_TO_BTN_i", "IGNITING_BTN",
+  "LEAVING_FROM_BTN_i", "DUMPING", "GOING_TO_PANTRY_1", "GOING_TO_PANTRY_2",
+  "GOING_TO_PANTRY_3", "LOADING", "GOING_TO_BURNER_1", "GOING_TO_BURNER_2",
+  "GOING_TO_BURNER_3", "GOING_TO_BTN_f", "TURNING_OFF_BURNER",
+  "LEAVING_FROM_BTN_f", "DELIVERING", "CELEBRATING"
 };
 
 typedef enum {
-  SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, PIVOTING, GOING_TO_CW_1, GOING_TO_CW_2,
-  MOVING_POT, GOING_BACK_ON_TRACK, GOING_TO_BTN_i, IGNITING_BTN,
-  LEAVING_FROM_BTN_i, DUMPING, 
-  GOING_TO_PANTRY_1, GOING_TO_PANTRY_2, GOING_TO_PANTRY_3, LOADING,
-  GOING_TO_BURNER_1, GOING_TO_BURNER_2, GOING_TO_BURNER_3,
-  GOING_TO_BTN_f, TURNING_OFF_BURNER, LEAVING_FROM_BTN_f,
-  DELIVERING, CELEBRATING, NUM_STATES
+SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, PIVOTING, GOING_TO_CW_1, GOING_TO_CW_2,
+MOVING_POT, GOING_BACK_ON_TRACK, GOING_TO_BTN_i, IGNITING_BTN,
+LEAVING_FROM_BTN_i, DUMPING, 
+GOING_TO_PANTRY_1, GOING_TO_PANTRY_2, GOING_TO_PANTRY_3, LOADING,
+GOING_TO_BURNER_1, GOING_TO_BURNER_2, GOING_TO_BURNER_3,
+GOING_TO_BTN_f, TURNING_OFF_BURNER, LEAVING_FROM_BTN_f,
+DELIVERING, CELEBRATING, NUM_STATES
 } States_t;
 
 /*---------------Module Variables---------------------------*/
@@ -121,11 +126,13 @@ States_t state;
 States_t initialState = DUMPING;
 
 // Line sensor variables
-float thrLine = 200.0;
+float thrLine = 50.0; // depend on sensing
+// previous detects
 int line1;
 int line2;
 int line3;
 int line4;
+// current detects
 int current_line1;
 int current_line2;
 int current_line3;
@@ -134,10 +141,13 @@ int current_line4;
 // IR sensor variables
 int ir_1_status = 0;
 int ir_2_status = 0;
+long duration1, distance1, duration2, distance2;
 
 // Ultrasonic sensor variables
-long duration1, distance1, duration2, distance2;    // long for 64 bit storage
-long prev_dist1, prev_dist2;
-long front_dist_threshold = 5;
-long left_dist_threshold = 50; 
-long hysteresis_threshold = 5;    // may need different threshold for different distances
+int timerTrigger = 10; // milliseconds
+int currentMillis;
+int startMillis;
+int us1; // distance sensed by the ultrasonic sensor 1
+int us2; // distance sensed by the ultrasonic sensor 1
+int thr_us1 = 4; // cm, front
+int thr_us2 = 20; // cm, left
