@@ -1,7 +1,22 @@
 ## Meeting Notes
+**Feb 27, 2025**
+Members: Sam C., Archer D., Thomas H., Enzo A.
 
-**Feb 26, 2025 Afternoon-Evening Testing Bot**
+Discussion items/worked on:
+1. Tested robot driving mechanisms and can confirm that normal driving and loading works. Dumping probably works.
+2. Tested robot IR sensing mechanism, pretty inconsistent, sometimes arbitrary. Need improvement.
+3. Assembled robot double-decker prototype and finished circuitry for everything except the TPU and gate servo motors.
+
+Action items:
+1. Subsystem checkoff due tomorrow.
+2. Sensor testing.
+3. Improvement of IR mechanism.
+4. Re-design and design of robot second level, switch holder (in the robot), ultrasonic sensor holder, etc.
+
+**Feb 25, 2025 Afternoon-Evening Testing Bot**
+
 Members: Thomas H., Enzo A.
+
 Discussion items/worked on: 
 1. Tested robot on the field.
 2. reinstalled buck converter, installed switch
@@ -11,7 +26,9 @@ Action items:
 2. Tape sensor needs to be in the right direction.
 
 **Feb 25, 2025 Afternoon-Evening**
+
 Members: Sam C., Archer D., Enzo A.
+
 Discussion items/worked on: 
 1. Assembled motor drivers and crimped battery wires. Tested the motor driver functionality with Enzo's test code, no issues with software. Need to redo direction of the mecanums.
 2. Sam looked into inter-board I2C communication and found ways to send messages. Also found a way to drive 2 Arduinos at once.
