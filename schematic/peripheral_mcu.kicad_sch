@@ -3819,7 +3819,7 @@
 			(uuid "11687149-a369-4433-b2ac-bfb2082aea82")
 		)
 		(instances
-			(project ""
+			(project "schematic"
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6/c5f6cf30-2438-4d40-aa4d-571d7fd035a9"
 					(reference "#PWR047")
 					(unit 1)
