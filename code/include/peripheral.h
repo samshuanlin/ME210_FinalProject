@@ -37,6 +37,8 @@
 uint8_t load_done_flag = 0;
 #define DUMPING_CMD     (uint8_t)8
 uint8_t dump_done_flag = 0;
+#define IGNITION_CMD    (uint8_t)9
+uint8_t ignition_done_flag = 0;
 uint8_t cur_cmd = 8;    // no one is using this, so set as initial value
 uint8_t incoming_cmd = 255;
 
@@ -57,6 +59,7 @@ void driveSouth(void);
 void driveWest(void);
 void driveTurnAround(void);
 void drivePivot(void);
+void ignition(void);
 
 // I2C interrupt handlers
 void receiveEvent(int bytes);

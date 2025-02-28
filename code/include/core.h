@@ -100,6 +100,9 @@ void loadCmd(void);
 #define DUMPING_CMD     (uint8_t)8
 void dumpCmd(void);
 
+#define IGNITION_CMD    (uint8_t)9
+void igniteCmd(void);
+
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
   "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2", "PIVOTING", "GOING_TO_CW_1", "GOING_TO_CW_2",
