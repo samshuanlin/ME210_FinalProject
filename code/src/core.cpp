@@ -38,10 +38,6 @@
     pinMode(IR_RX_PIN_1, INPUT);
     pinMode(IR_RX_PIN_2, INPUT);
  
-    // digital pin interrupt setup for IR sensors
-    attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_handler, RISING);
-    attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, RISING);
- 
     // ultrasonic sensor pin setup
     pinMode(US_TRIG, OUTPUT);
     pinMode(US_1_ECHO, INPUT);
@@ -141,17 +137,23 @@
  /*----------------Module Functions--------------------------*/
  
  void checkGlobalEvents(void) {
-   if (TestForChangeInTape_1()) RespToChangeInTape_1();
+   /*if (TestForChangeInTape_1()) RespToChangeInTape_1();
    if (TestForChangeInTape_2()) RespToChangeInTape_2();
    if (TestForChangeInTape_3()) RespToChangeInTape_3();
    if (TestForChangeInTape_4()) RespToChangeInTape_4();
-   if (TestForBeaconSensing()) RespToBeaconSensing();
-   if (TestForFrontWall()) RespToFrontWall();
+   
+   */if (TestForBeaconSensing()) RespToBeaconSensing();
+   /*if (TestForFrontWall()) RespToFrontWall();
    if (TestForTriggerTimerExpired()) RespToTriggerTimerExpired();
-  } 
+    */
+   } 
  
  uint8_t TestForBeaconSensing(void) {
-   if (ir_1_status || ir_2_status) {   // use OR logic to allow for greater coverage
+  // digital pin interrupt setup for IR sensors
+  attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_handler, RISING);
+  attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, RISING);
+    
+  if (ir_1_status || ir_2_status) {   // use OR logic to allow for greater coverage
      ir_1_status = 0;
      ir_2_status = 0;
      return 1;
@@ -160,10 +162,10 @@
  }
  
 void RespToBeaconSensing(void) {
-  state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
   // detach interrupts since we don't need them anymore
   detachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1));
   detachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2));
+  state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
 }
  
  void checkDistance(void) {

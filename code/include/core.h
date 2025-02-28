@@ -123,7 +123,7 @@ DELIVERING, CELEBRATING, NUM_STATES
 /*---------------Module Variables---------------------------*/
 // State variables
 States_t state;
-States_t initialState = GOING_TO_PANTRY_3;
+States_t initialState = SCANNING;
 
 // Line sensor variables
 float thrLine = 50.0; // depend on sensing

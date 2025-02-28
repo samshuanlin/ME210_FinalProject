@@ -139,6 +139,7 @@ void setMotorDirection(int in1, int in2, int dir, int motor) {
   
 void driveNorth(void) {
   Serial.println("north...");
+  mtrSpeed = 150;
   setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR, 1);
   setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR, 2);
   setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR, 3);
@@ -168,6 +169,7 @@ void driveWest(void) {
   
  void driveTurnAround(void) {
   // We turn CCW
+  mtrSpeed = 100;
   setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR, 1);
   setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR, 2);
   setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, FORWARD_DIR, 3);
