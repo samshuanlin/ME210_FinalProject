@@ -52,10 +52,12 @@ void setup()
 
   // I2C core board setup
   Wire.begin();
+  startMillis = millis();
 }
 
 void loop()
 {
+  checkGlobalEvents();
   switch (state)
   {
   case SCANNING:
@@ -89,8 +91,12 @@ void loop()
   case GOING_TO_BTN_i:
     driveWestCmd();
     break;
-  case IGNITING_BTN:
+  case STOPPING_FOR_IGNITION:
     stopCmd();
+    state = IGNITING_BTN;
+    break;
+  case IGNITING_BTN:
+    ignitionCmd();
     break;
   case LEAVING_FROM_BTN_i:
     driveNorthCmd();
@@ -140,27 +146,43 @@ void loop()
     break;
   }
 
-  checkGlobalEvents();
+  
+  
   displayState();
 
+  currentMillis = millis();
+
+  us1 = checkDistance1();
+  // us2 = checkDistance2();
+
+  // Serial.println(analogRead(IR_RX_PIN_2));
+
+
+  // Serial.println(us2);
+
   // displayLineSensors();
+  // Serial.println(analogRead(LINE_SENSOR_E_PIN));
 }
 
 /*----------------Module Functions--------------------------*/
 
 void checkGlobalEvents(void)
 {
-  /*if (TestForChangeInTape_1()) RespToChangeInTape_1();
+  if (TestForChangeInTape_1()) RespToChangeInTape_1();
   if (TestForChangeInTape_2()) RespToChangeInTape_2();
   if (TestForChangeInTape_3()) RespToChangeInTape_3();
   if (TestForChangeInTape_4()) RespToChangeInTape_4();
 
-  */
-  if (TestForBeaconSensing())
-    RespToBeaconSensing();
-  /*if (TestForFrontWall()) RespToFrontWall();
-  if (TestForTriggerTimerExpired()) RespToTriggerTimerExpired();
-   */
+  // if (state == SCANNING)
+  // {
+  //   if (TestForBeaconSensing())
+  //     RespToBeaconSensing();
+  // }
+
+  if (TestForFrontWall()) RespToFrontWall();
+  if (TestForLeftWall()) RespToLeftWall();
+  // if (TestForTriggerTimerExpired()) RespToTriggerTimerExpired();
+
 }
 
 uint8_t TestForBeaconSensing(void)
@@ -186,7 +208,7 @@ void RespToBeaconSensing(void)
   state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
 }
 
-void checkDistance(void)
+uint8_t checkDistance1(void)
 {
   analogWrite(US_TRIG, 128); // 50% duty cycle, 490Hz frequency
   unsigned long timeout = 3000L;
@@ -194,14 +216,24 @@ void checkDistance(void)
   duration1 = pulseIn(US_1_ECHO, HIGH, timeout); // pulse in us. if returning 0, means no feedback received
   distance1 = duration1 * 10 / 2 / 291;          // duration (us) / 2 / 29.1 (us / cm) (speed is the speed of light)
                                                  // additional 10 multiplied to prevent decimal numbers
+  return distance1;
+}
+
+uint8_t checkDistance2(void)
+{
+  analogWrite(US_TRIG, 128); // 50% duty cycle, 490Hz frequency
+  unsigned long timeout = 3000L;
   // US_2 is the left-facing ultrasonic sensor
   duration2 = pulseIn(US_2_ECHO, HIGH, timeout);
   distance2 = duration2 * 10 / 2 / 291;
   // note that this is done in a superloop, so will cause delays for 6 ms maximum
+  return distance2;
 }
+
 
 uint8_t TestForFrontWall(void)
 {
+  // Serial.println(us1);
   return us1 < thr_us1 && us1 > 0;
 }
 
@@ -211,6 +243,10 @@ void RespToFrontWall(void)
   {
     state = MOVING_POT;
     startMillis = millis();
+  }
+  else if (state == LEAVING_FROM_BTN_i)
+  {
+    state = DUMPING;
   }
   else if (state == GOING_TO_BURNER_3)
   {
@@ -238,6 +274,7 @@ void RespToLeftWall(void)
 // Ultrasonic sensor time trigger control
 uint8_t TestForTriggerTimerExpired(void)
 {
+  
   return currentMillis - startMillis > timerTrigger;
 }
 
@@ -248,7 +285,7 @@ void RespToTriggerTimerExpired()
   {
     us1 = pulseIn(US_1_ECHO, DEC);
     us1 = (us1 / 2) / 29.1;
-    Serial.println(us2); // for testing. TODO
+    // Serial.println(us2); // for testing. TODO
   }
   else if (state == MOVING_POT)
   {
@@ -280,7 +317,7 @@ void RespToChangeInTape_1()
   case GOING_TO_BTN_i:
     if (current_line1 == 1 && line3 == 1)
     {
-      state = IGNITING_BTN;
+      state = STOPPING_FOR_IGNITION;
     }
     break;
   case GOING_TO_PANTRY_2:
@@ -310,12 +347,12 @@ void RespToChangeInTape_2()
 {
   switch (state)
   {
-  case PIVOTING:
-    if (current_line2 == 1)
-    {
-      state = GOING_TO_CW_1;
-    }
-    break;
+  // case PIVOTING:
+  //   if (current_line2 == 0)
+  //   {
+  //     state = GOING_TO_CW_1;
+  //   }
+  //   break;
   case GOING_BACK_ON_TRACK:
     if (current_line2 == 1 && line4 == 1)
     {
@@ -360,6 +397,12 @@ void RespToChangeInTape_3()
 {
   switch (state)
   {
+  case PIVOTING:
+    if (current_line3 == 0)
+    {
+      state = GOING_TO_CW_1;
+    }
+    break;
   case GOING_TO_CW_1:
     if (current_line3 == 1 && line1 == 1)
     {
@@ -370,7 +413,7 @@ void RespToChangeInTape_3()
   case GOING_TO_BTN_i:
     if (current_line3 == 1 && line1 == 1)
     {
-      state = IGNITING_BTN;
+      state = STOPPING_FOR_IGNITION;
     }
     break;
   case GOING_TO_PANTRY_2:
@@ -546,6 +589,7 @@ void loadCmd(void)
 
 void dumpCmd(void)
 {
+  Serial.println("Dumping...");
   // Send command
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(DUMPING_CMD);

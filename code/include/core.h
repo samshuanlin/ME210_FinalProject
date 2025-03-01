@@ -41,7 +41,8 @@
 void checkGlobalEvents(void);
 
 // Recurring function to check the front and left distance parameters from the ultrasonic sensor.
-void checkDistance(void);
+uint8_t checkDistance1(void);
+uint8_t checkDistance2(void);
 
 // Line sensor event detection and response functions
 unsigned char TestForChangeInTape_1(void);
@@ -101,12 +102,12 @@ void loadCmd(void);
 void dumpCmd(void);
 
 #define IGNITION_CMD    (uint8_t)9
-void igniteCmd(void);
+void ignitionCmd(void);
 
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
   "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2", "PIVOTING", "GOING_TO_CW_1", "GOING_TO_CW_2",
-  "MOVING_POT", "GOING_BACK_ON_TRACK", "GOING_TO_BTN_i", "IGNITING_BTN",
+  "MOVING_POT", "GOING_BACK_ON_TRACK", "GOING_TO_BTN_i", "STOPPING_FOR_IGNITION", "IGNITING_BTN",
   "LEAVING_FROM_BTN_i", "DUMPING", "GOING_TO_PANTRY_1", "GOING_TO_PANTRY_2",
   "GOING_TO_PANTRY_3", "LOADING", "GOING_TO_BURNER_1", "GOING_TO_BURNER_2",
   "GOING_TO_BURNER_3", "GOING_TO_BTN_f", "TURNING_OFF_BURNER",
@@ -115,7 +116,7 @@ const char* stateNames[] = {
 
 typedef enum {
 SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, PIVOTING, GOING_TO_CW_1, GOING_TO_CW_2,
-MOVING_POT, GOING_BACK_ON_TRACK, GOING_TO_BTN_i, IGNITING_BTN,
+MOVING_POT, GOING_BACK_ON_TRACK, GOING_TO_BTN_i, STOPPING_FOR_IGNITION,  IGNITING_BTN,
 LEAVING_FROM_BTN_i, DUMPING, 
 GOING_TO_PANTRY_1, GOING_TO_PANTRY_2, GOING_TO_PANTRY_3, LOADING,
 GOING_TO_BURNER_1, GOING_TO_BURNER_2, GOING_TO_BURNER_3,
@@ -126,10 +127,10 @@ DELIVERING, CELEBRATING, NUM_STATES
 /*---------------Module Variables---------------------------*/
 // State variables
 States_t state;
-States_t initialState = SCANNING;
+States_t initialState = DUMPING;
 
 // Line sensor variables
-float thrLine = 50.0; // depend on sensing
+int thrLine = 200; // depend on sensing
 // previous detects
 int line1;
 int line2;
@@ -152,5 +153,5 @@ int currentMillis;
 int startMillis;
 int us1; // distance sensed by the ultrasonic sensor 1
 int us2; // distance sensed by the ultrasonic sensor 1
-int thr_us1 = 4; // cm, front
+int thr_us1 = 3; // cm, front
 int thr_us2 = 20; // cm, left

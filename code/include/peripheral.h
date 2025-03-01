@@ -10,6 +10,7 @@
 /*---------------Module Defines-----------------------------*/
 
 #define GATE_SERVO_PIN      9
+#define IGNITER_SERVO_PIN   10
 
 #define MOTOR_1_IN1_PIN     2 // This is M3 on Kicad
 #define MOTOR_1_IN2_PIN     4 // This is M3 on Kicad
@@ -39,7 +40,7 @@ uint8_t load_done_flag = 0;
 uint8_t dump_done_flag = 0;
 #define IGNITION_CMD    (uint8_t)9
 uint8_t ignition_done_flag = 0;
-uint8_t cur_cmd = 8;    // no one is using this, so set as initial value
+uint8_t cur_cmd = 100;    // no one is using this, so set as initial value
 uint8_t incoming_cmd = 255;
 
 // I2C Peripheral Address
@@ -70,7 +71,11 @@ PWMServo gateServo;  // create servo object to control a servo
 int gateServoPos = 0;    // variable to store the servo position
 int dumpingDuration = 1000; // milliseconds
 
+// Igniting-related variables (servo)
+PWMServo igniterServo;  // create servo object to control a servo
+int igniterServoPos = 0;    // variable to store the servo position
+
 // Motor-related variables
 int loading_driving_delay = 1000; // number of milliseconds the robot will drive toward and from the loading position
 int loading_staying_delay = 1000; // number of milliseconds the robot will stay during loading
-int mtrSpeed = 150;
+int mtrSpeed = 180;

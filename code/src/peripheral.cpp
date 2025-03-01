@@ -11,6 +11,8 @@
 void receiveEvent(int bytes)
 {
   incoming_cmd = (uint8_t)Wire.read();
+  Serial.print("Incoming command: ");
+  Serial.println(incoming_cmd);
 }
 
 void requestEvent()
@@ -18,7 +20,7 @@ void requestEvent()
   if (cur_cmd == LOADING_CMD)
   {
     Wire.write(load_done_flag);
-    Serial.println(load_done_flag);
+    // Serial.println(load_done_flag);
     if (load_done_flag == 1)
       load_done_flag = 0;
   }
@@ -49,7 +51,7 @@ void setup(void)
   }
 
   // pin mode setup
-  pinMode(GATE_SERVO_PIN, OUTPUT);
+  // pinMode(GATE_SERVO_PIN, OUTPUT);
   pinMode(MOTOR_1_IN1_PIN, OUTPUT);
   pinMode(MOTOR_1_IN2_PIN, OUTPUT);
   pinMode(MOTOR_2_IN3_PIN, OUTPUT);
@@ -62,6 +64,7 @@ void setup(void)
 
   // servo setup
   gateServo.attach(GATE_SERVO_PIN);
+  igniterServo.attach(IGNITER_SERVO_PIN);
 
   // I2C peripheral device setup
   Wire.begin(PERIPHERAL_ADDR);
@@ -73,14 +76,19 @@ void setup(void)
 void loop()
 {
   // turn off any done flags
-  Serial.print("cur_cmd: ");
-  Serial.println(cur_cmd);
-  Serial.print("incoming_cmd: ");
-  Serial.println(incoming_cmd);
+  // Serial.print("cur_cmd: ");
+  // Serial.println(cur_cmd);
+  // Serial.print("incoming_cmd: ");
+  // Serial.println(incoming_cmd);
   if (cur_cmd != incoming_cmd)
-    stop();               // stop before executing other command if the new cmd is not the current cmd
+    stop();
+    // Serial.println("--------------");             // stop before executing other command if the new cmd is not the current cmd
   cur_cmd = incoming_cmd; // store what the currently running command is
   analogWrite(MOTOR_SPEED_PIN, mtrSpeed);
+
+  Serial.print("Current command: ");
+  Serial.println(cur_cmd);
+
   if (incoming_cmd == STOP_CMD)
   {
     stop();
@@ -117,6 +125,10 @@ void loop()
   {
     drivePivot();
   }
+  else if (incoming_cmd == IGNITION_CMD)
+  {
+    ignition();
+  }
 }
 
 /*----------------Module Functions--------------------------*/
@@ -152,6 +164,7 @@ void setMotorDirection(int in1, int in2, int dir, int motor)
   }
   else if (dir == OFF)
   {
+    Serial.println("Stopping motor...");
     digitalWrite(in1, LOW);
     digitalWrite(in2, LOW);
   }
@@ -159,10 +172,12 @@ void setMotorDirection(int in1, int in2, int dir, int motor)
 
 void dump(void)
 {
-  gateServo.write(100);
+  gateServo.write(90+50);
   delay(dumpingDuration);
-  gateServo.write(0);
+  gateServo.write(90);
   delay(dumpingDuration);
+  // delay(dumpingDuration);
+  // igniterServo.write(0);
   dump_done_flag = 1;
 }
 
@@ -182,18 +197,19 @@ void load(void)
 
 void ignition(void)
 {
-  gateServo.write(100);
-  delay(dumpingDuration);
-  gateServo.write(0);
-  delay(dumpingDuration);
+  igniterServo.write(0);
+  delay(500);
+  igniterServo.write(100);
+  // delay(dumpingDuration);
+  // gateServo.write(0);
+  // delay(dumpingDuration);
   ignition_done_flag = 1;
 }
 
 void driveNorth(void)
 {
   Serial.println("north...");
-  mtrSpeed = 150;
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR, 1);
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR, 1);
   setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR, 2);
   setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR, 3);
   setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, FORWARD_DIR, 4);
@@ -201,7 +217,8 @@ void driveNorth(void)
 
 void driveEast(void)
 {
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR, 1);
+  Serial.println("east...");
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR, 1);
   setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR, 2);
   setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, FORWARD_DIR, 3);
   setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, FORWARD_DIR, 4);
@@ -209,7 +226,7 @@ void driveEast(void)
 
 void driveSouth(void)
 {
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR, 1);
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR, 1);
   setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR, 2);
   setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, FORWARD_DIR, 3);
   setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR, 4);
@@ -217,26 +234,27 @@ void driveSouth(void)
 
 void driveWest(void)
 {
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR, 1);
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR, 1);
   setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR, 2);
   setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR, 3);
   setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR, 4);
 }
-
 void driveTurnAround(void)
 {
+  Serial.println("Turning around...");
   // We turn CCW
-  mtrSpeed = 100;
+  // mtrSpeed = 80;
   setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR, 1);
-  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR, 2);
-  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, FORWARD_DIR, 3);
-  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR, 4);
+  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR, 2);
+  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR, 3);
+  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, FORWARD_DIR, 4);
+  // mtrSpeed = 150;
 }
 
 void drivePivot(void)
 {
   // We pivot around the wheel number 4 (MTR 4 = Nort-West)
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR, 1);
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR, 1);
   setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR, 2);
   setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, OFF, 3);
   setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, OFF, 4);
@@ -244,6 +262,7 @@ void drivePivot(void)
 
 void stop(void)
 {
+  Serial.println("Stopping...");
   setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, OFF, 1);
   setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, OFF, 2);
   setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, OFF, 3);
