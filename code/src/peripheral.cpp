@@ -175,7 +175,6 @@ void dump(void)
   gateServo.write(90+50);
   delay(dumpingDuration);
   gateServo.write(90);
-  delay(dumpingDuration);
   // delay(dumpingDuration);
   // igniterServo.write(0);
   dump_done_flag = 1;
@@ -198,7 +197,7 @@ void load(void)
 void ignition(void)
 {
   igniterServo.write(0);
-  delay(500);
+  delay(1000);
   igniterServo.write(100);
   // delay(dumpingDuration);
   // gateServo.write(0);

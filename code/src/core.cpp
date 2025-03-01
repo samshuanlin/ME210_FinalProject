@@ -58,6 +58,7 @@ void setup()
 void loop()
 {
   checkGlobalEvents();
+  displayState();
   switch (state)
   {
   case SCANNING:
@@ -148,8 +149,7 @@ void loop()
 
   
   
-  displayState();
-
+  
   currentMillis = millis();
 
   us1 = checkDistance1();

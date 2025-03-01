@@ -68,8 +68,8 @@ void requestEvent(int bytes);
 
 // Loading-related variables (servo)
 PWMServo gateServo;  // create servo object to control a servo
-int gateServoPos = 0;    // variable to store the servo position
-int dumpingDuration = 1000; // milliseconds
+int gateServoPos = 90;    // variable to store the servo position
+int dumpingDuration = 500; // milliseconds
 
 // Igniting-related variables (servo)
 PWMServo igniterServo;  // create servo object to control a servo
