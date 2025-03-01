@@ -1,4 +1,23 @@
 ## Meeting Notes
+**Feb 28, 2025**
+Members: Thomas H., Enzo A.
+
+Discussion items/worked on:
+1. robot functions well ( 80\% ish success rate?) from leaving starting zone until pushing pot.
+2. robot goes back on track fine. 
+
+Action items:
+1. It is likely that we have to implement a timer to push the pot since we cannot get the ultrasonic sensor to work.
+2. The west ultrasonic sensor should be used to sense when we should stop before igniting the burner, the current method stops way too late and risks the robot bumping into the pot handle.
+3.  IR sensor needs to be retested. The issue ONLY happens when the power is on. I suggest we first test it with the computer power arduino, make sure it works. Then we test it still with our laptop, but in the vicinity of the robot, turn on the switch, and see what happens. I also think that it might be good if the ultrasonic sensor is not sharing a ground with the rest of the circuit.
+4. To fix everything servo related, Thomas needs to talk to Sam to understand how the boards are communicating.
+5. To sum up, in order to beat the brick, the following transitions needs to be fixed.
+	(1) IR scanning and leaving the start zone.
+	(2) timer for pot pushing
+	(3) stopping before ignition
+	(4) servo bugs
+
+
 **Feb 27, 2025**
 Members: Sam C., Archer D., Thomas H., Enzo A.
 
