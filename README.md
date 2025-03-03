@@ -1,4 +1,16 @@
 ## Meeting Notes
+
+**March 2, 2025**
+Members: Sam C., Archer D.
+
+Discussion items/worked on:
+1. Troubleshooting the IR sensor. The issue turned out to be the PWM signal, as unplugging it 
+from the circuit eliminates the interference. It could be because the small resistances in the
+shared wires and possibly the protoboard lines cause current jumps due to the PWM. We are isolating the power and ground connections. We also added unity buffers between the photoresistor output and highpass input to stop interference between the two.
+
+Action items:
+1. We still need to fix the bugs from last time (servo bugs, stopping before ignition, timer for pot pushing).
+
 **Feb 28, 2025**
 Members: Thomas H., Enzo A.
 
