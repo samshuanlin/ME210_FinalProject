@@ -293,10 +293,6 @@ uint8_t TestForLeftWall(void)
 
 void RespToLeftWall(void)
 {
-  if (state == MOVING_POT)
-  {
-    state = GOING_BACK_ON_TRACK;
-  }
   if (state == GOING_TO_BTN_i)
   {
     state = STOPPING_FOR_IGNITION;
