@@ -57,6 +57,11 @@ void RespToChangeInTape_4(void);
 // IR receiver interrupt handlers
 void ir1_handler();
 void ir2_handler();
+// IR receiver reading average array, for "debouncing"
+int ir1_debouncing_array[10] = {};
+int ir2_debouncing_array[10] = {};
+int ir1_arr_idx = 0;
+int ir2_arr_idx = 0;
 
 // IR receiver sensing event detection and response functions
 uint8_t TestForBeaconSensing(void);

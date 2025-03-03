@@ -9,11 +9,11 @@
 
  /*---------------Interrupt Handlers------------------*/
  void ir1_handler(void) {
-     ir_1_status = 1;  // fired at every pin interrupt, set ir_1_status to be 1, to be turned of by TestForBeaconSensing
+     ir_1_status++; // fired at every pin interrupt, set ir_1_status to be 1, to be turned of by TestForBeaconSensing
  }
    
  void ir2_handler(void) {
-     ir_2_status = 1;  // fired at every pin interrupt, set ir_2_status to be 1, to be turned of by TestForBeaconSensing
+     ir_2_status++;  // fired at every pin interrupt, set ir_2_status to be 1, to be turned of by TestForBeaconSensing
  }  
  
  /*---------------Robot Main Functions----------------*/
@@ -151,7 +151,7 @@
   } 
  
  uint8_t TestForBeaconSensing(void) {
-   if (ir_1_status || ir_2_status) {   // use OR logic to allow for greater coverage
+   if (ir_1_status == 2 && ir_2_status == 2) {   // use OR logic to allow for greater coverage
      ir_1_status = 0;
      ir_2_status = 0;
      return 1;

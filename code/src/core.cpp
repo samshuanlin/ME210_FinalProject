@@ -11,12 +11,14 @@
 void ir1_handler(void)
 {
   ir_1_status = 1; // fired at every pin interrupt, set ir_1_status to be 1, to be turned off by TestForBeaconSensing
+  ir1_debouncing_array[ir1_arr_idx] = ir_1_status;
   Serial.println("Rise in IR 1 detected!");
 }
 
 void ir2_handler(void)
 {
   ir_2_status = 1; // fired at every pin interrupt, set ir_2_status to be 1, to be turned off by TestForBeaconSensing
+  ir2_debouncing_array[ir2_arr_idx] = ir_2_status;
   Serial.println("Rise in IR 2 detected!");
 }
 
@@ -44,6 +46,10 @@ void setup()
   // pin setup for IR sensors
   pinMode(IR_RX_PIN_1, INPUT);
   pinMode(IR_RX_PIN_2, INPUT);
+
+  // digital pin interrupt setup for IR sensors
+  attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_handler, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, CHANGE);
 
   // ultrasonic sensor pin setup
   pinMode(US_TRIG, OUTPUT);
@@ -187,16 +193,32 @@ void checkGlobalEvents(void)
 
 uint8_t TestForBeaconSensing(void)
 {
-  // digital pin interrupt setup for IR sensors
-  attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_handler, RISING);
-  attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, RISING);
+  int ir1_arr_sum, ir2_arr_sum = 0;
 
-  if (ir_1_status || ir_2_status)
-  { // use OR logic to allow for greater coverage
-    ir_1_status = 0;
-    ir_2_status = 0;
+  // traverse through loop to get average value
+  for (int i = 0; i < 10; i++) {
+    ir1_arr_sum += ir1_debouncing_array[i];
+    ir2_arr_sum += ir2_debouncing_array[i];
+  }
+
+  // if both sums are equal to 5, means a signal is indeed being detected
+  if (ir1_arr_sum == 5 && ir2_arr_sum == 5)
+  { 
     return 1;
   }
+
+  // reset index if cycling back
+  if (ir1_arr_idx == 10) {
+    ir1_arr_idx = 0;
+  } else {
+    ir1_arr_idx++;
+  }
+  if (ir2_arr_idx == 10) {
+    ir2_arr_idx = 0;
+  } else {
+    ir2_arr_idx++;
+  }
+
   return 0;
 }
 
