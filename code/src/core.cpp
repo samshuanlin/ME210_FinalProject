@@ -144,10 +144,13 @@ void loop()
     break;
   case GOING_TO_PANTRY_3:
     driveSouthCmd();
+    delay(delay_to_enter_and_leave_loading_zone);
+    driveNorthCmd();
+    delay(delay_to_enter_and_leave_loading_zone);
     break;
-  case LOADING:
-    loadCmd();
-    break;
+  // case LOADING:
+  //   loadCmd();
+  //   break;
   case GOING_TO_BURNER_1:
     driveNorthCmd();
     break;

@@ -169,3 +169,4 @@ int delay_ignoring_tape_in_sz = 500;
 int timer_moving_pot = 7500;
 int delay_going_against_kitchen = 800;
 int delay_rotation_to_45_orientation = 1700;
+int delay_to_enter_and_leave_loading_zone = 3000;
