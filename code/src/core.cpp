@@ -16,14 +16,14 @@ int timer_moving_pot = 8000;
 void ir1_handler(void)
 {
   ir_1_status = 1; // fired at every pin interrupt, set ir_1_status to be 1, to be turned off by TestForBeaconSensing
-  ir1_debouncing_array[ir1_arr_idx] = ir_1_status;
+  // ir1_debouncing_array[ir1_arr_idx] = ir_1_status;
   Serial.println("Rise in IR 1 detected!");
 }
 
 void ir2_handler(void)
 {
   ir_2_status = 1; // fired at every pin interrupt, set ir_2_status to be 1, to be turned off by TestForBeaconSensing
-  ir2_debouncing_array[ir2_arr_idx] = ir_2_status;
+  // ir2_debouncing_array[ir2_arr_idx] = ir_2_status;
   Serial.println("Rise in IR 2 detected!");
 }
 
@@ -84,6 +84,8 @@ void loop()
     break;
   case LEAVING_SZ_1:
     driveNorthCmd();
+    delay(1000);
+    state = LEAVING_SZ_2;
     break;
   case LEAVING_SZ_2:
     driveNorthCmd();
@@ -221,7 +223,7 @@ void checkGlobalEvents(void)
 
 uint8_t TestForBeaconSensing(void)
 {
-  int ir1_arr_sum, ir2_arr_sum = 0;
+  /*int ir1_arr_sum, ir2_arr_sum = 0;
 
   // traverse through loop to get average value
   for (int i = 0; i < 10; i++) {
@@ -245,7 +247,12 @@ uint8_t TestForBeaconSensing(void)
     ir2_arr_idx = 0;
   } else {
     ir2_arr_idx++;
+  }*/
+  if (ir_1_status && ir_2_status)
+  { 
+    return 1;
   }
+
 
   return 0;
 }
