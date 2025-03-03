@@ -7,6 +7,11 @@
 
 #include <core.h>
 
+
+int timer_moving_pot = 8000;
+
+
+
 /*---------------Interrupt Handlers------------------*/
 void ir1_handler(void)
 {
@@ -50,15 +55,22 @@ void setup()
   pinMode(US_1_ECHO, INPUT);
   pinMode(US_2_ECHO, INPUT);
 
+
   // I2C core board setup
   Wire.begin();
   startMillis = millis();
+
+
+
+
+
 }
 
 void loop()
 {
   checkGlobalEvents();
   displayState();
+  currentMillis = millis();
   switch (state)
   {
   case SCANNING:
@@ -83,8 +95,9 @@ void loop()
     break;
   case MOVING_POT:
     driveWestCmd();
-    if (TestForLeftWall())
-      RespToLeftWall();
+
+    // if (TestForLeftWall())
+    //   RespToLeftWall();
     break;
   case GOING_BACK_ON_TRACK:
     driveSouthCmd();
@@ -94,13 +107,17 @@ void loop()
     break;
   case STOPPING_FOR_IGNITION:
     stopCmd();
-    state = IGNITING_BTN;
+    // startMillis = millis();
+    // state = IGNITING_BTN;
+    // delay(1000);
     break;
   case IGNITING_BTN:
     ignitionCmd();
     break;
   case LEAVING_FROM_BTN_i:
     driveNorthCmd();
+    if (TestForLeftWall())
+      RespToLeftWall();
     break;
   case DUMPING:
     dumpCmd();
@@ -150,10 +167,10 @@ void loop()
   
   
   
-  currentMillis = millis();
+  
 
   us1 = checkDistance1();
-  // us2 = checkDistance2();
+  us2 = checkDistance2();
 
   // Serial.println(analogRead(IR_RX_PIN_2));
 
@@ -162,6 +179,9 @@ void loop()
 
   // displayLineSensors();
   // Serial.println(analogRead(LINE_SENSOR_E_PIN));
+
+
+
 }
 
 /*----------------Module Functions--------------------------*/
@@ -173,15 +193,23 @@ void checkGlobalEvents(void)
   if (TestForChangeInTape_3()) RespToChangeInTape_3();
   if (TestForChangeInTape_4()) RespToChangeInTape_4();
 
-  // if (state == SCANNING)
-  // {
-  //   if (TestForBeaconSensing())
-  //     RespToBeaconSensing();
-  // }
+  if (state == SCANNING)
+  {
+    if (TestForBeaconSensing())
+      RespToBeaconSensing();
+  }
 
   if (TestForFrontWall()) RespToFrontWall();
   if (TestForLeftWall()) RespToLeftWall();
   // if (TestForTriggerTimerExpired()) RespToTriggerTimerExpired();
+
+  if (currentMillis - startMillis > timer_moving_pot)
+  {
+    if (state == MOVING_POT)
+    {
+      state = GOING_BACK_ON_TRACK;
+    }
+  }
 
 }
 
@@ -191,7 +219,7 @@ uint8_t TestForBeaconSensing(void)
   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_handler, RISING);
   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, RISING);
 
-  if (ir_1_status || ir_2_status)
+  if (ir_1_status && ir_2_status)
   { // use OR logic to allow for greater coverage
     ir_1_status = 0;
     ir_2_status = 0;
@@ -269,6 +297,10 @@ void RespToLeftWall(void)
   {
     state = GOING_BACK_ON_TRACK;
   }
+  if (state == GOING_TO_BTN_i)
+  {
+    state = STOPPING_FOR_IGNITION;
+  }
 }
 
 // Ultrasonic sensor time trigger control
@@ -314,12 +346,12 @@ void RespToChangeInTape_1()
       startMillis = millis();
     }
     break;
-  case GOING_TO_BTN_i:
-    if (current_line1 == 1 && line3 == 1)
-    {
-      state = STOPPING_FOR_IGNITION;
-    }
-    break;
+  // case GOING_TO_BTN_i:
+  //   if (current_line1 == 1 && line3 == 1)
+  //   {
+  //     state = STOPPING_FOR_IGNITION;
+  //   }
+  //   break;
   case GOING_TO_PANTRY_2:
     if (current_line1 == 1 && line3 == 1)
     {
@@ -410,12 +442,12 @@ void RespToChangeInTape_3()
       startMillis = millis();
     }
     break;
-  case GOING_TO_BTN_i:
-    if (current_line3 == 1 && line1 == 1)
-    {
-      state = STOPPING_FOR_IGNITION;
-    }
-    break;
+  // case GOING_TO_BTN_i:
+  //   if (current_line3 == 1 && line1 == 1)
+  //   {
+  //     state = STOPPING_FOR_IGNITION;
+  //   }
+  //   break;
   case GOING_TO_PANTRY_2:
     if (current_line3 == 1 && line1 == 1)
     {
@@ -498,7 +530,7 @@ void displayLineSensors(void)
 
 const char *getStateName(States_t state)
 {
-  if (state >= 0 && state < NUM_STATES)
+  if (state >= 0 || state < NUM_STATES)
   {
     return stateNames[state];
   }
@@ -524,6 +556,12 @@ void stopCmd()
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(STOP_CMD);
   Wire.endTransmission();
+
+  if (state == STOPPING_FOR_IGNITION)
+  {
+    delay(500);
+    state = IGNITING_BTN;
+  } 
 }
 
 void driveNorthCmd()
@@ -566,6 +604,7 @@ void driveTurnAroundCmd(void)
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(DRIVE_TURNAROUND_CMD);
   Wire.endTransmission();
+  // delay(2000);
 }
 
 void loadCmd(void)
@@ -595,6 +634,8 @@ void dumpCmd(void)
   Wire.write(DUMPING_CMD);
   Wire.endTransmission();
 
+  // delay(5000);
+
   // Wait until done
   uint8_t inp;
   do
@@ -609,11 +650,13 @@ void dumpCmd(void)
 
 void ignitionCmd(void)
 {
+  // Serial.println("Igniting...");
   // Send command
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(IGNITION_CMD);
   Wire.endTransmission();
-
+  // Serial.println("Ignition command sent!");
+  delay(1000);
   // Wait until done
   uint8_t inp;
   do
@@ -626,6 +669,7 @@ void ignitionCmd(void)
   if (state == IGNITING_BTN)
   {
     state = LEAVING_FROM_BTN_i; // set new state
+    startMillis = millis();
   }
   else if (state == TURNING_OFF_BURNER)
   {

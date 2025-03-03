@@ -75,6 +75,7 @@ void setup(void)
 
 void loop()
 {
+
   // turn off any done flags
   // Serial.print("cur_cmd: ");
   // Serial.println(cur_cmd);
@@ -197,8 +198,9 @@ void load(void)
 void ignition(void)
 {
   igniterServo.write(0);
-  delay(1000);
-  igniterServo.write(100);
+  delay(200);
+  // igniterServo.write(100);
+
   // delay(dumpingDuration);
   // gateServo.write(0);
   // delay(dumpingDuration);

@@ -78,4 +78,4 @@ int igniterServoPos = 0;    // variable to store the servo position
 // Motor-related variables
 int loading_driving_delay = 1000; // number of milliseconds the robot will drive toward and from the loading position
 int loading_staying_delay = 1000; // number of milliseconds the robot will stay during loading
-int mtrSpeed = 180;
+int mtrSpeed = 150;
