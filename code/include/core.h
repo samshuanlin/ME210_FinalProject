@@ -132,10 +132,10 @@ DELIVERING, CELEBRATING, NUM_STATES
 /*---------------Module Variables---------------------------*/
 // State variables
 States_t state;
-States_t initialState = GOING_BACK_ON_TRACK;
+States_t initialState = SCANNING;
 
 // Line sensor variables
-int thrLine = 200; // depend on sensing
+int thrLine = 300; // depend on sensing
 // previous detects
 int line1;
 int line2;
