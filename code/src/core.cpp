@@ -14,14 +14,12 @@ void ir1_handler(void)
 {
   ir_1_status = 1; // fired at every pin interrupt, set ir_1_status to be 1, to be turned off by TestForBeaconSensing
   // ir1_debouncing_array[ir1_arr_idx] = ir_1_status;
-  Serial.println("Rise in IR 1 detected!");
-}
 
+}
 void ir2_handler(void)
 {
   ir_2_status = 1; // fired at every pin interrupt, set ir_2_status to be 1, to be turned off by TestForBeaconSensing
   // ir2_debouncing_array[ir2_arr_idx] = ir_2_status;
-  Serial.println("Rise in IR 2 detected!");
 }
 
 /*---------------Robot Main Functions----------------*/
@@ -213,7 +211,7 @@ void checkGlobalEvents(void)
     }
 
 
-
+  Serial.println(us_score);
     if (us_score > 0 && us_score < thr_us_score) {
       state = LEAVING_SZ_1;
     }
