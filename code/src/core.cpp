@@ -8,9 +8,6 @@
 #include <core.h>
 
 
-int timer_moving_pot = 8000;
-
-
 
 /*---------------Interrupt Handlers------------------*/
 void ir1_handler(void)
@@ -74,20 +71,31 @@ void setup()
 
 void loop()
 {
+
   checkGlobalEvents();
   displayState();
   currentMillis = millis();
+  us1 = checkDistance1();
+  us2 = checkDistance2();
+
+
+
   switch (state)
   {
   case SCANNING:
     driveTurnAroundCmd();
     break;
   case LEAVING_SZ_1:
-    driveNorthCmd();
-    delay(1000);
+    driveSouthCmd();
+    delay(delay_going_against_kitchen);
     state = LEAVING_SZ_2;
     break;
   case LEAVING_SZ_2:
+    driveTurnAroundCmd();
+    delay(delay_rotation_to_45_orientation);
+    state = LEAVING_SZ_3;
+    break;
+  case LEAVING_SZ_3:
     driveNorthCmd();
     break;
   case PIVOTING:
@@ -124,8 +132,8 @@ void loop()
     break;
   case LEAVING_FROM_BTN_i:
     driveNorthCmd();
-    if (TestForLeftWall())
-      RespToLeftWall();
+    if (TestForFrontWall())
+      RespToFrontWall();
     break;
   case DUMPING:
     dumpCmd();
@@ -172,24 +180,6 @@ void loop()
     break;
   }
 
-  
-  
-  
-  
-
-  us1 = checkDistance1();
-  us2 = checkDistance2();
-
-  // Serial.println(analogRead(IR_RX_PIN_2));
-
-
-  // Serial.println(us2);
-
-  // displayLineSensors();
-  // Serial.println(analogRead(LINE_SENSOR_E_PIN));
-
-
-
 }
 
 /*----------------Module Functions--------------------------*/
@@ -201,11 +191,35 @@ void checkGlobalEvents(void)
   if (TestForChangeInTape_3()) RespToChangeInTape_3();
   if (TestForChangeInTape_4()) RespToChangeInTape_4();
 
+  // if (state == SCANNING)
+  // {
+  //   if (TestForBeaconSensing())
+  //     RespToBeaconSensing();
+  // }
+
   if (state == SCANNING)
   {
-    if (TestForBeaconSensing())
-      RespToBeaconSensing();
+    // Serial.print("US1: ");
+    // Serial.print(us1);
+    // Serial.print(" - US2: ");
+    // Serial.print(us2);
+    // Serial.print(", sum: ");
+    // Serial.println(us1 + us2);
+    if (us1 == 0 || us2 == 0) {
+      us_score = -1;
+    } else
+    {
+      us_score = us1 + us2;
+    }
+
+
+
+    if (us_score > 0 && us_score < thr_us_score) {
+      state = LEAVING_SZ_1;
+    }
+  
   }
+
 
   if (TestForFrontWall()) RespToFrontWall();
   if (TestForLeftWall()) RespToLeftWall();
@@ -221,49 +235,28 @@ void checkGlobalEvents(void)
 
 }
 
-uint8_t TestForBeaconSensing(void)
-{
-  /*int ir1_arr_sum, ir2_arr_sum = 0;
+// uint8_t TestForBeaconSensing(void)
+// {
+//   // digital pin interrupt setup for IR sensors
+//   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_handler, RISING);
+//   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, RISING);
 
-  // traverse through loop to get average value
-  for (int i = 0; i < 10; i++) {
-    ir1_arr_sum += ir1_debouncing_array[i];
-    ir2_arr_sum += ir2_debouncing_array[i];
-  }
+//   if (ir_1_status && ir_2_status)
+//   { // use OR logic to allow for greater coverage
+//     ir_1_status = 0;
+//     ir_2_status = 0;
+//     return 1;
+//   }
+//   return 0;
+// }
 
-  // if both sums are equal to 5, means a signal is indeed being detected
-  if (ir1_arr_sum == 5 && ir2_arr_sum == 5)
-  { 
-    return 1;
-  }
-
-  // reset index if cycling back
-  if (ir1_arr_idx == 10) {
-    ir1_arr_idx = 0;
-  } else {
-    ir1_arr_idx++;
-  }
-  if (ir2_arr_idx == 10) {
-    ir2_arr_idx = 0;
-  } else {
-    ir2_arr_idx++;
-  }*/
-  if (ir_1_status && ir_2_status)
-  { 
-    return 1;
-  }
-
-
-  return 0;
-}
-
-void RespToBeaconSensing(void)
-{
-  // detach interrupts since we don't need them anymore
-  detachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1));
-  detachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2));
-  state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
-}
+// void RespToBeaconSensing(void)
+// {
+//   // detach interrupts since we don't need them anymore
+//   detachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1));
+//   detachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2));
+//   state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
+// }
 
 uint8_t checkDistance1(void)
 {
@@ -500,13 +493,13 @@ void RespToChangeInTape_4()
 {
   switch (state)
   {
-  case LEAVING_SZ_1:
-    if (current_line4 == 0)
-    {
-      state = LEAVING_SZ_2;
-    }
-    break;
-  case LEAVING_SZ_2:
+  // case LEAVING_SZ_1:
+  //   if (current_line4 == 0)
+  //   {
+  //     state = LEAVING_SZ_2;
+  //   }
+  //   break;
+  case LEAVING_SZ_3:
     if (current_line4 == 1)
     {
       state = PIVOTING;

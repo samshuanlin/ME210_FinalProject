@@ -111,7 +111,7 @@ void ignitionCmd(void);
 
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
-  "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2", "PIVOTING", "GOING_TO_CW_1", "GOING_TO_CW_2",
+  "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2","LEAVING_SZ_3", "PIVOTING", "GOING_TO_CW_1", "GOING_TO_CW_2",
   "MOVING_POT", "GOING_BACK_ON_TRACK", "GOING_TO_BTN_i", "STOPPING_FOR_IGNITION", "IGNITING_BTN",
   "LEAVING_FROM_BTN_i", "DUMPING", "GOING_TO_PANTRY_1", "GOING_TO_PANTRY_2",
   "GOING_TO_PANTRY_3", "LOADING", "GOING_TO_BURNER_1", "GOING_TO_BURNER_2",
@@ -120,7 +120,7 @@ const char* stateNames[] = {
 };
 
 typedef enum {
-SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, PIVOTING, GOING_TO_CW_1, GOING_TO_CW_2,
+SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, LEAVING_SZ_3, PIVOTING, GOING_TO_CW_1, GOING_TO_CW_2,
 MOVING_POT, GOING_BACK_ON_TRACK, GOING_TO_BTN_i, STOPPING_FOR_IGNITION,  IGNITING_BTN,
 LEAVING_FROM_BTN_i, DUMPING, 
 GOING_TO_PANTRY_1, GOING_TO_PANTRY_2, GOING_TO_PANTRY_3, LOADING,
@@ -159,4 +159,13 @@ int startMillis;
 int us1; // distance sensed by the ultrasonic sensor 1
 int us2; // distance sensed by the ultrasonic sensor 1
 int thr_us1 = 3; // cm, front
-int thr_us2 = 20; // cm, left
+int thr_us2 = 15; // cm, left
+int us_score;
+int thr_us_score = 16;
+
+
+// Timer variables
+int delay_ignoring_tape_in_sz = 500;
+int timer_moving_pot = 7500;
+int delay_going_against_kitchen = 800;
+int delay_rotation_to_45_orientation = 1700;
