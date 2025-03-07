@@ -82,7 +82,7 @@ void loop()
   {
 
   case SCANNING:
-    driveTurnAroundCCWCmd();
+    driveTurnAroundCWCmd();
     break;
   case LEAVING_SZ_1:
     driveSouthCmd();
@@ -90,7 +90,7 @@ void loop()
     state = LEAVING_SZ_2;
     break;
   case LEAVING_SZ_2:
-    driveTurnAroundCCWCmd();
+    driveTurnAroundCWCmd();
     delay(delay_rotation_to_45_orientation);
     state = LEAVING_SZ_3;
     break;
@@ -142,13 +142,22 @@ void loop()
     break;
   case GOING_TO_PANTRY_2:
     driveEastCmd();
+    /*
     // SE direction adjustment
-    if (TestForChangeInTape_1 && !line2 && !line3) {  // went off the line
-      SEadjustCmd();
+    if (current_line1 && !line2 && !line3) {  // went off the line
+      driveTurnAroundCCWCmd();
       delay(adjust1_duration);
       driveNorthCmd();
       delay(adjust2_duration);
     }
+    // NE direction adjustment
+    if (current_line3 && !line2 && !line1) {  // went off the line
+      driveTurnAroundCWCmd();
+      delay(adjust1_duration);
+      driveSouthCmd();
+      delay(adjust2_duration);
+    }
+      */
     break;
   case GOING_TO_PANTRY_3:
     loadCmd();
@@ -168,6 +177,23 @@ void loop()
     break;
   case GOING_TO_BURNER_2:
     driveWestCmd();
+    /*
+    // SW direction adjustment
+    if (current_line1 && !line4 && !line3) {  // went off the line
+      driveTurnAroundCCWCmd();
+      delay(adjust1_duration);
+      driveSouthCmd();
+      delay(adjust2_duration);
+    }
+    // NW direction adjustment
+    if (current_line3 && !line4 && !line1) {  // went off the line
+      driveTurnAroundCWCmd();
+      delay(adjust1_duration);
+      driveNorthCmd();
+      delay(adjust2_duration);
+    }
+      */
+    
     break;
   case GOING_TO_BURNER_3:
     driveNorthCmd();
@@ -658,10 +684,10 @@ void drivePivotCmd(void)
   Wire.endTransmission();
 }
 
-void driveTurnAroundCCWCmd(void)
+void driveTurnAroundCWCmd(void)
 {
   Wire.beginTransmission(PERIPHERAL_ADDR);
-  Wire.write(DRIVE_TURNAROUND_CCW_CMD);
+  Wire.write(DRIVE_TURNAROUND_CW_CMD);
   Wire.endTransmission();
   // delay(2000);
 }
@@ -737,9 +763,8 @@ void ignitionCmd(void)
   }
 }
 
-void SEadjustCmd(void)
+void driveTurnAroundCCWCmd(void)
 {
-  // CCW turn, so same as turnaround
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(DRIVE_TURNAROUND_CCW_CMD);
   Wire.endTransmission();

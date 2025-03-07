@@ -3,6 +3,12 @@ When driving Arduino boards, use USB 2.0 hubs instead of 3.0 hubs for maximum co
 
 ## Latest Update
 
+Mar 7, 2025:
+
+Fixed the ultrasonic sensor range issue (see comment in code document). Implemented line following correction but commented out (see case statement). Implemented motor speed adjustment in peripheral.cpp without success. 
+
+If you would like to revert the changes, commit hash is 690b6b4 (full hash 690b6b45a4b425a36bfee0e5647bee5e484e7ed0).
+
 Feb 27, 2025:
 
 Sam: Integrated I2C inter-board communication and reconfigured platformio.ini. Now the core board should be able to send commands to the peripheral board to drive motors, and the peripheral board should be able to send back flags

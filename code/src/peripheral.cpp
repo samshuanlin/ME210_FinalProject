@@ -87,7 +87,9 @@ void loop()
     stop();
     // Serial.println("--------------");             // stop before executing other command if the new cmd is not the current cmd
   cur_cmd = incoming_cmd; // store what the currently running command is
+  // TODO: to clean up later!
   analogWrite(MOTOR_SPEED_PIN, mtrSpeed);
+  analogWrite(6, 220);
 
   // Serial.print("Current command: ");
   // Serial.println(cur_cmd);
@@ -122,9 +124,9 @@ void loop()
   {
     dump();
   }
-  else if (incoming_cmd == DRIVE_TURNAROUND_CMD)
+  else if (incoming_cmd == DRIVE_TURNAROUND_CW_CMD)
   {
-    driveTurnAround();
+    driveTurnAroundCW();
   }
   else if (incoming_cmd == DRIVE_PIVOT_CMD)
   {
@@ -133,6 +135,10 @@ void loop()
   else if (incoming_cmd == IGNITION_CMD)
   {
     ignition();
+  }
+  else if (incoming_cmd == DRIVE_TURNAROUND_CCW_CMD)
+  {
+    driveTurnAroundCCW();
   }
 }
 
@@ -248,15 +254,15 @@ void driveWest(void)
   setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR, 3);
   setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR, 4);
 }
-void driveTurnAround(void)
+void driveTurnAroundCW(void)
 {
   Serial.println("Turning around...");
-  // We turn CCW
+  // We turn CW
   // mtrSpeed = 80;
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR, 1);
-  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR, 2);
-  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR, 3);
-  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, FORWARD_DIR, 4);
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR, 1);
+  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR, 2);
+  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, FORWARD_DIR, 3);
+  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR, 4);
   // mtrSpeed = 150;
 }
 
@@ -279,11 +285,11 @@ void stop(void)
 }
 
 // copied from turn around then inverted directions to turn cw
-void driveTurnAroundCW(void)
+void driveTurnAroundCCW(void)
 {
-  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, BACKWARD_DIR, 1);
-  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, BACKWARD_DIR, 2);
-  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, FORWARD_DIR, 3);
-  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, BACKWARD_DIR, 4);
+  setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, FORWARD_DIR, 1);
+  setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, FORWARD_DIR, 2);
+  setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, BACKWARD_DIR, 3);
+  setMotorDirection(MOTOR_4_IN3_PIN, MOTOR_4_IN4_PIN, FORWARD_DIR, 4);
 }
 

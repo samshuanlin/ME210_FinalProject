@@ -95,8 +95,8 @@ void driveWestCmd(void);
 #define DRIVE_SOUTH_CMD (uint8_t)4
 void driveSouthCmd(void);
 
-#define DRIVE_TURNAROUND_CCW_CMD (uint8_t)5
-void driveTurnAroundCCWCmd(void);
+#define DRIVE_TURNAROUND_CW_CMD (uint8_t)5
+void driveTurnAroundCWCmd(void);
 
 #define DRIVE_PIVOT_CMD (uint8_t)6
 void drivePivotCmd(void);
@@ -110,8 +110,8 @@ void dumpCmd(void);
 #define IGNITION_CMD    (uint8_t)9
 void ignitionCmd(void);
 
-#define DRIVE_TURNAROUND_CW_CMD (uint8_t)10
-void driveTurnAroundCWCmd(void);
+#define DRIVE_TURNAROUND_CCW_CMD (uint8_t)10
+void driveTurnAroundCCWCmd(void);
 
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
@@ -173,12 +173,12 @@ unsigned long buffer_value_3;
 
 // Timer variables
 int delay_ignoring_tape_in_sz = 500;
-int timer_moving_pot = 7500;
+int timer_moving_pot = 6000;
 int delay_going_against_kitchen = 800;
 int delay_rotation_to_45_orientation = 900;
 int delay_to_enter_loading_zone = 1300;
 int delay_to_leave_loading_zone = 1100;
 int delay_back_to_kitchen = 1000;
 int dumping_duration = 500;
-int adjust1_duration = 100;
-int adjust2_duration = 100;
+int adjust1_duration = 50;
+int adjust2_duration = 50;

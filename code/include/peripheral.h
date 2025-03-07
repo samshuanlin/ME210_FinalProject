@@ -32,13 +32,14 @@
 #define DRIVE_EAST_CMD  (uint8_t)2
 #define DRIVE_WEST_CMD  (uint8_t)3
 #define DRIVE_SOUTH_CMD (uint8_t)4
-#define DRIVE_TURNAROUND_CMD (uint8_t)5
+#define DRIVE_TURNAROUND_CCW_CMD (uint8_t)5
 #define DRIVE_PIVOT_CMD (uint8_t)6
 #define LOADING_CMD     (uint8_t)7
 uint8_t load_done_flag = 0;
 #define DUMPING_CMD     (uint8_t)8
 uint8_t dump_done_flag = 0;
 #define IGNITION_CMD    (uint8_t)9
+#define DRIVE_TURNAROUND_CW_CMD (uint8_t)10
 uint8_t ignition_done_flag = 0;
 uint8_t cur_cmd = 100;    // no one is using this, so set as initial value
 uint8_t incoming_cmd = 255;
@@ -58,9 +59,10 @@ void driveNorth(void);
 void driveEast(void);
 void driveSouth(void);
 void driveWest(void);
-void driveTurnAround(void);
+void driveTurnAroundCW(void);
 void drivePivot(void);
 void ignition(void);
+void driveTurnAroundCCW(void);
 
 // I2C interrupt handlers
 void receiveEvent(int bytes);
@@ -79,5 +81,3 @@ int igniterServoPos = 0;    // variable to store the servo position
 int loading_driving_delay = 1000; // number of milliseconds the robot will drive toward and from the loading position
 int loading_staying_delay = 1000; // number of milliseconds the robot will stay during loading
 int mtrSpeed = 255;
-
-void driveTurnAroundCW(void);
