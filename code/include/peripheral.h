@@ -79,3 +79,5 @@ int igniterServoPos = 0;    // variable to store the servo position
 int loading_driving_delay = 1000; // number of milliseconds the robot will drive toward and from the loading position
 int loading_staying_delay = 1000; // number of milliseconds the robot will stay during loading
 int mtrSpeed = 255;
+
+void driveTurnAroundCW(void);
