@@ -29,8 +29,9 @@
 #define IR_RX_PIN_2     3     // Interrupt-capable
 
 // Ultrasonic sensor pins
-#define US_TRIG         9     // PWM pin
+#define US_1_TRIG       9     // PWM pin
 #define US_1_ECHO       4     // regular IO pin
+#define US_2_TRIG       10    // PWM pin
 #define US_2_ECHO       7     // regular IO pin
 
 // I2C Peripheral Address
@@ -126,13 +127,13 @@ LEAVING_FROM_BTN_i, DUMPING,
 GOING_TO_PANTRY_1, GOING_TO_PANTRY_2, GOING_TO_PANTRY_3, LOADING,
 GOING_TO_BURNER_1, GOING_TO_BURNER_2, GOING_TO_BURNER_3,
 GOING_TO_BTN_f, TURNING_OFF_BURNER, LEAVING_FROM_BTN_f,
-DELIVERING, CELEBRATING, NUM_STATES
+DELIVERING, CELEBRATING, NUM_STATES 
 } States_t;
 
 /*---------------Module Variables---------------------------*/
 // State variables
 States_t state;
-States_t initialState = SCANNING;
+States_t initialState = GOING_TO_BTN_i;
 
 // Line sensor variables
 int thrLine = 300; // depend on sensing
@@ -159,14 +160,20 @@ int startMillis;
 int us1; // distance sensed by the ultrasonic sensor 1
 int us2; // distance sensed by the ultrasonic sensor 1
 int thr_us1 = 3; // cm, front
-int thr_us2 = 15; // cm, left
+int thr_us2 = 17; // cm, left
 int us_score;
 int thr_us_score = 16;
+int buffer_value_1;
+int buffer_value_2;
+int buffer_value_3;
 
 
 // Timer variables
 int delay_ignoring_tape_in_sz = 500;
 int timer_moving_pot = 7500;
 int delay_going_against_kitchen = 800;
-int delay_rotation_to_45_orientation = 1700;
-int delay_to_enter_and_leave_loading_zone = 3000;
+int delay_rotation_to_45_orientation = 900;
+int delay_to_enter_loading_zone = 1300;
+int delay_to_leave_loading_zone = 1100;
+int delay_back_to_kitchen = 1000;
+int dumping_duration = 500;

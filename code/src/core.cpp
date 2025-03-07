@@ -52,7 +52,8 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, CHANGE);
 
   // ultrasonic sensor pin setup
-  pinMode(US_TRIG, OUTPUT);
+  pinMode(US_1_TRIG, OUTPUT);
+  pinMode(US_2_TRIG, OUTPUT);
   pinMode(US_1_ECHO, INPUT);
   pinMode(US_2_ECHO, INPUT);
 
@@ -73,13 +74,17 @@ void loop()
   checkGlobalEvents();
   displayState();
   currentMillis = millis();
-  us1 = checkDistance1();
   us2 = checkDistance2();
+  us1 = checkDistance1();
 
+
+
+  Serial.println(us2);
 
 
   switch (state)
   {
+
   case SCANNING:
     driveTurnAroundCmd();
     break;
@@ -143,16 +148,20 @@ void loop()
     driveEastCmd();
     break;
   case GOING_TO_PANTRY_3:
+    loadCmd();
     driveSouthCmd();
-    delay(delay_to_enter_and_leave_loading_zone);
-    driveNorthCmd();
-    delay(delay_to_enter_and_leave_loading_zone);
+    delay(delay_to_enter_loading_zone);
+    state = LOADING;
     break;
-  // case LOADING:
-  //   loadCmd();
-  //   break;
+  case LOADING:
+    state = GOING_TO_BURNER_1;
+    break;
   case GOING_TO_BURNER_1:
     driveNorthCmd();
+    delay(delay_to_leave_loading_zone);
+    driveWestCmd();
+    delay(delay_back_to_kitchen);
+    state = GOING_TO_BURNER_2;
     break;
   case GOING_TO_BURNER_2:
     driveWestCmd();
@@ -214,7 +223,7 @@ void checkGlobalEvents(void)
     }
 
 
-  Serial.println(us_score);
+  // Serial.println(us_score);
     if (us_score > 0 && us_score < thr_us_score) {
       state = LEAVING_SZ_1;
     }
@@ -224,6 +233,11 @@ void checkGlobalEvents(void)
 
   if (TestForFrontWall()) RespToFrontWall();
   if (TestForLeftWall()) RespToLeftWall();
+
+  buffer_value_3 = buffer_value_2;
+  buffer_value_2 = buffer_value_1;
+  buffer_value_1 = distance2;
+
   // if (TestForTriggerTimerExpired()) RespToTriggerTimerExpired();
 
   if (currentMillis - startMillis > timer_moving_pot)
@@ -261,7 +275,7 @@ void checkGlobalEvents(void)
 
 uint8_t checkDistance1(void)
 {
-  analogWrite(US_TRIG, 128); // 50% duty cycle, 490Hz frequency
+  analogWrite(US_1_TRIG, 128); // 50% duty cycle, 490Hz frequency
   unsigned long timeout = 3000L;
   // US_1 is the front-facing ultrasonic sensor
   duration1 = pulseIn(US_1_ECHO, HIGH, timeout); // pulse in us. if returning 0, means no feedback received
@@ -272,12 +286,13 @@ uint8_t checkDistance1(void)
 
 uint8_t checkDistance2(void)
 {
-  analogWrite(US_TRIG, 128); // 50% duty cycle, 490Hz frequency
+  analogWrite(US_2_TRIG, 200); // 50% duty cycle, 490Hz frequency
   unsigned long timeout = 3000L;
   // US_2 is the left-facing ultrasonic sensor
   duration2 = pulseIn(US_2_ECHO, HIGH, timeout);
   distance2 = duration2 * 10 / 2 / 291;
   // note that this is done in a superloop, so will cause delays for 6 ms maximum
+  
   return distance2;
 }
 
@@ -311,7 +326,7 @@ void RespToFrontWall(void)
 
 uint8_t TestForLeftWall(void)
 {
-  return us2 < thr_us2 && us2 > 0;
+  return us2 < thr_us2 && us2 > 0 && buffer_value_1*buffer_value_2*buffer_value_3 > 0;
 }
 
 void RespToLeftWall(void)
@@ -319,6 +334,10 @@ void RespToLeftWall(void)
   if (state == GOING_TO_BTN_i)
   {
     state = STOPPING_FOR_IGNITION;
+  }
+
+  if(state == GOING_TO_BURNER_2) {
+    state = GOING_TO_BURNER_3;
   }
 }
 
@@ -377,14 +396,14 @@ void RespToChangeInTape_1()
       state = GOING_TO_PANTRY_3;
     }
     break;
-  case GOING_TO_BURNER_2:
-    if (current_line1 == 1 && line3 == 1)
-    {
-      state = GOING_TO_BURNER_3;
-      startMillis = millis();
-    }
-    break;
+  // case GOING_TO_BURNER_2:
+  //   if (current_line1 == 1 && line3 == 1)
+  //   {
+  //     state = GOING_TO_BURNER_3;
+  //   }
+  //   break;
   }
+  
   line1 = current_line1;
 }
 
@@ -473,14 +492,14 @@ void RespToChangeInTape_3()
       state = GOING_TO_PANTRY_3;
     }
     break;
-  case GOING_TO_BURNER_2:
-    if (current_line3 == 1 && line1 == 1)
-    {
-      state = GOING_TO_BURNER_3;
-      startMillis = millis();
-    }
-    break;
+  // case GOING_TO_BURNER_2:
+  //   if (current_line3 == 1 && line1 == 1)
+  //   {
+  //     state = GOING_TO_BURNER_3;
+  //   }
+  //   break;
   }
+  
   line3 = current_line3;
 }
 
@@ -518,12 +537,13 @@ void RespToChangeInTape_4()
       state = LOADING;
     }
     break;
-  case GOING_TO_BURNER_1:
-    if (current_line4 == 1)
-    {
-      state = GOING_TO_BURNER_2;
-    }
-    break;
+
+  // case GOING_TO_BURNER_1:
+  //   if (current_line4 == 1)
+  //   {
+  //     state = GOING_TO_BURNER_2;
+  //   }
+  //   break;
   case DELIVERING:
     if (current_line4 == 1 && line2 == 1)
     {
@@ -578,7 +598,7 @@ void stopCmd()
 
   if (state == STOPPING_FOR_IGNITION)
   {
-    delay(500);
+    // delay(500);
     state = IGNITING_BTN;
   } 
 }
@@ -641,8 +661,6 @@ void loadCmd(void)
     inp = Wire.read();
   } while (inp != 1); // while the done flag is not raised, keep waiting
 
-  // only return control after done
-  state = GOING_TO_BURNER_1;
 }
 
 void dumpCmd(void)
@@ -665,6 +683,9 @@ void dumpCmd(void)
 
   // only return control after done
   state = GOING_TO_PANTRY_1; // set new state
+
+  delay(dumping_duration);
+
 }
 
 void ignitionCmd(void)
@@ -675,7 +696,7 @@ void ignitionCmd(void)
   Wire.write(IGNITION_CMD);
   Wire.endTransmission();
   // Serial.println("Ignition command sent!");
-  delay(1000);
+  // delay(1000);
   // Wait until done
   uint8_t inp;
   do

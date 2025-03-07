@@ -11,8 +11,8 @@
 void receiveEvent(int bytes)
 {
   incoming_cmd = (uint8_t)Wire.read();
-  Serial.print("Incoming command: ");
-  Serial.println(incoming_cmd);
+  // Serial.print("Incoming command: ");
+  // Serial.println(incoming_cmd);
 }
 
 void requestEvent()
@@ -32,6 +32,8 @@ void requestEvent()
   }
   else if (cur_cmd == IGNITION_CMD) 
   {
+    Serial.println("Sending ignition done flag...");
+    Serial.println(ignition_done_flag);
     Wire.write(ignition_done_flag);
     if (ignition_done_flag == 1)
       ignition_done_flag = 0;
@@ -87,8 +89,10 @@ void loop()
   cur_cmd = incoming_cmd; // store what the currently running command is
   analogWrite(MOTOR_SPEED_PIN, mtrSpeed);
 
-  Serial.print("Current command: ");
-  Serial.println(cur_cmd);
+  // Serial.print("Current command: ");
+  // Serial.println(cur_cmd);
+
+  requestEvent();
 
   if (incoming_cmd == STOP_CMD)
   {
@@ -173,9 +177,11 @@ void setMotorDirection(int in1, int in2, int dir, int motor)
 
 void dump(void)
 {
-  gateServo.write(90+50);
-  delay(dumpingDuration);
-  gateServo.write(90);
+  gateServo.write(80+50);
+  // delay(dumpingDuration);
+  // gateServo.write(80);
+
+
   // delay(dumpingDuration);
   // igniterServo.write(0);
   dump_done_flag = 1;
@@ -183,22 +189,24 @@ void dump(void)
 
 void load(void)
 {
-  Serial.println("Driving south!");
-  driveSouth();
-  delay(loading_driving_delay);
-  Serial.println("Stopping!");
-  stop();
-  delay(loading_staying_delay);
-  Serial.println("Driving north!");
-  driveNorth();
-  delay(loading_driving_delay);
+  // Serial.println("Driving south!");
+  // driveSouth();
+  // delay(loading_driving_delay);
+  // Serial.println("Stopping!");
+  // stop();
+  gateServo.write(80);
+  // delay(loading_staying_delay);
+  // Serial.println("Driving north!");
+  // driveNorth();
+  // delay(loading_driving_delay);
   load_done_flag = 1;
 }
 
 void ignition(void)
 {
   igniterServo.write(0);
-  delay(200);
+  // delay(200);
+  Serial.print("Ignition done!");
   // igniterServo.write(100);
 
   // delay(dumpingDuration);
@@ -263,7 +271,7 @@ void drivePivot(void)
 
 void stop(void)
 {
-  Serial.println("Stopping...");
+  // Serial.println("Stopping...");
   setMotorDirection(MOTOR_1_IN1_PIN, MOTOR_1_IN2_PIN, OFF, 1);
   setMotorDirection(MOTOR_2_IN3_PIN, MOTOR_2_IN4_PIN, OFF, 2);
   setMotorDirection(MOTOR_3_IN1_PIN, MOTOR_3_IN2_PIN, OFF, 3);
