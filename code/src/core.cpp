@@ -271,7 +271,9 @@ void checkGlobalEvents(void)
 
 unsigned long checkDistance1(void)
 {
-  // analogWrite(US_1_TRIG, 128); // 50% duty cycle, 490Hz frequency
+  // ultrasonic sensors have to be implemented like this to not have errors.
+  // see this website for details: https://howtomechatronics.com/tutorials/arduino/ultrasonic-sensor-hc-sr04/#how-the-hc-sr04-ultrasonic-distance-sensor-works
+  // specifically, the pulse to send as HIGH is not custom.
   digitalWrite(US_1_TRIG, LOW);
   delayMicroseconds(2);
   digitalWrite(US_1_TRIG, HIGH);
