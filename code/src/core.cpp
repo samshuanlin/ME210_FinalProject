@@ -62,10 +62,6 @@ void setup()
   Wire.begin();
   startMillis = millis();
 
-
-
-
-
 }
 
 void loop()
@@ -74,8 +70,8 @@ void loop()
   checkGlobalEvents();
   displayState();
   currentMillis = millis();
-  us2 = checkDistance2();
   us1 = checkDistance1();
+  us2 = checkDistance2();
 
 
 
@@ -273,25 +269,40 @@ void checkGlobalEvents(void)
 //   state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
 // }
 
-uint8_t checkDistance1(void)
+unsigned long checkDistance1(void)
 {
-  analogWrite(US_1_TRIG, 128); // 50% duty cycle, 490Hz frequency
-  unsigned long timeout = 3000L;
+  // analogWrite(US_1_TRIG, 128); // 50% duty cycle, 490Hz frequency
+  digitalWrite(US_1_TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(US_1_TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(US_1_TRIG, LOW);
+  // unsigned long timeout = 3000L;k
   // US_1 is the front-facing ultrasonic sensor
-  duration1 = pulseIn(US_1_ECHO, HIGH, timeout); // pulse in us. if returning 0, means no feedback received
+  duration1 = pulseIn(US_1_ECHO, HIGH); // pulse in us. if returning 0, means no feedback received
   distance1 = duration1 * 10 / 2 / 291;          // duration (us) / 2 / 29.1 (us / cm) (speed is the speed of light)
                                                  // additional 10 multiplied to prevent decimal numbers
+                                                 
+  Serial.print("Distance 1: ");
+  Serial.print(distance1);
   return distance1;
 }
 
-uint8_t checkDistance2(void)
+unsigned long checkDistance2(void)
 {
-  analogWrite(US_2_TRIG, 200); // 50% duty cycle, 490Hz frequency
-  unsigned long timeout = 3000L;
+  //analogWrite(US_2_TRIG, 200); // 50% duty cycle, 490Hz frequency
+  digitalWrite(US_2_TRIG, LOW);
+  delayMicroseconds(2);
+  digitalWrite(US_2_TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(US_2_TRIG, LOW);
+  // unsigned long timeout = 3000L;
   // US_2 is the left-facing ultrasonic sensor
-  duration2 = pulseIn(US_2_ECHO, HIGH, timeout);
+  duration2 = pulseIn(US_2_ECHO, HIGH);
   distance2 = duration2 * 10 / 2 / 291;
   // note that this is done in a superloop, so will cause delays for 6 ms maximum
+  Serial.print(", Distance 2: ");
+  Serial.println(distance2);
   
   return distance2;
 }

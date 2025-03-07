@@ -29,9 +29,9 @@
 #define IR_RX_PIN_2     3     // Interrupt-capable
 
 // Ultrasonic sensor pins
-#define US_1_TRIG       9     // PWM pin
+#define US_1_TRIG       10     // PWM pin
 #define US_1_ECHO       4     // regular IO pin
-#define US_2_TRIG       10    // PWM pin
+#define US_2_TRIG       9    // PWM pin
 #define US_2_ECHO       7     // regular IO pin
 
 // I2C Peripheral Address
@@ -42,8 +42,8 @@
 void checkGlobalEvents(void);
 
 // Recurring function to check the front and left distance parameters from the ultrasonic sensor.
-uint8_t checkDistance1(void);
-uint8_t checkDistance2(void);
+unsigned long checkDistance1(void);
+unsigned long checkDistance2(void);
 
 // Line sensor event detection and response functions
 unsigned char TestForChangeInTape_1(void);
@@ -133,7 +133,7 @@ DELIVERING, CELEBRATING, NUM_STATES
 /*---------------Module Variables---------------------------*/
 // State variables
 States_t state;
-States_t initialState = GOING_TO_BTN_i;
+States_t initialState = SCANNING;
 
 // Line sensor variables
 int thrLine = 300; // depend on sensing
@@ -151,21 +151,21 @@ int current_line4;
 // IR sensor variables
 int ir_1_status = 0;
 int ir_2_status = 0;
-long duration1, distance1, duration2, distance2;
+unsigned long duration1, distance1, duration2, distance2;
 
 // Ultrasonic sensor variables
 int timerTrigger = 10; // milliseconds
 int currentMillis;
 int startMillis;
-int us1; // distance sensed by the ultrasonic sensor 1
-int us2; // distance sensed by the ultrasonic sensor 1
-int thr_us1 = 3; // cm, front
-int thr_us2 = 17; // cm, left
-int us_score;
-int thr_us_score = 16;
-int buffer_value_1;
-int buffer_value_2;
-int buffer_value_3;
+unsigned long us1; // distance sensed by the ultrasonic sensor 1
+unsigned long us2; // distance sensed by the ultrasonic sensor 1
+unsigned long thr_us1 = 3; // cm, front
+unsigned long thr_us2 = 17; // cm, left
+unsigned long us_score;
+unsigned long thr_us_score = 16;
+unsigned long buffer_value_1;
+unsigned long buffer_value_2;
+unsigned long buffer_value_3;
 
 
 // Timer variables
