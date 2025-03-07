@@ -87,9 +87,16 @@ void loop()
     stop();
     // Serial.println("--------------");             // stop before executing other command if the new cmd is not the current cmd
   cur_cmd = incoming_cmd; // store what the currently running command is
+  /*
+   * Update: Mar 7
+   * We were trying to separate the motor speed for motors 1, 4 and 2, 3 because one side is going slower than the other.
+   * The robot started acting up so we gave up, and here's the new pins that we used.
+   * The circuit board has also been changed to have pins 3 and 6 both as PWM pins.
+   * Potential problem: pins 3 and 6 have different PWM frequencies (490Hz and 980Hz respectively).
+   */
   // TODO: to clean up later!
   analogWrite(MOTOR_SPEED_PIN, mtrSpeed);
-  analogWrite(6, 220);
+  analogWrite(6, mtrSpeed);
 
   // Serial.print("Current command: ");
   // Serial.println(cur_cmd);

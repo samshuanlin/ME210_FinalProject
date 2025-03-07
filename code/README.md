@@ -5,9 +5,9 @@ When driving Arduino boards, use USB 2.0 hubs instead of 3.0 hubs for maximum co
 
 Mar 7, 2025:
 
-Fixed the ultrasonic sensor range issue (see comment in code document). Implemented line following correction but commented out (see case statement). Implemented motor speed adjustment in peripheral.cpp without success. 
+Fixed the ultrasonic sensor range issue (see comment in core.cpp, line 307). Implemented line following correction but commented out (see case statement in core.cpp, line 145-160 and 180-195). Implemented motor speed adjustment in peripheral.cpp without success (see peripheral.cpp, line 90). 
 
-If you would like to revert the changes, commit hash is 690b6b4 (full hash 690b6b45a4b425a36bfee0e5647bee5e484e7ed0).
+If you would like to revert the changes to get a working version before our experimentation, commit hash is 690b6b4 (full hash 690b6b45a4b425a36bfee0e5647bee5e484e7ed0).
 
 Feb 27, 2025:
 
