@@ -95,8 +95,8 @@ void driveWestCmd(void);
 #define DRIVE_SOUTH_CMD (uint8_t)4
 void driveSouthCmd(void);
 
-#define DRIVE_TURNAROUND_CMD (uint8_t)5
-void driveTurnAroundCmd(void);
+#define DRIVE_TURNAROUND_CCW_CMD (uint8_t)5
+void driveTurnAroundCCWCmd(void);
 
 #define DRIVE_PIVOT_CMD (uint8_t)6
 void drivePivotCmd(void);
@@ -109,6 +109,9 @@ void dumpCmd(void);
 
 #define IGNITION_CMD    (uint8_t)9
 void ignitionCmd(void);
+
+#define DRIVE_TURNAROUND_CW_CMD (uint8_t)10
+void driveTurnAroundCWCmd(void);
 
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
@@ -177,3 +180,5 @@ int delay_to_enter_loading_zone = 1300;
 int delay_to_leave_loading_zone = 1100;
 int delay_back_to_kitchen = 1000;
 int dumping_duration = 500;
+int adjust1_duration = 100;
+int adjust2_duration = 100;

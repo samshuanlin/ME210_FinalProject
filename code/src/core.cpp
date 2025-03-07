@@ -82,7 +82,7 @@ void loop()
   {
 
   case SCANNING:
-    driveTurnAroundCmd();
+    driveTurnAroundCCWCmd();
     break;
   case LEAVING_SZ_1:
     driveSouthCmd();
@@ -90,7 +90,7 @@ void loop()
     state = LEAVING_SZ_2;
     break;
   case LEAVING_SZ_2:
-    driveTurnAroundCmd();
+    driveTurnAroundCCWCmd();
     delay(delay_rotation_to_45_orientation);
     state = LEAVING_SZ_3;
     break;
@@ -142,6 +142,13 @@ void loop()
     break;
   case GOING_TO_PANTRY_2:
     driveEastCmd();
+    // SE direction adjustment
+    if (TestForChangeInTape_1 && !line2 && !line3) {  // went off the line
+      SEadjustCmd();
+      delay(adjust1_duration);
+      driveNorthCmd();
+      delay(adjust2_duration);
+    }
     break;
   case GOING_TO_PANTRY_3:
     loadCmd();
@@ -651,10 +658,10 @@ void drivePivotCmd(void)
   Wire.endTransmission();
 }
 
-void driveTurnAroundCmd(void)
+void driveTurnAroundCCWCmd(void)
 {
   Wire.beginTransmission(PERIPHERAL_ADDR);
-  Wire.write(DRIVE_TURNAROUND_CMD);
+  Wire.write(DRIVE_TURNAROUND_CCW_CMD);
   Wire.endTransmission();
   // delay(2000);
 }
@@ -728,4 +735,12 @@ void ignitionCmd(void)
   {
     state = LEAVING_FROM_BTN_f; // set new state
   }
+}
+
+void SEadjustCmd(void)
+{
+  // CCW turn, so same as turnaround
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(DRIVE_TURNAROUND_CCW_CMD);
+  Wire.endTransmission();
 }
