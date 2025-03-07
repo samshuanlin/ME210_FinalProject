@@ -70,18 +70,21 @@ void loop()
   checkGlobalEvents();
   displayState();
   currentMillis = millis();
-  us1 = checkDistance1();
-  us2 = checkDistance2();
+
+  // us1 = checkDistance1();
+  // us2 = checkDistance2();
 
 
 
-  Serial.println(us2);
+  // Serial.println(line3);
 
 
   switch (state)
   {
 
   case SCANNING:
+    us1 = checkDistance1();
+    us2 = checkDistance2();
     driveTurnAroundCWCmd();
     break;
   case LEAVING_SZ_1:
@@ -103,8 +106,15 @@ void loop()
   case GOING_TO_CW_1:
     driveEastCmd();
     break;
+  case FIRST_LOADING:
+    driveSouthCmd();
+    delay(delay_to_enter_loading_zone);
+    state = GOING_TO_CW_2;
+    break;
+
   case GOING_TO_CW_2:
     driveNorthCmd();
+    us1 = checkDistance1();
     if (TestForFrontWall())
       RespToFrontWall();
     break;
@@ -118,6 +128,7 @@ void loop()
     driveSouthCmd();
     break;
   case GOING_TO_BTN_i:
+    us2 = checkDistance2();
     driveWestCmd();
     break;
   case STOPPING_FOR_IGNITION:
@@ -130,6 +141,7 @@ void loop()
     ignitionCmd();
     break;
   case LEAVING_FROM_BTN_i:
+    us1 = checkDistance1();
     driveNorthCmd();
     if (TestForFrontWall())
       RespToFrontWall();
@@ -176,6 +188,7 @@ void loop()
     state = GOING_TO_BURNER_2;
     break;
   case GOING_TO_BURNER_2:
+    us2 = checkDistance2();
     driveWestCmd();
     /*
     // SW direction adjustment
@@ -196,6 +209,7 @@ void loop()
     
     break;
   case GOING_TO_BURNER_3:
+    us1 = checkDistance1();
     driveNorthCmd();
     if (TestForFrontWall())
       RespToFrontWall();
@@ -416,6 +430,7 @@ void RespToTriggerTimerExpired()
 uint8_t TestForChangeInTape_1(void)
 {
   current_line1 = analogRead(LINE_SENSOR_N_PIN) > thrLine;
+  Serial.println(analogRead(LINE_SENSOR_N_PIN));
   return current_line1 != line1;
 }
 
@@ -426,7 +441,7 @@ void RespToChangeInTape_1()
   case GOING_TO_CW_1:
     if (current_line1 == 1 && line3 == 1)
     {
-      state = GOING_TO_CW_2;
+      state = FIRST_LOADING;
       startMillis = millis();
     }
     break;
@@ -522,7 +537,7 @@ void RespToChangeInTape_3()
   case GOING_TO_CW_1:
     if (current_line3 == 1 && line1 == 1)
     {
-      state = GOING_TO_CW_2;
+      state = FIRST_LOADING;
       startMillis = millis();
     }
     break;

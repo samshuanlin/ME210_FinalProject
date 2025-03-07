@@ -115,7 +115,7 @@ void driveTurnAroundCCWCmd(void);
 
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
-  "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2","LEAVING_SZ_3", "PIVOTING", "GOING_TO_CW_1", "GOING_TO_CW_2",
+  "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2","LEAVING_SZ_3", "PIVOTING", "GOING_TO_CW_1", "FIRST_LOADING", "GOING_TO_CW_2",
   "MOVING_POT", "GOING_BACK_ON_TRACK", "GOING_TO_BTN_i", "STOPPING_FOR_IGNITION", "IGNITING_BTN",
   "LEAVING_FROM_BTN_i", "DUMPING", "GOING_TO_PANTRY_1", "GOING_TO_PANTRY_2",
   "GOING_TO_PANTRY_3", "LOADING", "GOING_TO_BURNER_1", "GOING_TO_BURNER_2",
@@ -124,7 +124,7 @@ const char* stateNames[] = {
 };
 
 typedef enum {
-SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, LEAVING_SZ_3, PIVOTING, GOING_TO_CW_1, GOING_TO_CW_2,
+SPINNING_NOODLE, SCANNING, LEAVING_SZ_1, LEAVING_SZ_2, LEAVING_SZ_3, PIVOTING, GOING_TO_CW_1, FIRST_LOADING, GOING_TO_CW_2,
 MOVING_POT, GOING_BACK_ON_TRACK, GOING_TO_BTN_i, STOPPING_FOR_IGNITION,  IGNITING_BTN,
 LEAVING_FROM_BTN_i, DUMPING, 
 GOING_TO_PANTRY_1, GOING_TO_PANTRY_2, GOING_TO_PANTRY_3, LOADING,
@@ -139,7 +139,7 @@ States_t state;
 States_t initialState = SCANNING;
 
 // Line sensor variables
-int thrLine = 300; // depend on sensing
+int thrLine = 200; // depend on sensing
 // previous detects
 int line1;
 int line2;
@@ -173,9 +173,9 @@ unsigned long buffer_value_3;
 
 // Timer variables
 int delay_ignoring_tape_in_sz = 500;
-int timer_moving_pot = 6000;
-int delay_going_against_kitchen = 800;
-int delay_rotation_to_45_orientation = 900;
+int timer_moving_pot = 5000;
+int delay_going_against_kitchen = 700;
+int delay_rotation_to_45_orientation = 1100;
 int delay_to_enter_loading_zone = 1300;
 int delay_to_leave_loading_zone = 1100;
 int delay_back_to_kitchen = 1000;
