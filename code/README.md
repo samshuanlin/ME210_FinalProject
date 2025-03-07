@@ -3,8 +3,13 @@ When driving Arduino boards, use USB 2.0 hubs instead of 3.0 hubs for maximum co
 
 ## Latest Update
 
+Feb 27, 2025:
+
+Sam: Integrated I2C inter-board communication and reconfigured platformio.ini. Now the core board should be able to send commands to the peripheral board to drive motors, and the peripheral board should be able to send back flags
+
 Feb 25, 2025:
-Sam: Added I2C inter-board communication test code and reconfigured platformio.ini. WILL NOT RECOMMEND MERGING THIS BRANCH UNLESS YOU HAVE TO. And make sure you keep a copy of your own platformio.ini if you're running platformIO code. 
+
+Sam: Added I2C inter-board communication test code and reconfigured platformio.ini. Modified code to be split into core_code and peripheral_code, each containing a header and implementation file. WILL NOT RECOMMEND MERGING THIS BRANCH UNLESS YOU HAVE TO. And make sure you keep a copy of your own platformio.ini if you're running platformIO code. 
 Enzo: integrated motor control code in the FSM and test code for all 4 motors separately.
 
 Feb 24, 2025:

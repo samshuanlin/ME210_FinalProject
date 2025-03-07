@@ -922,7 +922,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "34acb965-3386-4008-b019-08755127260a")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR05"
 			(at 96.52 52.07 0)
 			(effects
 				(font
@@ -972,7 +972,7 @@
 		(instances
 			(project ""
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "#PWR045")
+					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -988,7 +988,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6b44f3a7-54f7-482c-bdf5-fb4440f28f61")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR04"
 			(at 80.01 68.58 0)
 			(effects
 				(font
@@ -1038,7 +1038,7 @@
 		(instances
 			(project "schematic"
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "#PWR046")
+					(reference "#PWR04")
 					(unit 1)
 				)
 			)
@@ -1054,7 +1054,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "bb32585e-3701-4f61-a779-1a5ae33209cb")
-		(property "Reference" "#PWR04"
+		(property "Reference" "#PWR02"
 			(at 44.45 72.39 0)
 			(effects
 				(font
@@ -1104,7 +1104,7 @@
 		(instances
 			(project ""
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "#PWR04")
+					(reference "#PWR02")
 					(unit 1)
 				)
 			)
@@ -1120,7 +1120,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "db7cbea0-e212-4363-b299-2edfec30cb36")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR03"
 			(at 63.5 52.07 0)
 			(effects
 				(font
@@ -1170,7 +1170,7 @@
 		(instances
 			(project "schematic"
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "#PWR047")
+					(reference "#PWR03")
 					(unit 1)
 				)
 			)
@@ -1256,7 +1256,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ef67a8bc-fbfd-4b9f-a85c-f195f46b0341")
-		(property "Reference" "U16"
+		(property "Reference" "U1"
 			(at 80.01 44.45 0)
 			(effects
 				(font
@@ -1319,7 +1319,7 @@
 		(instances
 			(project ""
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "U16")
+					(reference "U1")
 					(unit 1)
 				)
 			)
@@ -1335,7 +1335,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fa3d3839-1851-4032-9305-1a66585d0643")
-		(property "Reference" "#PWR03"
+		(property "Reference" "#PWR01"
 			(at 44.45 48.26 0)
 			(effects
 				(font
@@ -1385,7 +1385,7 @@
 		(instances
 			(project ""
 				(path "/a117cae9-da48-465a-8dd5-c903415f43a6"
-					(reference "#PWR03")
+					(reference "#PWR01")
 					(unit 1)
 				)
 			)
@@ -1403,7 +1403,7 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "36720b7f-9e6e-4197-8c28-207631d2c0a5")
-		(property "Sheetname" "master_mcu"
+		(property "Sheetname" "core_mcu"
 			(at 105.41 39.9284 0)
 			(effects
 				(font
@@ -1412,7 +1412,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "master_mcu.kicad_sch"
+		(property "Sheetfile" "core_mcu.kicad_sch"
 			(at 105.41 62.8146 0)
 			(effects
 				(font
