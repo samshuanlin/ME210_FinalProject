@@ -68,6 +68,8 @@ void setup(void)
   gateServo.attach(GATE_SERVO_PIN);
   igniterServo.attach(IGNITER_SERVO_PIN);
 
+  gateServo.write(70);
+
   // I2C peripheral device setup
   Wire.begin(PERIPHERAL_ADDR);
   // Attach a function to trigger when something is received.
@@ -190,7 +192,7 @@ void setMotorDirection(int in1, int in2, int dir, int motor)
 
 void dump(void)
 {
-  gateServo.write(80+50);
+  gateServo.write(70+50);
   // delay(dumpingDuration);
   // gateServo.write(80);
 
@@ -207,7 +209,7 @@ void load(void)
   // delay(loading_driving_delay);
   // Serial.println("Stopping!");
   // stop();
-  gateServo.write(80);
+  gateServo.write(70);
   // delay(loading_staying_delay);
   // Serial.println("Driving north!");
   // driveNorth();

@@ -136,7 +136,7 @@ DELIVERING, CELEBRATING, NUM_STATES
 /*---------------Module Variables---------------------------*/
 // State variables
 States_t state;
-States_t initialState = SCANNING;
+States_t initialState = GOING_BACK_ON_TRACK;
 
 // Line sensor variables
 int thrLine = 200; // depend on sensing
@@ -165,7 +165,7 @@ unsigned long us2; // distance sensed by the ultrasonic sensor 1
 unsigned long thr_us1 = 3; // cm, front
 unsigned long thr_us2 = 17; // cm, left
 unsigned long us_score;
-unsigned long thr_us_score = 16;
+unsigned long thr_us_score = 18;
 unsigned long buffer_value_1;
 unsigned long buffer_value_2;
 unsigned long buffer_value_3;

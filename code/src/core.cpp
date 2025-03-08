@@ -120,7 +120,8 @@ void loop()
     break;
   case MOVING_POT:
     driveWestCmd();
-
+    delay(timer_moving_pot);
+    state = GOING_BACK_ON_TRACK;
     // if (TestForLeftWall())
     //   RespToLeftWall();
     break;
@@ -128,8 +129,11 @@ void loop()
     driveSouthCmd();
     break;
   case GOING_TO_BTN_i:
+    Serial.println("Going to BTN i");
     us2 = checkDistance2();
     driveWestCmd();
+    if (TestForLeftWall())
+      RespToLeftWall();
     break;
   case STOPPING_FOR_IGNITION:
     stopCmd();
@@ -139,10 +143,11 @@ void loop()
     break;
   case IGNITING_BTN:
     ignitionCmd();
+    // delay(100);
     break;
   case LEAVING_FROM_BTN_i:
-    us1 = checkDistance1();
     driveNorthCmd();
+    us1 = checkDistance1();
     if (TestForFrontWall())
       RespToFrontWall();
     break;
@@ -186,10 +191,11 @@ void loop()
     driveWestCmd();
     delay(delay_back_to_kitchen);
     state = GOING_TO_BURNER_2;
-    break;
   case GOING_TO_BURNER_2:
     us2 = checkDistance2();
     driveWestCmd();
+    if (TestForLeftWall())
+      RespToLeftWall();
     /*
     // SW direction adjustment
     if (current_line1 && !line4 && !line3) {  // went off the line
@@ -206,13 +212,17 @@ void loop()
       delay(adjust2_duration);
     }
       */
-    
-    break;
+    if (state == GOING_TO_BURNER_2) {
+      break;
+    }
+
+
   case GOING_TO_BURNER_3:
     us1 = checkDistance1();
     driveNorthCmd();
     if (TestForFrontWall())
       RespToFrontWall();
+    Serial.println("Going to burner 3");
     break;
   case GOING_TO_BTN_f:
     driveSouthCmd();
@@ -283,13 +293,13 @@ void checkGlobalEvents(void)
 
   // if (TestForTriggerTimerExpired()) RespToTriggerTimerExpired();
 
-  if (currentMillis - startMillis > timer_moving_pot)
-  {
-    if (state == MOVING_POT)
-    {
-      state = GOING_BACK_ON_TRACK;
-    }
-  }
+  // if (currentMillis - startMillis > timer_moving_pot)
+  // {
+  //   if (state == MOVING_POT)
+  //   {
+  //     state = GOING_BACK_ON_TRACK;
+  //   }
+  // }
 
 }
 
@@ -332,8 +342,8 @@ unsigned long checkDistance1(void)
   distance1 = duration1 * 10 / 2 / 291;          // duration (us) / 2 / 29.1 (us / cm) (speed is the speed of light)
                                                  // additional 10 multiplied to prevent decimal numbers
                                                  
-  Serial.print("Distance 1: ");
-  Serial.print(distance1);
+  // Serial.print("Distance 1: ");
+  // Serial.print(distance1);
   return distance1;
 }
 
@@ -350,8 +360,8 @@ unsigned long checkDistance2(void)
   duration2 = pulseIn(US_2_ECHO, HIGH);
   distance2 = duration2 * 10 / 2 / 291;
   // note that this is done in a superloop, so will cause delays for 6 ms maximum
-  Serial.print(", Distance 2: ");
-  Serial.println(distance2);
+  // Serial.print(", Distance 2: ");
+  // Serial.println(distance2);
   
   return distance2;
 }
@@ -386,7 +396,7 @@ void RespToFrontWall(void)
 
 uint8_t TestForLeftWall(void)
 {
-  return us2 < thr_us2 && us2 > 0 && buffer_value_1*buffer_value_2*buffer_value_3 > 0;
+  return us2 < thr_us2 && us2 > 0;
 }
 
 void RespToLeftWall(void)
@@ -430,7 +440,7 @@ void RespToTriggerTimerExpired()
 uint8_t TestForChangeInTape_1(void)
 {
   current_line1 = analogRead(LINE_SENSOR_N_PIN) > thrLine;
-  Serial.println(analogRead(LINE_SENSOR_N_PIN));
+  // Serial.println(analogRead(LINE_SENSOR_N_PIN));
   return current_line1 != line1;
 }
 
@@ -661,7 +671,8 @@ void stopCmd()
   {
     // delay(500);
     state = IGNITING_BTN;
-  } 
+  }
+  Serial.println("Stop command sent!");
 }
 
 void driveNorthCmd()
@@ -770,7 +781,7 @@ void ignitionCmd(void)
   if (state == IGNITING_BTN)
   {
     state = LEAVING_FROM_BTN_i; // set new state
-    startMillis = millis();
+    // startMillis = millis();
   }
   else if (state == TURNING_OFF_BURNER)
   {
