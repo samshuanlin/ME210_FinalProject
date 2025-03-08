@@ -183,7 +183,12 @@ void loop()
   case DUMPING:
     dumpCmd();
     delay(dumping_duration);
-    state = GOING_TO_PANTRY_1;
+    if (refill_counter == max_refill_number) {
+      state = GOING_TO_BTN_f;
+    }
+    else {
+      state = GOING_TO_PANTRY_1;
+    }
     break;
   case GOING_TO_PANTRY_1:
     driveSouthCmd();
@@ -229,6 +234,7 @@ void loop()
     state = LOADING;
     break;
   case LOADING:
+    refill_counter++;
     state = GOING_TO_BURNER_1;
     break;
   case GOING_TO_BURNER_1:
@@ -267,15 +273,19 @@ void loop()
     break;
   case GOING_TO_BTN_f:
     driveSouthCmd();
-    if (TestForChangeInTape_2() && current_line2 == 1)
-    {
-      state = TURNING_OFF_BURNER;
-    }
+    // if (TestForChangeInTape_2() && current_line2 == 1)
+    // {
+    //   state = TURNING_OFF_BURNER;
+    // }
+    delay(1000);
+    state = TURNING_OFF_BURNER;
     break;
   case TURNING_OFF_BURNER:
-    stopCmd();
+    // stopCmd();
+    ignitionCmd();
     break;
   case LEAVING_FROM_BTN_f:
+    us1 = checkDistance1();
     driveNorthCmd();
     if (TestForFrontWall())
       state = DELIVERING; 
@@ -344,8 +354,8 @@ unsigned long checkDistance1(void)
   distance1 = duration1 * 10 / 2 / 291;          // duration (us) / 2 / 29.1 (us / cm) (speed is the speed of light)
                                                  // additional 10 multiplied to prevent decimal numbers
                                                  
-  // Serial.print("Distance 1: ");
-  // Serial.print(distance1);
+  Serial.print("Distance 1: ");
+  Serial.print(distance1);
   return distance1;
 }
 
@@ -421,8 +431,8 @@ void RespToChangeInTape_1()
 uint8_t TestForChangeInTape_2(void)
 {
   current_line2 = analogRead(LINE_SENSOR_E_PIN) > thrLine;
-  Serial.print(", Line 2 Value: ");
-  Serial.print(analogRead(LINE_SENSOR_E_PIN));
+  // Serial.print(", Line 2 Value: ");
+  // Serial.print(analogRead(LINE_SENSOR_E_PIN));
   return current_line2 != line2;
 }
 
@@ -604,6 +614,7 @@ void ignitionCmd(void)
     state = LEAVING_FROM_BTN_f; // set new state
   }
 }
+
 
 void driveTurnAroundCCWCmd(void)
 {
