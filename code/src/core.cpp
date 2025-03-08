@@ -354,8 +354,8 @@ unsigned long checkDistance1(void)
   distance1 = duration1 * 10 / 2 / 291;          // duration (us) / 2 / 29.1 (us / cm) (speed is the speed of light)
                                                  // additional 10 multiplied to prevent decimal numbers
                                                  
-  Serial.print("Distance 1: ");
-  Serial.print(distance1);
+  // Serial.print("Distance 1: ");
+  // Serial.print(distance1);
   return distance1;
 }
 
@@ -372,8 +372,8 @@ unsigned long checkDistance2(void)
   duration2 = pulseIn(US_2_ECHO, HIGH);
   distance2 = duration2 * 10 / 2 / 291;
   // note that this is done in a superloop, so will cause delays for 6 ms maximum
-  Serial.print(", Distance 2: ");
-  Serial.println(distance2);
+  // Serial.print(", Distance 2: ");
+  // Serial.println(distance2);
   
   return distance2;
 }
@@ -420,6 +420,8 @@ void RespToTriggerTimerExpired()
 uint8_t TestForChangeInTape_1(void)
 {
   current_line1 = analogRead(LINE_SENSOR_N_PIN) > thrLine;
+  Serial.print("Line 1 Value: ");
+  Serial.println(analogRead(LINE_SENSOR_N_PIN));
   return current_line1 != line1;
 }
 
@@ -431,8 +433,8 @@ void RespToChangeInTape_1()
 uint8_t TestForChangeInTape_2(void)
 {
   current_line2 = analogRead(LINE_SENSOR_E_PIN) > thrLine;
-  // Serial.print(", Line 2 Value: ");
-  // Serial.print(analogRead(LINE_SENSOR_E_PIN));
+  // Serial.print("Line 2 Value: ");
+  // Serial.println(analogRead(LINE_SENSOR_E_PIN));
   return current_line2 != line2;
 }
 
@@ -455,8 +457,8 @@ void RespToChangeInTape_3()
 uint8_t TestForChangeInTape_4(void)
 {
   current_line4 = analogRead(LINE_SENSOR_W_PIN) > thrLine;
-  //Serial.print(", Line 4 Value: ");
-  //Serial.println(analogRead(LINE_SENSOR_W_PIN));
+  // Serial.print(", Line 4 Value: ");
+  // Serial.println(analogRead(LINE_SENSOR_W_PIN));
   return current_line4 != line4;
 }
 
