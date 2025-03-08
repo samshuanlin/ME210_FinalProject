@@ -54,6 +54,7 @@ unsigned char TestForChangeInTape_3(void);
 void RespToChangeInTape_3(void);
 unsigned char TestForChangeInTape_4(void);
 void RespToChangeInTape_4(void);
+void RespToChangeInTape(void);
 
 // IR receiver interrupt handlers
 void ir1_handler();

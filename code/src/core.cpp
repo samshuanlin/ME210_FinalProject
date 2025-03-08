@@ -99,12 +99,29 @@ void loop()
     break;
   case LEAVING_SZ_3:
     driveNorthCmd();
+    if (TestForChangeInTape_4() && current_line4 == 1)
+    {
+      state = PIVOTING;
+    }
     break;
   case PIVOTING:
     drivePivotCmd();
+    if (TestForChangeInTape_3() && current_line3 == 0)
+    {
+      state = GOING_TO_CW_1;
+    }
     break;
   case GOING_TO_CW_1:
     driveEastCmd();
+    if (TestForChangeInTape_1() && current_line1 == 1 && line3 == 1) {
+      state = FIRST_LOADING;
+      startMillis = millis();
+    } 
+    if (TestForChangeInTape_3() && current_line3 == 1 && line1 == 1)
+    {
+      state = FIRST_LOADING;
+      startMillis = millis();
+    }
     break;
   case FIRST_LOADING:
     driveSouthCmd();
@@ -115,8 +132,10 @@ void loop()
   case GOING_TO_CW_2:
     driveNorthCmd();
     us1 = checkDistance1();
-    if (TestForFrontWall())
-      RespToFrontWall();
+    if (TestForFrontWall()) {
+      state = MOVING_POT;
+      startMillis = millis();
+    }
     break;
   case MOVING_POT:
     driveWestCmd();
@@ -127,38 +146,65 @@ void loop()
     break;
   case GOING_BACK_ON_TRACK:
     driveSouthCmd();
+    if (TestForChangeInTape_2()) {
+      RespToChangeInTape();
+      if (current_line2 == 1 || line4 == 1) {
+        state = GOING_TO_BTN_i;
+      }
+    }
+    if (TestForChangeInTape_4()) {
+      RespToChangeInTape();
+      if (current_line4 == 1 || line2 == 1)
+      {
+        state = GOING_TO_BTN_i;
+      }
+    }
     break;
   case GOING_TO_BTN_i:
-    Serial.println("Going to BTN i");
     us2 = checkDistance2();
     driveWestCmd();
     if (TestForLeftWall())
-      RespToLeftWall();
+      state = STOPPING_FOR_IGNITION;
     break;
   case STOPPING_FOR_IGNITION:
     stopCmd();
-    // startMillis = millis();
-    // state = IGNITING_BTN;
-    // delay(1000);
+    state = IGNITING_BTN;
     break;
   case IGNITING_BTN:
     ignitionCmd();
-    // delay(100);
+    state = LEAVING_FROM_BTN_i;
     break;
   case LEAVING_FROM_BTN_i:
     driveNorthCmd();
     us1 = checkDistance1();
     if (TestForFrontWall())
-      RespToFrontWall();
+      state = DUMPING;
     break;
   case DUMPING:
     dumpCmd();
+    delay(dumping_duration);
+    state = GOING_TO_PANTRY_1;
     break;
   case GOING_TO_PANTRY_1:
     driveSouthCmd();
+    if (TestForChangeInTape_2() && current_line2 == 1) {
+      state = GOING_TO_PANTRY_2;
+    }
     break;
   case GOING_TO_PANTRY_2:
     driveEastCmd();
+    if (TestForChangeInTape_1()) {
+      RespToChangeInTape();
+      if (current_line1 == 1 && line3 == 1) {
+        state = GOING_TO_PANTRY_3;
+      }
+    } 
+    if (TestForChangeInTape_3()) {
+      RespToChangeInTape();
+      if (current_line3 == 1 && line1 == 1) {
+        state = GOING_TO_PANTRY_3;
+      }
+    }
     /*
     // SE direction adjustment
     if (current_line1 && !line2 && !line3) {  // went off the line
@@ -195,7 +241,7 @@ void loop()
     us2 = checkDistance2();
     driveWestCmd();
     if (TestForLeftWall())
-      RespToLeftWall();
+      state = GOING_TO_BURNER_3;
     /*
     // SW direction adjustment
     if (current_line1 && !line4 && !line3) {  // went off the line
@@ -212,20 +258,19 @@ void loop()
       delay(adjust2_duration);
     }
       */
-    if (state == GOING_TO_BURNER_2) {
-      break;
-    }
-
-
+    break;
   case GOING_TO_BURNER_3:
     us1 = checkDistance1();
     driveNorthCmd();
     if (TestForFrontWall())
-      RespToFrontWall();
-    Serial.println("Going to burner 3");
+      state = DUMPING;
     break;
   case GOING_TO_BTN_f:
     driveSouthCmd();
+    if (TestForChangeInTape_2() && current_line2 == 1)
+    {
+      state = TURNING_OFF_BURNER;
+    }
     break;
   case TURNING_OFF_BURNER:
     stopCmd();
@@ -233,10 +278,18 @@ void loop()
   case LEAVING_FROM_BTN_f:
     driveNorthCmd();
     if (TestForFrontWall())
-      RespToFrontWall();
+      state = DELIVERING; 
     break;
   case DELIVERING:
     driveEastCmd();
+    if (TestForChangeInTape_2() && current_line2 == 1 && line4 == 1)
+    {
+      state = CELEBRATING;
+    } 
+    if (TestForChangeInTape_4() && current_line4 == 1 && line2 == 1)
+    {
+      state = CELEBRATING;
+    }
     break;
   case CELEBRATING:
     stopCmd();
@@ -253,21 +306,10 @@ void checkGlobalEvents(void)
   if (TestForChangeInTape_2()) RespToChangeInTape_2();
   if (TestForChangeInTape_3()) RespToChangeInTape_3();
   if (TestForChangeInTape_4()) RespToChangeInTape_4();
-
-  // if (state == SCANNING)
-  // {
-  //   if (TestForBeaconSensing())
-  //     RespToBeaconSensing();
-  // }
+  RespToChangeInTape();
 
   if (state == SCANNING)
   {
-    // Serial.print("US1: ");
-    // Serial.print(us1);
-    // Serial.print(" - US2: ");
-    // Serial.print(us2);
-    // Serial.print(", sum: ");
-    // Serial.println(us1 + us2);
     if (us1 == 0 || us2 == 0) {
       us_score = -1;
     } else
@@ -275,57 +317,17 @@ void checkGlobalEvents(void)
       us_score = us1 + us2;
     }
 
-
-  // Serial.println(us_score);
     if (us_score > 0 && us_score < thr_us_score) {
       state = LEAVING_SZ_1;
     }
   
   }
 
-
-  if (TestForFrontWall()) RespToFrontWall();
-  if (TestForLeftWall()) RespToLeftWall();
-
   buffer_value_3 = buffer_value_2;
   buffer_value_2 = buffer_value_1;
   buffer_value_1 = distance2;
-
-  // if (TestForTriggerTimerExpired()) RespToTriggerTimerExpired();
-
-  // if (currentMillis - startMillis > timer_moving_pot)
-  // {
-  //   if (state == MOVING_POT)
-  //   {
-  //     state = GOING_BACK_ON_TRACK;
-  //   }
-  // }
-
 }
-
-// uint8_t TestForBeaconSensing(void)
-// {
-//   // digital pin interrupt setup for IR sensors
-//   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_handler, RISING);
-//   attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, RISING);
-
-//   if (ir_1_status && ir_2_status)
-//   { // use OR logic to allow for greater coverage
-//     ir_1_status = 0;
-//     ir_2_status = 0;
-//     return 1;
-//   }
-//   return 0;
-// }
-
-// void RespToBeaconSensing(void)
-// {
-//   // detach interrupts since we don't need them anymore
-//   detachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1));
-//   detachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2));
-//   state = LEAVING_SZ_1; // only state it can enter is leaving starting zone 1. It should stop spinning and go in the determined direction.
-// }
-
+ 
 unsigned long checkDistance1(void)
 {
   // ultrasonic sensors have to be implemented like this to not have errors.
@@ -360,8 +362,8 @@ unsigned long checkDistance2(void)
   duration2 = pulseIn(US_2_ECHO, HIGH);
   distance2 = duration2 * 10 / 2 / 291;
   // note that this is done in a superloop, so will cause delays for 6 ms maximum
-  // Serial.print(", Distance 2: ");
-  // Serial.println(distance2);
+  Serial.print(", Distance 2: ");
+  Serial.println(distance2);
   
   return distance2;
 }
@@ -373,43 +375,11 @@ uint8_t TestForFrontWall(void)
   return us1 < thr_us1 && us1 > 0;
 }
 
-void RespToFrontWall(void)
-{
-  if (state == GOING_TO_CW_2)
-  {
-    state = MOVING_POT;
-    startMillis = millis();
-  }
-  else if (state == LEAVING_FROM_BTN_i)
-  {
-    state = DUMPING;
-  }
-  else if (state == GOING_TO_BURNER_3)
-  {
-    state = DUMPING;
-  }
-  else if (state == LEAVING_FROM_BTN_f)
-  {
-    state = DELIVERING;
-  }
-}
-
 uint8_t TestForLeftWall(void)
 {
   return us2 < thr_us2 && us2 > 0;
 }
 
-void RespToLeftWall(void)
-{
-  if (state == GOING_TO_BTN_i)
-  {
-    state = STOPPING_FOR_IGNITION;
-  }
-
-  if(state == GOING_TO_BURNER_2) {
-    state = GOING_TO_BURNER_3;
-  }
-}
 
 // Ultrasonic sensor time trigger control
 uint8_t TestForTriggerTimerExpired(void)
@@ -440,91 +410,24 @@ void RespToTriggerTimerExpired()
 uint8_t TestForChangeInTape_1(void)
 {
   current_line1 = analogRead(LINE_SENSOR_N_PIN) > thrLine;
-  // Serial.println(analogRead(LINE_SENSOR_N_PIN));
   return current_line1 != line1;
 }
 
 void RespToChangeInTape_1()
 {
-  switch (state)
-  {
-  case GOING_TO_CW_1:
-    if (current_line1 == 1 && line3 == 1)
-    {
-      state = FIRST_LOADING;
-      startMillis = millis();
-    }
-    break;
-  // case GOING_TO_BTN_i:
-  //   if (current_line1 == 1 && line3 == 1)
-  //   {
-  //     state = STOPPING_FOR_IGNITION;
-  //   }
-  //   break;
-  case GOING_TO_PANTRY_2:
-    if (current_line1 == 1 && line3 == 1)
-    {
-      state = GOING_TO_PANTRY_3;
-    }
-    break;
-  // case GOING_TO_BURNER_2:
-  //   if (current_line1 == 1 && line3 == 1)
-  //   {
-  //     state = GOING_TO_BURNER_3;
-  //   }
-  //   break;
-  }
-  
   line1 = current_line1;
 }
 
 uint8_t TestForChangeInTape_2(void)
 {
   current_line2 = analogRead(LINE_SENSOR_E_PIN) > thrLine;
+  Serial.print(", Line 2 Value: ");
+  Serial.print(analogRead(LINE_SENSOR_E_PIN));
   return current_line2 != line2;
 }
 
 void RespToChangeInTape_2()
 {
-  switch (state)
-  {
-  // case PIVOTING:
-  //   if (current_line2 == 0)
-  //   {
-  //     state = GOING_TO_CW_1;
-  //   }
-  //   break;
-  case GOING_BACK_ON_TRACK:
-    if (current_line2 == 1 && line4 == 1)
-    {
-      state = GOING_TO_BTN_i;
-    }
-    break;
-  case GOING_TO_PANTRY_1:
-    if (current_line2 == 1)
-    {
-      state = GOING_TO_PANTRY_2;
-    }
-    break;
-  case GOING_TO_PANTRY_3:
-    if (current_line2 == 1 && line4 == 1)
-    {
-      state = LOADING;
-    }
-    break;
-  case GOING_TO_BTN_f:
-    if (current_line2 == 1)
-    {
-      state = TURNING_OFF_BURNER;
-    }
-    break;
-  case DELIVERING:
-    if (current_line2 == 1 && line4 == 1)
-    {
-      state = CELEBRATING;
-    }
-    break;
-  }
   line2 = current_line2;
 }
 
@@ -536,92 +439,26 @@ uint8_t TestForChangeInTape_3(void)
 
 void RespToChangeInTape_3()
 {
-  switch (state)
-  {
-  case PIVOTING:
-    if (current_line3 == 0)
-    {
-      state = GOING_TO_CW_1;
-    }
-    break;
-  case GOING_TO_CW_1:
-    if (current_line3 == 1 && line1 == 1)
-    {
-      state = FIRST_LOADING;
-      startMillis = millis();
-    }
-    break;
-  // case GOING_TO_BTN_i:
-  //   if (current_line3 == 1 && line1 == 1)
-  //   {
-  //     state = STOPPING_FOR_IGNITION;
-  //   }
-  //   break;
-  case GOING_TO_PANTRY_2:
-    if (current_line3 == 1 && line1 == 1)
-    {
-      state = GOING_TO_PANTRY_3;
-    }
-    break;
-  // case GOING_TO_BURNER_2:
-  //   if (current_line3 == 1 && line1 == 1)
-  //   {
-  //     state = GOING_TO_BURNER_3;
-  //   }
-  //   break;
-  }
-  
   line3 = current_line3;
 }
 
 uint8_t TestForChangeInTape_4(void)
 {
   current_line4 = analogRead(LINE_SENSOR_W_PIN) > thrLine;
+  //Serial.print(", Line 4 Value: ");
+  //Serial.println(analogRead(LINE_SENSOR_W_PIN));
   return current_line4 != line4;
 }
 
 void RespToChangeInTape_4()
 {
-  switch (state)
-  {
-  // case LEAVING_SZ_1:
-  //   if (current_line4 == 0)
-  //   {
-  //     state = LEAVING_SZ_2;
-  //   }
-  //   break;
-  case LEAVING_SZ_3:
-    if (current_line4 == 1)
-    {
-      state = PIVOTING;
-    }
-    break;
-  case GOING_BACK_ON_TRACK:
-    if (current_line4 == 1 && line2 == 1)
-    {
-      state = GOING_TO_BTN_i;
-    }
-    break;
-  case GOING_TO_PANTRY_3:
-    if (current_line4 == 1 && line2 == 1)
-    {
-      state = LOADING;
-    }
-    break;
+  line4 = current_line4;
+}
 
-  // case GOING_TO_BURNER_1:
-  //   if (current_line4 == 1)
-  //   {
-  //     state = GOING_TO_BURNER_2;
-  //   }
-  //   break;
-  case DELIVERING:
-    if (current_line4 == 1 && line2 == 1)
-    {
-      state = CELEBRATING;
-    }
-    break;
-  }
+void RespToChangeInTape() {
+  line1 = current_line1;
+  line2 = current_line2; 
+  line3 = current_line3;
   line4 = current_line4;
 }
 
@@ -666,13 +503,6 @@ void stopCmd()
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(STOP_CMD);
   Wire.endTransmission();
-
-  if (state == STOPPING_FOR_IGNITION)
-  {
-    // delay(500);
-    state = IGNITING_BTN;
-  }
-  Serial.println("Stop command sent!");
 }
 
 void driveNorthCmd()
@@ -715,7 +545,6 @@ void driveTurnAroundCWCmd(void)
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(DRIVE_TURNAROUND_CW_CMD);
   Wire.endTransmission();
-  // delay(2000);
 }
 
 void loadCmd(void)
@@ -737,13 +566,10 @@ void loadCmd(void)
 
 void dumpCmd(void)
 {
-  Serial.println("Dumping...");
   // Send command
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(DUMPING_CMD);
   Wire.endTransmission();
-
-  // delay(5000);
 
   // Wait until done
   uint8_t inp;
@@ -753,23 +579,13 @@ void dumpCmd(void)
     inp = Wire.read();
   } while (inp != 1); // while the done flag is not raised, keep waiting
 
-  // only return control after done
-  state = GOING_TO_PANTRY_1; // set new state
-
-  delay(dumping_duration);
-
 }
 
 void ignitionCmd(void)
 {
-  // Serial.println("Igniting...");
-  // Send command
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(IGNITION_CMD);
   Wire.endTransmission();
-  // Serial.println("Ignition command sent!");
-  // delay(1000);
-  // Wait until done
   uint8_t inp;
   do
   {
@@ -783,7 +599,7 @@ void ignitionCmd(void)
     state = LEAVING_FROM_BTN_i; // set new state
     // startMillis = millis();
   }
-  else if (state == TURNING_OFF_BURNER)
+  if (state == TURNING_OFF_BURNER)
   {
     state = LEAVING_FROM_BTN_f; // set new state
   }
