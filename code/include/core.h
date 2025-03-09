@@ -116,6 +116,12 @@ void ignitionCmd(void);
 #define DRIVE_TURNAROUND_CCW_CMD (uint8_t)10
 void driveTurnAroundCCWCmd(void);
 
+#define CELEBRATION_CMD   (uint8_t)11
+void celebrationCmd(void);
+
+#define DISIGNITION_CMD   (uint8_t)12
+void disignitionCmd(void);
+
 
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
@@ -180,7 +186,7 @@ int delay_ignoring_tape_in_sz = 500;
 int timer_moving_pot = 5000;
 int delay_going_against_kitchen = 700;
 int delay_rotation_to_45_orientation = 1100;
-int delay_to_enter_loading_zone = 1300;
+int delay_to_enter_loading_zone = 2500;
 int delay_to_leave_loading_zone = 1100;
 int delay_back_to_kitchen = 1000;
 int dumping_duration = 500;
@@ -188,5 +194,5 @@ int adjust1_duration = 50;
 int adjust2_duration = 50;
 
 
-int refill_counter = 3;
-int max_refill_number = 3;
+int refill_counter = 0;
+int max_refill_number = 5;
