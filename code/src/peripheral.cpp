@@ -68,7 +68,7 @@ void setup(void)
   gateServo.attach(GATE_SERVO_PIN);
   igniterServo.attach(IGNITER_SERVO_PIN);
 
-  gateServo.write(70);
+  gateServo.write(100);
 
   // I2C peripheral device setup
   Wire.begin(PERIPHERAL_ADDR);
@@ -149,8 +149,15 @@ void loop()
   {
     driveTurnAroundCCW();
   }
+  else if (incoming_cmd == CELEBRATION_CMD)
+  {
+    celebration();
+  }
+  else if (incoming_cmd == DISIGNITION_CMD)
+  {
+    disignition();
+  }
 }
-
 /*----------------Module Functions--------------------------*/
 
 // Shortcut function that sets the direction of a given motor to forward / backward
@@ -209,7 +216,7 @@ void load(void)
   // delay(loading_driving_delay);
   // Serial.println("Stopping!");
   // stop();
-  gateServo.write(70);
+  gateServo.write(100);
   // delay(loading_staying_delay);
   // Serial.println("Driving north!");
   // driveNorth();
@@ -227,6 +234,25 @@ void ignition(void)
   // delay(dumpingDuration);
   // gateServo.write(0);
   // delay(dumpingDuration);
+  ignition_done_flag = 1;
+}
+
+void disignition(void)
+{
+  igniterServo.write(100);
+
+  ignition_done_flag = 1;
+}
+
+void celebration(void)
+{
+  gateServo.write(70);
+  delay(500);
+  gateServo.write(70+50);
+  delay(500);
+  gateServo.write(70);
+  delay(500);
+  gateServo.write(70+50);
   ignition_done_flag = 1;
 }
 

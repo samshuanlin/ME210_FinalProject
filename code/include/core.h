@@ -77,6 +77,8 @@ void RespToLeftWall(void);
 uint8_t TestForTriggerTimerExpired(void);
 void RespToTriggerTimerExpired(void);
 
+void end_of_game(void);
+
 // State display function for testing
 void displayState(void);
 
@@ -114,6 +116,13 @@ void ignitionCmd(void);
 #define DRIVE_TURNAROUND_CCW_CMD (uint8_t)10
 void driveTurnAroundCCWCmd(void);
 
+#define CELEBRATION_CMD   (uint8_t)11
+void celebrationCmd(void);
+
+#define DISIGNITION_CMD   (uint8_t)12
+void disignitionCmd(void);
+
+
 /*---------------State Definitions--------------------------*/
 const char* stateNames[] = {
   "SPINNING_NOODLE", "SCANNING", "LEAVING_SZ_1", "LEAVING_SZ_2","LEAVING_SZ_3", "PIVOTING", "GOING_TO_CW_1", "FIRST_LOADING", "GOING_TO_CW_2",
@@ -137,10 +146,10 @@ DELIVERING, CELEBRATING, NUM_STATES
 /*---------------Module Variables---------------------------*/
 // State variables
 States_t state;
-States_t initialState = GOING_BACK_ON_TRACK;
+States_t initialState = SCANNING;
 
 // Line sensor variables
-int thrLine = 200; // depend on sensing
+int thrLine = 300; // depend on sensing
 // previous detects
 int line1;
 int line2;
@@ -177,9 +186,13 @@ int delay_ignoring_tape_in_sz = 500;
 int timer_moving_pot = 5000;
 int delay_going_against_kitchen = 700;
 int delay_rotation_to_45_orientation = 1100;
-int delay_to_enter_loading_zone = 1300;
+int delay_to_enter_loading_zone = 2500;
 int delay_to_leave_loading_zone = 1100;
 int delay_back_to_kitchen = 1000;
 int dumping_duration = 500;
 int adjust1_duration = 50;
 int adjust2_duration = 50;
+
+
+int refill_counter = 0;
+int max_refill_number = 5;

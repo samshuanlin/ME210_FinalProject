@@ -98,15 +98,15 @@ void loop()
     state = LEAVING_SZ_3;
     break;
   case LEAVING_SZ_3:
-    driveNorthCmd();
     if (TestForChangeInTape_4() && current_line4 == 1)
     {
       state = PIVOTING;
     }
+    driveNorthCmd();
     break;
   case PIVOTING:
     drivePivotCmd();
-    if (TestForChangeInTape_3() && current_line3 == 0)
+    if (TestForChangeInTape_2() && current_line2 == 1)
     {
       state = GOING_TO_CW_1;
     }
@@ -148,13 +148,14 @@ void loop()
     driveSouthCmd();
     if (TestForChangeInTape_2()) {
       RespToChangeInTape();
-      if (current_line2 == 1 || line4 == 1) {
+      if (current_line2 == 1 && line4 == 1) {
         state = GOING_TO_BTN_i;
       }
+      
     }
     if (TestForChangeInTape_4()) {
       RespToChangeInTape();
-      if (current_line4 == 1 || line2 == 1)
+      if (current_line4 == 1 && line2 == 1)
       {
         state = GOING_TO_BTN_i;
       }
@@ -183,27 +184,35 @@ void loop()
   case DUMPING:
     dumpCmd();
     delay(dumping_duration);
-    state = GOING_TO_PANTRY_1;
+    if (refill_counter == max_refill_number) {
+      state = GOING_TO_BTN_f;
+    }
+    else {
+      state = GOING_TO_PANTRY_1;
+    }
     break;
   case GOING_TO_PANTRY_1:
     driveSouthCmd();
     if (TestForChangeInTape_2() && current_line2 == 1) {
       state = GOING_TO_PANTRY_2;
+      driveEastCmd();
+      delay(1000);
     }
     break;
   case GOING_TO_PANTRY_2:
-    driveEastCmd();
+    
+    
     if (TestForChangeInTape_1()) {
-      RespToChangeInTape();
       if (current_line1 == 1 && line3 == 1) {
         state = GOING_TO_PANTRY_3;
       }
+       RespToChangeInTape();
     } 
     if (TestForChangeInTape_3()) {
-      RespToChangeInTape();
       if (current_line3 == 1 && line1 == 1) {
         state = GOING_TO_PANTRY_3;
       }
+       RespToChangeInTape();
     }
     /*
     // SE direction adjustment
@@ -229,6 +238,7 @@ void loop()
     state = LOADING;
     break;
   case LOADING:
+    refill_counter++;
     state = GOING_TO_BURNER_1;
     break;
   case GOING_TO_BURNER_1:
@@ -266,33 +276,39 @@ void loop()
       state = DUMPING;
     break;
   case GOING_TO_BTN_f:
+    disignitionCmd();
+    delay(1000);
     driveSouthCmd();
-    if (TestForChangeInTape_2() && current_line2 == 1)
-    {
-      state = TURNING_OFF_BURNER;
-    }
+    // if (TestForChangeInTape_2() && current_line2 == 1)
+    // {
+    //   state = TURNING_OFF_BURNER;
+    // }
+    delay(1000);
+    state = TURNING_OFF_BURNER;
     break;
   case TURNING_OFF_BURNER:
-    stopCmd();
+    ignitionCmd();
+    delay(500);
     break;
   case LEAVING_FROM_BTN_f:
+    us1 = checkDistance1();
     driveNorthCmd();
     if (TestForFrontWall())
       state = DELIVERING; 
     break;
   case DELIVERING:
     driveEastCmd();
-    if (TestForChangeInTape_2() && current_line2 == 1 && line4 == 1)
-    {
+    if (TestForChangeInTape_1() && current_line1 == 1 && line3 == 1) {
       state = CELEBRATING;
     } 
-    if (TestForChangeInTape_4() && current_line4 == 1 && line2 == 1)
+    if (TestForChangeInTape_3() && current_line3 == 1 && line1 == 1)
     {
       state = CELEBRATING;
     }
     break;
   case CELEBRATING:
     stopCmd();
+    celebrationCmd();
     break;
   }
 
@@ -302,10 +318,10 @@ void loop()
 
 void checkGlobalEvents(void)
 {
-  if (TestForChangeInTape_1()) RespToChangeInTape_1();
-  if (TestForChangeInTape_2()) RespToChangeInTape_2();
-  if (TestForChangeInTape_3()) RespToChangeInTape_3();
-  if (TestForChangeInTape_4()) RespToChangeInTape_4();
+  // if (TestForChangeInTape_1()) RespToChangeInTape_1();
+  // if (TestForChangeInTape_2()) RespToChangeInTape_2();
+  // if (TestForChangeInTape_3()) RespToChangeInTape_3();
+  // if (TestForChangeInTape_4()) RespToChangeInTape_4();
   RespToChangeInTape();
 
   if (state == SCANNING)
@@ -344,8 +360,8 @@ unsigned long checkDistance1(void)
   distance1 = duration1 * 10 / 2 / 291;          // duration (us) / 2 / 29.1 (us / cm) (speed is the speed of light)
                                                  // additional 10 multiplied to prevent decimal numbers
                                                  
-  // Serial.print("Distance 1: ");
-  // Serial.print(distance1);
+  Serial.print("Distance 1: ");
+  Serial.println(distance1);
   return distance1;
 }
 
@@ -372,44 +388,48 @@ unsigned long checkDistance2(void)
 uint8_t TestForFrontWall(void)
 {
   // Serial.println(us1);
-  return us1 < thr_us1 && us1 > 0;
+  // return us1 < thr_us1 && us1 > 0;
+  return us1 == thr_us1;
 }
 
 uint8_t TestForLeftWall(void)
 {
-  return us2 < thr_us2 && us2 > 0;
+  // return us2 < thr_us2 && us2 > 0;
+  return us2 == thr_us2;
 }
 
 
-// Ultrasonic sensor time trigger control
-uint8_t TestForTriggerTimerExpired(void)
-{
+// // Ultrasonic sensor time trigger control
+// uint8_t TestForTriggerTimerExpired(void)
+// {
   
-  return currentMillis - startMillis > timerTrigger;
-}
+//   return currentMillis - startMillis > timerTrigger;
+// }
 
-void RespToTriggerTimerExpired()
-{
-  // we echo only when we need because the pulseIn function takes time
-  if (state == GOING_TO_CW_2 || state == GOING_TO_BURNER_3 || state == LEAVING_FROM_BTN_f)
-  {
-    us1 = pulseIn(US_1_ECHO, DEC);
-    us1 = (us1 / 2) / 29.1;
-    // Serial.println(us2); // for testing. TODO
-  }
-  else if (state == MOVING_POT)
-  {
-    us2 = pulseIn(US_2_ECHO, DEC);
-    us2 = (us2 / 2) / 29.1;
-    Serial.println(us2); // for testing. TODO
-  }
+// void RespToTriggerTimerExpired()
+// {
+//   // we echo only when we need because the pulseIn function takes time
+//   if (state == GOING_TO_CW_2 || state == GOING_TO_BURNER_3 || state == LEAVING_FROM_BTN_f)
+//   {
+//     us1 = pulseIn(US_1_ECHO, DEC);
+//     us1 = (us1 / 2) / 29.1;
+//     // Serial.println(us2); // for testing. TODO
+//   }
+//   else if (state == MOVING_POT)
+//   {
+//     us2 = pulseIn(US_2_ECHO, DEC);
+//     us2 = (us2 / 2) / 29.1;
+//     Serial.println(us2); // for testing. TODO
+//   }
 
-  startMillis = millis();
-}
+//   startMillis = millis();
+// }
 
 uint8_t TestForChangeInTape_1(void)
 {
   current_line1 = analogRead(LINE_SENSOR_N_PIN) > thrLine;
+  // Serial.print("Line 1 Value: ");
+  // Serial.println(analogRead(LINE_SENSOR_N_PIN));
   return current_line1 != line1;
 }
 
@@ -421,8 +441,8 @@ void RespToChangeInTape_1()
 uint8_t TestForChangeInTape_2(void)
 {
   current_line2 = analogRead(LINE_SENSOR_E_PIN) > thrLine;
-  Serial.print(", Line 2 Value: ");
-  Serial.print(analogRead(LINE_SENSOR_E_PIN));
+  Serial.print("Line 2 Value: ");
+  Serial.println(analogRead(LINE_SENSOR_E_PIN));
   return current_line2 != line2;
 }
 
@@ -434,6 +454,8 @@ void RespToChangeInTape_2()
 uint8_t TestForChangeInTape_3(void)
 {
   current_line3 = analogRead(LINE_SENSOR_S_PIN) > thrLine;
+  // Serial.print("Line 3 Value: ");
+  // Serial.println(analogRead(LINE_SENSOR_S_PIN));
   return current_line3 != line3;
 }
 
@@ -445,8 +467,8 @@ void RespToChangeInTape_3()
 uint8_t TestForChangeInTape_4(void)
 {
   current_line4 = analogRead(LINE_SENSOR_W_PIN) > thrLine;
-  //Serial.print(", Line 4 Value: ");
-  //Serial.println(analogRead(LINE_SENSOR_W_PIN));
+  // Serial.print(", Line 4 Value: ");
+  // Serial.println(analogRead(LINE_SENSOR_W_PIN));
   return current_line4 != line4;
 }
 
@@ -601,8 +623,24 @@ void ignitionCmd(void)
   }
   if (state == TURNING_OFF_BURNER)
   {
-    state = LEAVING_FROM_BTN_f; // set new state
+    state = LEAVING_FROM_BTN_f; 
   }
+}
+
+void celebrationCmd(void)
+{
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(CELEBRATION_CMD);
+  Wire.endTransmission();
+}
+
+void disignitionCmd(void)
+{
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(DISIGNITION_CMD);
+  Wire.endTransmission();
+ 
+
 }
 
 void driveTurnAroundCCWCmd(void)
