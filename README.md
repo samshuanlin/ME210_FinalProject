@@ -72,7 +72,7 @@ Action items:
 4. Thomas needs to talk to Archer about interfacing the slope with the chassis.
 
 **Feb 25, 2025 Morning**
-Members: Sam C., Enzo A., Thomas H.,
+Members: Sam C., Enzo A., Thomas H.
 
 Discussion items/Worked on:
 1. Finalizing the motor operation code and integrating it into the FSM.
@@ -80,7 +80,7 @@ Discussion items/Worked on:
 3. 
 
 Action items:
-1. Test out IR sensor operation.
+1. Test out ultrasonic sensor operation.
 2. Figure out two-board communication and organize code from there.
 3. Servo integration with gate & TPU.
 4. Battery connector crimping and wiring.

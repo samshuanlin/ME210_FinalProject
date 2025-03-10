@@ -17,31 +17,32 @@ framework = arduino
 monitor_speed = 9600
 lib_deps = 
     ;adafruit/Adafruit Sensor Lab@^0.8.2
-    ; adafruit/Adafruit BusIO@^1.17.0
-    ;adafruit/Adafruit Unified Sensor@^1.1.15
+    adafruit/Adafruit BusIO@^1.17.0
+    adafruit/Adafruit Unified Sensor@^1.1.15
     khoih-prog/TimerInterrupt@^1.8.0
-    ;arduino-libraries/Servo@^1.2.2
+    arduino-libraries/Servo@^1.2.2
     paulstoffregen/PWMServo@^2.1
 
 build_src_filter = +<*>
+
+[env:uno]
+build_src_filter =
+    ${env.src_filter}
+    -<core.cpp>
+    -<peripheral.cpp>
 
 [env:core]
 build_src_filter =
     ${env.src_filter}
     -<peripheral.cpp>
     -<main.cpp>
-;upload_port = /dev/cu.usbmodem13301 ; for the mac
-;monitor_port = /dev/cu.usbmodem13301 ; for the mac
-upload_port = /dev/cu.usbmodem11201  ; for Windows
-monitor_port = /dev/cu.usbmodem11201 ; for Windows
-
+upload_port = /dev/cu.usbmodem13301 ; for the mac
+monitor_port = /dev/cu.usbmodem13301 ; for the mac
 
 [env:peripheral]
 build_src_filter =
     ${env.src_filter}
     -<core.cpp>
     -<main.cpp>
-;upload_port = /dev/cu.usbmodem13401 ; for the mac
-;monitor_port = /dev/cu.usbmodem13401 ; for the mac. For windoes it'll probably be COMX, X being a number
-upload_port = /dev/cu.usbmodem11101  ; for Windows
-monitor_port = /dev/cu.usbmodem11101 ; for Windows
+upload_port = /dev/cu.usbmodem13401 ; for the mac
+monitor_port = /dev/cu.usbmodem13401 ; for the mac. For windoes it'll probably be COMX, X being a number
