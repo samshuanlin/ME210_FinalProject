@@ -7,21 +7,6 @@
 
 #include <core.h>
 
-
-
-/*---------------Interrupt Handlers------------------*/
-void ir1_handler(void)
-{
-  ir_1_status = 1; // fired at every pin interrupt, set ir_1_status to be 1, to be turned off by TestForBeaconSensing
-  // ir1_debouncing_array[ir1_arr_idx] = ir_1_status;
-
-}
-void ir2_handler(void)
-{
-  ir_2_status = 1; // fired at every pin interrupt, set ir_2_status to be 1, to be turned off by TestForBeaconSensing
-  // ir2_debouncing_array[ir2_arr_idx] = ir_2_status;
-}
-
 /*---------------Robot Main Functions----------------*/
 
 void setup()
@@ -43,14 +28,6 @@ void setup()
   pinMode(LINE_SENSOR_S_PIN, INPUT);
   pinMode(LINE_SENSOR_W_PIN, INPUT);
 
-  // pin setup for IR sensors
-  pinMode(IR_RX_PIN_1, INPUT);
-  pinMode(IR_RX_PIN_2, INPUT);
-
-  // digital pin interrupt setup for IR sensors
-  attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_1), ir1_handler, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(IR_RX_PIN_2), ir2_handler, CHANGE);
-
   // ultrasonic sensor pin setup
   pinMode(US_1_TRIG, OUTPUT);
   pinMode(US_2_TRIG, OUTPUT);
@@ -69,19 +46,17 @@ void loop()
 
   checkGlobalEvents();
   displayState();
-  currentMillis = millis();
-
-  // us1 = checkDistance1();
-  // us2 = checkDistance2();
-
-
-
-  // Serial.println(line3);
-
 
   switch (state)
   {
 
+  case SPINNING_NOODLE:
+    ignitionCmd();
+    delay(500);
+    disignitionCmd();
+    delay(500);
+    state = SCANNING;
+    break;
   case SCANNING:
     us1 = checkDistance1();
     us2 = checkDistance2();
@@ -115,12 +90,10 @@ void loop()
     driveEastCmd();
     if (TestForChangeInTape_1() && current_line1 == 1 && line3 == 1) {
       state = FIRST_LOADING;
-      startMillis = millis();
     } 
     if (TestForChangeInTape_3() && current_line3 == 1 && line1 == 1)
     {
       state = FIRST_LOADING;
-      startMillis = millis();
     }
     break;
   case FIRST_LOADING:
@@ -141,8 +114,6 @@ void loop()
     driveWestCmd();
     delay(timer_moving_pot);
     state = GOING_BACK_ON_TRACK;
-    // if (TestForLeftWall())
-    //   RespToLeftWall();
     break;
   case GOING_BACK_ON_TRACK:
     driveSouthCmd();
@@ -151,7 +122,6 @@ void loop()
       if (current_line2 == 1 && line4 == 1) {
         state = GOING_TO_BTN_i;
       }
-      
     }
     if (TestForChangeInTape_4()) {
       RespToChangeInTape();
@@ -200,36 +170,22 @@ void loop()
     }
     break;
   case GOING_TO_PANTRY_2:
-    
-    
     if (TestForChangeInTape_1()) {
       if (current_line1 == 1 && line3 == 1) {
+        driveTurnAroundCWCmd();
+        delay(100);
         state = GOING_TO_PANTRY_3;
       }
        RespToChangeInTape();
     } 
     if (TestForChangeInTape_3()) {
       if (current_line3 == 1 && line1 == 1) {
+        driveTurnAroundCWCmd();
+        delay(100);
         state = GOING_TO_PANTRY_3;
       }
        RespToChangeInTape();
     }
-    /*
-    // SE direction adjustment
-    if (current_line1 && !line2 && !line3) {  // went off the line
-      driveTurnAroundCCWCmd();
-      delay(adjust1_duration);
-      driveNorthCmd();
-      delay(adjust2_duration);
-    }
-    // NE direction adjustment
-    if (current_line3 && !line2 && !line1) {  // went off the line
-      driveTurnAroundCWCmd();
-      delay(adjust1_duration);
-      driveSouthCmd();
-      delay(adjust2_duration);
-    }
-      */
     break;
   case GOING_TO_PANTRY_3:
     loadCmd();
@@ -252,22 +208,6 @@ void loop()
     driveWestCmd();
     if (TestForLeftWall())
       state = GOING_TO_BURNER_3;
-    /*
-    // SW direction adjustment
-    if (current_line1 && !line4 && !line3) {  // went off the line
-      driveTurnAroundCCWCmd();
-      delay(adjust1_duration);
-      driveSouthCmd();
-      delay(adjust2_duration);
-    }
-    // NW direction adjustment
-    if (current_line3 && !line4 && !line1) {  // went off the line
-      driveTurnAroundCWCmd();
-      delay(adjust1_duration);
-      driveNorthCmd();
-      delay(adjust2_duration);
-    }
-      */
     break;
   case GOING_TO_BURNER_3:
     us1 = checkDistance1();
@@ -279,10 +219,6 @@ void loop()
     disignitionCmd();
     delay(1000);
     driveSouthCmd();
-    // if (TestForChangeInTape_2() && current_line2 == 1)
-    // {
-    //   state = TURNING_OFF_BURNER;
-    // }
     delay(1000);
     state = TURNING_OFF_BURNER;
     break;
@@ -293,22 +229,28 @@ void loop()
   case LEAVING_FROM_BTN_f:
     us1 = checkDistance1();
     driveNorthCmd();
-    if (TestForFrontWall())
-      state = DELIVERING; 
+    delay(1500);
+    state = DELIVERING;
     break;
   case DELIVERING:
     driveEastCmd();
-    if (TestForChangeInTape_1() && current_line1 == 1 && line3 == 1) {
-      state = CELEBRATING;
-    } 
-    if (TestForChangeInTape_3() && current_line3 == 1 && line1 == 1)
-    {
-      state = CELEBRATING;
-    }
+    delay(6000);
+    state = CELEBRATING;
     break;
   case CELEBRATING:
     stopCmd();
-    celebrationCmd();
+    dumpCmd();
+    delay(500);
+    loadCmd();
+    delay(500);
+    dumpCmd();
+    delay(500);
+    loadCmd();
+    delay(500);
+    state = ENDING;
+    break;
+  case ENDING:
+    stopCmd();
     break;
   }
 
@@ -318,11 +260,7 @@ void loop()
 
 void checkGlobalEvents(void)
 {
-  // if (TestForChangeInTape_1()) RespToChangeInTape_1();
-  // if (TestForChangeInTape_2()) RespToChangeInTape_2();
-  // if (TestForChangeInTape_3()) RespToChangeInTape_3();
-  // if (TestForChangeInTape_4()) RespToChangeInTape_4();
-  RespToChangeInTape();
+  RespToChangeInTape();   // update all line sensor variables
 
   if (state == SCANNING)
   {
@@ -346,40 +284,27 @@ void checkGlobalEvents(void)
  
 unsigned long checkDistance1(void)
 {
-  // ultrasonic sensors have to be implemented like this to not have errors.
-  // see this website for details: https://howtomechatronics.com/tutorials/arduino/ultrasonic-sensor-hc-sr04/#how-the-hc-sr04-ultrasonic-distance-sensor-works
-  // specifically, the pulse to send as HIGH is not custom.
+  // implementation and formula for ultrasonic sensor should be specified as follows
   digitalWrite(US_1_TRIG, LOW);
   delayMicroseconds(2);
   digitalWrite(US_1_TRIG, HIGH);
   delayMicroseconds(10);
   digitalWrite(US_1_TRIG, LOW);
-  // unsigned long timeout = 3000L;k
-  // US_1 is the front-facing ultrasonic sensor
   duration1 = pulseIn(US_1_ECHO, HIGH); // pulse in us. if returning 0, means no feedback received
   distance1 = duration1 * 10 / 2 / 291;          // duration (us) / 2 / 29.1 (us / cm) (speed is the speed of light)
                                                  // additional 10 multiplied to prevent decimal numbers
-                                                 
-  Serial.print("Distance 1: ");
-  Serial.println(distance1);
   return distance1;
 }
 
 unsigned long checkDistance2(void)
 {
-  //analogWrite(US_2_TRIG, 200); // 50% duty cycle, 490Hz frequency
   digitalWrite(US_2_TRIG, LOW);
   delayMicroseconds(2);
   digitalWrite(US_2_TRIG, HIGH);
   delayMicroseconds(10);
   digitalWrite(US_2_TRIG, LOW);
-  // unsigned long timeout = 3000L;
-  // US_2 is the left-facing ultrasonic sensor
   duration2 = pulseIn(US_2_ECHO, HIGH);
   distance2 = duration2 * 10 / 2 / 291;
-  // note that this is done in a superloop, so will cause delays for 6 ms maximum
-  Serial.print(", Distance 2: ");
-  Serial.println(distance2);
   
   return distance2;
 }
@@ -387,49 +312,17 @@ unsigned long checkDistance2(void)
 
 uint8_t TestForFrontWall(void)
 {
-  // Serial.println(us1);
-  // return us1 < thr_us1 && us1 > 0;
   return us1 == thr_us1;
 }
 
 uint8_t TestForLeftWall(void)
 {
-  // return us2 < thr_us2 && us2 > 0;
   return us2 == thr_us2;
 }
-
-
-// // Ultrasonic sensor time trigger control
-// uint8_t TestForTriggerTimerExpired(void)
-// {
-  
-//   return currentMillis - startMillis > timerTrigger;
-// }
-
-// void RespToTriggerTimerExpired()
-// {
-//   // we echo only when we need because the pulseIn function takes time
-//   if (state == GOING_TO_CW_2 || state == GOING_TO_BURNER_3 || state == LEAVING_FROM_BTN_f)
-//   {
-//     us1 = pulseIn(US_1_ECHO, DEC);
-//     us1 = (us1 / 2) / 29.1;
-//     // Serial.println(us2); // for testing. TODO
-//   }
-//   else if (state == MOVING_POT)
-//   {
-//     us2 = pulseIn(US_2_ECHO, DEC);
-//     us2 = (us2 / 2) / 29.1;
-//     Serial.println(us2); // for testing. TODO
-//   }
-
-//   startMillis = millis();
-// }
 
 uint8_t TestForChangeInTape_1(void)
 {
   current_line1 = analogRead(LINE_SENSOR_N_PIN) > thrLine;
-  // Serial.print("Line 1 Value: ");
-  // Serial.println(analogRead(LINE_SENSOR_N_PIN));
   return current_line1 != line1;
 }
 
@@ -441,8 +334,6 @@ void RespToChangeInTape_1()
 uint8_t TestForChangeInTape_2(void)
 {
   current_line2 = analogRead(LINE_SENSOR_E_PIN) > thrLine;
-  Serial.print("Line 2 Value: ");
-  Serial.println(analogRead(LINE_SENSOR_E_PIN));
   return current_line2 != line2;
 }
 
@@ -454,8 +345,6 @@ void RespToChangeInTape_2()
 uint8_t TestForChangeInTape_3(void)
 {
   current_line3 = analogRead(LINE_SENSOR_S_PIN) > thrLine;
-  // Serial.print("Line 3 Value: ");
-  // Serial.println(analogRead(LINE_SENSOR_S_PIN));
   return current_line3 != line3;
 }
 
@@ -467,8 +356,6 @@ void RespToChangeInTape_3()
 uint8_t TestForChangeInTape_4(void)
 {
   current_line4 = analogRead(LINE_SENSOR_W_PIN) > thrLine;
-  // Serial.print(", Line 4 Value: ");
-  // Serial.println(analogRead(LINE_SENSOR_W_PIN));
   return current_line4 != line4;
 }
 
@@ -569,21 +456,19 @@ void driveTurnAroundCWCmd(void)
   Wire.endTransmission();
 }
 
+void driveTurnAroundCCWCmd(void)
+{
+  Wire.beginTransmission(PERIPHERAL_ADDR);
+  Wire.write(DRIVE_TURNAROUND_CCW_CMD);
+  Wire.endTransmission();
+}
+
 void loadCmd(void)
 {
   // Send command
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(LOADING_CMD);
   Wire.endTransmission();
-
-  // Wait until done
-  uint8_t inp;
-  do
-  {
-    Wire.requestFrom(PERIPHERAL_ADDR, sizeof(uint8_t)); // request from peripheral
-    inp = Wire.read();
-  } while (inp != 1); // while the done flag is not raised, keep waiting
-
 }
 
 void dumpCmd(void)
@@ -592,15 +477,6 @@ void dumpCmd(void)
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(DUMPING_CMD);
   Wire.endTransmission();
-
-  // Wait until done
-  uint8_t inp;
-  do
-  {
-    Wire.requestFrom(PERIPHERAL_ADDR, sizeof(uint8_t)); // request from peripheral
-    inp = Wire.read();
-  } while (inp != 1); // while the done flag is not raised, keep waiting
-
 }
 
 void ignitionCmd(void)
@@ -609,43 +485,11 @@ void ignitionCmd(void)
   Wire.write(IGNITION_CMD);
   Wire.endTransmission();
   uint8_t inp;
-  do
-  {
-    Wire.requestFrom(PERIPHERAL_ADDR, sizeof(uint8_t)); // request from peripheral
-    inp = Wire.read();
-  } while (inp != 1); // while the done flag is not raised, keep waiting
-
-  // only return control after done
-  if (state == IGNITING_BTN)
-  {
-    state = LEAVING_FROM_BTN_i; // set new state
-    // startMillis = millis();
-  }
-  if (state == TURNING_OFF_BURNER)
-  {
-    state = LEAVING_FROM_BTN_f; 
-  }
-}
-
-void celebrationCmd(void)
-{
-  Wire.beginTransmission(PERIPHERAL_ADDR);
-  Wire.write(CELEBRATION_CMD);
-  Wire.endTransmission();
 }
 
 void disignitionCmd(void)
 {
   Wire.beginTransmission(PERIPHERAL_ADDR);
   Wire.write(DISIGNITION_CMD);
-  Wire.endTransmission();
- 
-
-}
-
-void driveTurnAroundCCWCmd(void)
-{
-  Wire.beginTransmission(PERIPHERAL_ADDR);
-  Wire.write(DRIVE_TURNAROUND_CCW_CMD);
   Wire.endTransmission();
 }

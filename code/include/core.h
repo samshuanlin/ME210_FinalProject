@@ -116,10 +116,7 @@ void ignitionCmd(void);
 #define DRIVE_TURNAROUND_CCW_CMD (uint8_t)10
 void driveTurnAroundCCWCmd(void);
 
-#define CELEBRATION_CMD   (uint8_t)11
-void celebrationCmd(void);
-
-#define DISIGNITION_CMD   (uint8_t)12
+#define DISIGNITION_CMD   (uint8_t)11
 void disignitionCmd(void);
 
 
@@ -130,7 +127,7 @@ const char* stateNames[] = {
   "LEAVING_FROM_BTN_i", "DUMPING", "GOING_TO_PANTRY_1", "GOING_TO_PANTRY_2",
   "GOING_TO_PANTRY_3", "LOADING", "GOING_TO_BURNER_1", "GOING_TO_BURNER_2",
   "GOING_TO_BURNER_3", "GOING_TO_BTN_f", "TURNING_OFF_BURNER",
-  "LEAVING_FROM_BTN_f", "DELIVERING", "CELEBRATING"
+  "LEAVING_FROM_BTN_f", "DELIVERING", "CELEBRATING", "ENDING"
 };
 
 typedef enum {
@@ -140,13 +137,13 @@ LEAVING_FROM_BTN_i, DUMPING,
 GOING_TO_PANTRY_1, GOING_TO_PANTRY_2, GOING_TO_PANTRY_3, LOADING,
 GOING_TO_BURNER_1, GOING_TO_BURNER_2, GOING_TO_BURNER_3,
 GOING_TO_BTN_f, TURNING_OFF_BURNER, LEAVING_FROM_BTN_f,
-DELIVERING, CELEBRATING, NUM_STATES 
+DELIVERING, CELEBRATING, ENDING, NUM_STATES 
 } States_t;
 
 /*---------------Module Variables---------------------------*/
 // State variables
 States_t state;
-States_t initialState = SCANNING;
+States_t initialState = SPINNING_NOODLE;
 
 // Line sensor variables
 int thrLine = 300; // depend on sensing
@@ -173,7 +170,7 @@ int startMillis;
 unsigned long us1; // distance sensed by the ultrasonic sensor 1
 unsigned long us2; // distance sensed by the ultrasonic sensor 1
 unsigned long thr_us1 = 3; // cm, front
-unsigned long thr_us2 = 17; // cm, left
+unsigned long thr_us2 = 19; // cm, left
 unsigned long us_score;
 unsigned long thr_us_score = 18;
 unsigned long buffer_value_1;
@@ -187,7 +184,7 @@ int timer_moving_pot = 5000;
 int delay_going_against_kitchen = 700;
 int delay_rotation_to_45_orientation = 1100;
 int delay_to_enter_loading_zone = 2500;
-int delay_to_leave_loading_zone = 1100;
+int delay_to_leave_loading_zone = 1200;
 int delay_back_to_kitchen = 1000;
 int dumping_duration = 500;
 int adjust1_duration = 50;

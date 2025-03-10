@@ -21,6 +21,7 @@
 #define MOTOR_4_IN3_PIN     12 // This is M6 on Kicad
 #define MOTOR_4_IN4_PIN     13 // This is M6 on Kicad
 #define MOTOR_SPEED_PIN     3
+#define MOTOR_SPEED_PIN_2   6
 
 #define FORWARD_DIR         1
 #define BACKWARD_DIR        -1
@@ -35,14 +36,11 @@
 #define DRIVE_TURNAROUND_CCW_CMD (uint8_t)5
 #define DRIVE_PIVOT_CMD (uint8_t)6
 #define LOADING_CMD     (uint8_t)7
-uint8_t load_done_flag = 0;
 #define DUMPING_CMD     (uint8_t)8
-uint8_t dump_done_flag = 0;
 #define IGNITION_CMD    (uint8_t)9
 #define DRIVE_TURNAROUND_CW_CMD (uint8_t)10
-#define CELEBRATION_CMD   (uint8_t)11
-#define DISIGNITION_CMD   (uint8_t)12
-uint8_t ignition_done_flag = 0;
+#define DISIGNITION_CMD   (uint8_t)11
+
 uint8_t cur_cmd = 100;    // no one is using this, so set as initial value
 uint8_t incoming_cmd = 255;
 
@@ -64,13 +62,11 @@ void driveWest(void);
 void driveTurnAroundCW(void);
 void drivePivot(void);
 void ignition(void);
-void celebration(void);
 void driveTurnAroundCCW(void);
 void disignition(void);
 
 // I2C interrupt handlers
 void receiveEvent(int bytes);
-void requestEvent(int bytes);
 
 // Loading-related variables (servo)
 PWMServo gateServo;  // create servo object to control a servo
@@ -84,4 +80,4 @@ int igniterServoPos = 0;    // variable to store the servo position
 // Motor-related variables
 int loading_driving_delay = 1000; // number of milliseconds the robot will drive toward and from the loading position
 int loading_staying_delay = 1000; // number of milliseconds the robot will stay during loading
-int mtrSpeed = 255;
+int mtrSpeed = 255; // 100% duty cycle
