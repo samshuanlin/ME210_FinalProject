@@ -227,7 +227,6 @@ void loop()
     delay(500);
     break;
   case LEAVING_FROM_BTN_f:
-    us1 = checkDistance1();
     driveNorthCmd();
     delay(1500);
     state = DELIVERING;
